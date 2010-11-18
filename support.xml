@@ -4,6 +4,7 @@
   <path id="docant.lib.path.id">
     <fileset dir="${basedir}/lib">
       <include name="**/*.jar"/>
+      <include name="**/*.zip"/>
     </fileset>
   </path>
   

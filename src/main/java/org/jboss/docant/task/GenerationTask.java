@@ -21,11 +21,16 @@
  */
 package org.jboss.docant.task;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import org.apache.tools.ant.BuildException;
 
 import org.jboss.jdocbook.profile.Profiler;
 import org.jboss.jdocbook.render.FormatOptions;
 import org.jboss.jdocbook.render.Renderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * generation ant task
@@ -34,6 +39,7 @@ import org.jboss.jdocbook.render.Renderer;
  */
 public class GenerationTask extends AbstractDocbookTask
 {
+   private static final Logger log = LoggerFactory.getLogger(GenerationTask.class);
    /**
     * process
     * @exception BuildException If the build fails
@@ -41,6 +47,24 @@ public class GenerationTask extends AbstractDocbookTask
    @Override
    public void process() throws BuildException
    {
+      /*
+      ClassLoader cl = Thread.currentThread().getContextClassLoader();
+      while (cl != null)
+      {
+         if (!(cl instanceof URLClassLoader))
+         {
+            log.info("$$ cl isn't URLClassloader: {}", cl.toString());
+            break;
+         }
+         log.info("$$  URLClassloader: {}", cl.toString());
+      for (URL url : ((URLClassLoader) cl).getURLs())
+      {
+         log.info("$$ cl url: {}", url.toString());
+      }
+      cl = cl.getParent();
+      }
+      */
+      
       if (!sourceDirectory.exists())
       {
          System.out.println("sourceDirectory [" + sourceDirectory.getAbsolutePath() + "] did not exist");

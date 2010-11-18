@@ -270,7 +270,7 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
 
       try
       {
-
+         addResourceIntoClassloader();
          doExecute();
 
       }
@@ -288,6 +288,32 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
       }
    }
 
+   private void addResourceIntoClassloader()
+   {
+      List<URL> urls = new ArrayList<URL>();
+      log.info("$$ docbook zip {}", "lib/docbook".toString());
+      File docbookDir = new File("lib/docbook");
+      if (docbookDir.exists())
+      {
+         try
+         {
+            File[] files = docbookDir.listFiles();
+            for (File f : files)
+            {
+            urls.add(f.toURI().toURL());
+            log.info("$$ add docbook zip to classloader {}", f.toString());
+            }
+         }
+         catch (Exception e)
+         {
+            throw new JDocBookProcessException("Unable to resolve staging directory to URL", e);
+         }
+      }
+      else
+         log.info("$$ docbook zip can't find");
+      ClassLoader newCl = new URLClassLoader(urls.toArray(new URL[urls.size()]), Thread.currentThread().getContextClassLoader());
+      Thread.currentThread().setContextClassLoader(newCl);
+   }
 
    private class EnvironmentImpl implements Environment
    {
@@ -369,6 +395,7 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
             throw new JDocBookProcessException("Unable to resolve staging directory to URL", e);
          }
       }
+      
       /*
              //      2) project dependencies
              for ( Artifact artifact : (Set<Artifact>) project.getArtifacts() ) {
@@ -462,6 +489,7 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
                catalogSet.add(catalog);
             }
          }
+         log.info("$$ catalogSet {}", catalogSet.toString());
          return catalogSet;
       }
 

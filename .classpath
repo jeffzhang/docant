@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="lib" path="lib/common/jdocbook-core.jar" sourcepath="/doc/temp/down/sebersole-jdocbook-core-1.0.3-1-g1b25e93.zip"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/common/ant.jar"/>
-	<classpathentry kind="lib" path="lib/common/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="lib/common/ant-1.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/common/jdocbook-core-1.0.3.jar" sourcepath="/doc/temp/down/docbook/sebersole-jdocbook-core-1.0.3-1-g1b25e93.zip"/>
+	<classpathentry kind="lib" path="lib/common/slf4j-api-1.5.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
