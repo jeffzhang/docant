@@ -17,6 +17,7 @@ Setup
 Download files
 -----
 It download some files include:
+
 * docbook dtds, xls file
 * dependend jars
 * hacked jdocbook (in alpha phase)
@@ -24,6 +25,7 @@ It download some files include:
 Docbook files
 -----
 Currently it includes some documents:
+
 * JBoss AS 6 (part)
 * Ironjacamar (JBoss JCA)
 * Hornetq
