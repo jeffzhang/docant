@@ -1,5 +1,6 @@
 DocAnt
 ======
+
 Description
 ------
 This project conetains Ant tasks for [jdocbook](https://github.com/jeffzhang/jdocbook-core).
@@ -12,7 +13,7 @@ Setup
 * ant release
 * cd target/release
 * ant
-* (got html, html-single, pdf files)
+* (got html, html-single, pdf files in target/release/target/publish)
 
 Download files
 -----
@@ -31,6 +32,8 @@ Currently it includes some documents:
 * Hornetq
 * Hibernate (some section missing)
 * Spring (some section missing, so far "borrow" jboss jdocbook style)
+
+_Modify build.xml in target/release, uncomment to get more document files_
 
 Note
 ------
