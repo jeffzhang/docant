@@ -1,0 +1,13 @@
+.project
+.settings
+.classpath
+
+# /
+/build
+/target
+/reports
+
+
+# /lib/
+/lib
+/down

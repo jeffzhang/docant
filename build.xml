@@ -79,11 +79,11 @@
   <property name="junit.batchtest.fork" value="yes" />
 
   <path id="lib.path.id">
-    <fileset dir="${lib.dir}/common">
+    <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
     <fileset dir="${target.dir}">
-      <include name="**/*.jar"/>
+      <include name="*.jar"/>
     </fileset>
   </path>
 
@@ -164,8 +164,7 @@
 
 <!-- temp using hacked file -->
     <get src="http://jeffzhang.github.com/docant/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar"
-         dest="${build.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar" skipexisting="true"/>
-
+         dest="${down.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar" skipexisting="true"/>
   </target>
   
   <!-- ================================= 
@@ -173,7 +172,7 @@
        ================================= -->
   <target name="resolve" depends="init">
     <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision].[ext]" sync="true"/>
-    <copy file="${build.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar" 
+    <copy file="${down.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar" 
           tofile="${lib.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar"/>
   </target>
   
@@ -290,14 +289,10 @@
         <include name="**/*.bak"/>
       </fileset>
     </delete>
-    <delete>
-      <fileset dir="${lib.dir}" includes="**/*.jar"/>
-    </delete>
+
     <delete dir="${build.dir}"/>
+    <delete dir="${lib.dir}"/>
     <delete dir="${target.dir}"/>
-    <delete dir="${reports.dir}"/>
-    <delete file="${name}-${major}.${minor}.${patch}.${type}.zip" />
-    <delete file="${name}-${major}.${minor}.${patch}.${type}.tar.gz" />
   </target>
 
 
