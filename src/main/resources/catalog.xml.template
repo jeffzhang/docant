@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
+
+  <uri 
+    name="http://docbook.sourceforge.net/release/xsl/@OLD@/xhtml/chunk.xsl"
+    uri="docbook-xsl-@NEW@/xhtml/chunk.xsl"/>
+
+  <uri 
+    name="http://docbook.sourceforge.net/release/xsl/@OLD@/xhtml/docbook.xsl"
+    uri="docbook-xsl-@NEW@/xhtml/docbook.xsl"/>
+
+  <uri 
+    name="http://docbook.sourceforge.net/release/xsl/@OLD@/fo/docbook.xsl"
+    uri="docbook-xsl-@NEW@/fo/docbook.xsl"/>
+
+</catalog> 
+

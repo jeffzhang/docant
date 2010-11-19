@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="deployment">
+   <title>Deployment</title>
+
+   <para>The IronJacamar distribution contains a deploy/ directory where all deployments
+     should be deployed to.</para>
+
+   <section id="packagingrequirements">
+      <title>Packaging requirements</title>
+
+      <para>A resource adapter archive is a structured Java Archive (JAR) file, which 
+        bundles all Java classes in JAR files, and optionally contains metadata, resources and native
+        libraries.</para>
+
+      <para>A resource adapter archive name ends in the <code>.rar</code> extension.</para>
+
+      <para>An example of a resource adapter archive could look like</para>
+
+      <programlisting>
+<![CDATA[
+[jpederse@localhost]$ jar tf ra.rar
+META-INF/ra.xml
+readme.html
+ra.jar
+images/icon.jpg
+win.dll
+linux.so
+ ]]>
+      </programlisting>
+
+      <para>See the Java EE Connector Architecture 1.6 specification chapter 20 for further
+        requirements.</para>
+
+   </section>
+
+   <section id="deployingrar">
+      <title>Deploying resource adapters</title>
+
+      <para>Resource adapters (.rar) are deployed by copying the resource adapter into the 
+        <code>deploy/</code> directory</para>
+
+     <programlisting>
+cp example.rar ironjacamar-1.0.0/deploy
+     </programlisting>
+
+     <para>on a Un*x based system or</para>
+
+     <programlisting>
+copy example.rar ironjacamar-1.0.0\deploy
+     </programlisting>
+
+     <para>on Windows.</para>
+
+     <para>The resource adapter can configured and activated through a <code>META-INF/ironjacamar.xml</code>
+       file in the archive. The format of the XML document is defined by the <code>ironjacamar_1_0.xsd</code>.</para>
+
+     <para>A resource adapter can also be configured and activated through deployment of a <code>-ra.xml</code>
+       file in the <code>deploy/</code> directory - f.ex. <code>deploy/example-ra.xml</code>. The format of the XML 
+       document is defined by the <code>resource-adapters_1_0.xsd</code> - f.ex</para>
+
+     <programlisting>
+<![CDATA[
+<resource-adapters>
+  <resource-adapter>
+    <archive>example.rar</archive>
+    <connection-definitions>
+      <connection-definition jndi-name="java:/eis/example" class="com.example.ra.MCF"/>
+    </connection-definitions>
+  </resource-adapter>
+</resource-adapters>
+]]>
+     </programlisting>
+
+     <para>to bind the connection factory from <code>com.example.ra.MCF</code> under <code>java:/eis/example</code>.</para>
+
+     <para>See the schema appendix for additional details about the format.</para>
+
+     <para>Alternative the resource adapter deployments will be picked up by the <code>RAActivator</code>
+       bean which bind a single connection factory under</para>
+
+     <programlisting>
+java:/eis/&lt;deploymentName&gt;
+     </programlisting>
+
+     <para>- f.ex. <code>java:/eis/example</code> and a single admin object under</para>
+
+     <programlisting>
+java:/eis/ao/&lt;deploymentName&gt;
+     </programlisting>
+
+     <para>- f.ex. <code>java:/eis/ao/example</code>.</para>
+   </section>
+
+   <section id="deployingds">
+      <title>Deploying datasources</title>
+
+      <para>Datasources (-ds.xml) are deployed by copying the definition into the 
+        <code>deploy/</code> directory</para>
+
+     <programlisting>
+cp postgres-xa-ds.xml ironjacamar-1.0.0/deploy
+     </programlisting>
+
+     <para>on a Un*x based system or</para>
+
+     <programlisting>
+copy postgres-xa-ds.xml ironjacamar-1.0.0\deploy
+     </programlisting>
+
+     <para>on Windows.</para>
+
+     <para>You will need to install the database JDBC driver into the <code>lib/</code> directory.</para>
+
+     <para>You can find examples of datasource definitions in the <code>doc/datasources</code> directory
+       and the schema itself <code>doc/datasources_1_0.xsd</code>.</para>
+
+   </section>
+
+</chapter>

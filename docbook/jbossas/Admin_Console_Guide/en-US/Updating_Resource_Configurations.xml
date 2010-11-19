@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Updating_Resource_Configurations">
+	<title>Updating Resource Configurations</title>
+	<para>
+		For resources that support configuration, either created through the Administration Console or deployed separately, you can use the Console to make modifications to their settings. Simply choose the resource to be modified from the navigation panel or from one of the resource list views and then select its Configuration tab, from where changes can then be made:
+	</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata scalefit="1" fileref="images/Admin-Console-QuickStart_html_24ffdce8.jpg"/>
+		</imageobject>
+	</mediaobject>
+	
+	<para>Updating a resources configuration follows a very similar pattern to adding a resource described above. Change the properties you want to be updated and hit the <emphasis role="bold">SAVE</emphasis> button at the bottom of the page and the changes will be applied to the JBoss Application Server instance.</para>
+	
+	<warning>
+		<para>
+			If a resource was previously deployed and modified via the Console, the administration of the resource should continue to be done via the Console. The resource modifications are persistent but will not be reflected in the resources original configuration file. This means that changes between manual edits to configuration files and changes performed via the Console are not interchangeable. If you make a change to a configuration file outside of the Administration Console it will override and replace any changes you have previously made via the Console.
+		</para>
+	</warning>
+</chapter>
+

@@ -1,0 +1,68 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Common_Tasks">
+	<title>Common Tasks</title>
+	<para>
+		Next we will give an overview of some common tasks you can do with the Administration Console. Each task will be used to highlight a particular function within the console.
+	</para>
+	
+	<para>
+		For a detailed list of all the supported resources and the functions the Administration Console can perform on them please see the accompanying resource specific documentation.
+	</para>
+	
+	<bridgehead>Application Deployment</bridgehead>
+	
+	<para>All applications running in the JBoss Application Server instance are listed in the summary
+		view under <emphasis>: &lt;machine&gt; : JBossAS Servers : JBoss AS 6
+			(all) : Applications </emphasis>in the navigation. Applications can also
+		be further organized by their types to simplify the view:</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata depth="215"
+				   fileref="images/Application_Nav.png"
+				   width="326" />
+		</imageobject>
+	</mediaobject>
+	
+	<important>
+		<para>
+			The Embedded application types were deployed as part of an Enterprise Archive. They are listed separately for easier management and each embedded archive shows the relationship to its' parent. Embedded applications are managed via their parent. In other words, they cannot be deleted or updated and control operations do not apply to them. The management of these applications is done through the operations on the parent.
+		</para>
+	</important>
+	
+	<para>To deploy an application, navigate to the Application type you want to
+		add. In this example, we will use an Enterprise Application. Clicking on the
+		link <emphasis>Enterprise Applications (EAR)s</emphasis> will bring you to
+		the Enterprise Application (EAR) Summary Tab.</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata scalefit="1" fileref="images/Enterprise_App_Summary.png"/>
+		</imageobject>
+	</mediaobject>
+	
+	<para>Clicking on:</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata depth="46"
+				   fileref="images/Admin-Console-QuickStart_html_m6fe09573.jpg"
+				   width="247" />
+		</imageobject>
+	</mediaobject>
+	
+	<para>brings you to <literal>Add New Enterprise Application (EAR)</literal> page. Click the
+		<emphasis role="bold">BROWSE</emphasis> button and select the EAR file to
+		be deployed. Select whether to deploy the app exploded or to the farm
+		directory. Click <emphasis role="bold">CONTINUE</emphasis> to proceed with
+		the application deployment. The status of the deployment will be shown and
+		if successful, added to the list of applications ready to be managed.
+		Otherwise, the reason for the failed deployment will be shown.</para>
+	
+	<para>You can follow this same procedure for other application types that
+  you want to add.</para>
+</chapter>
+

@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Flushing_the_Connection_Pool_for_a_Datasource">
+	<title>Flushing the Connection Pool for a Datasource</title>
+	<para>
+		Certain resources, such as Datasources, have support for executing particular operations from the Administration Console. These operations are exposed on the Control tab for a particular resource. Below is the Control tab for a Datasource:
+	</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata scalefit="1" fileref="images/Admin-Console-QuickStart_html_3cb12404.jpg"/>
+		</imageobject>
+	</mediaobject>
+	
+	<para>
+		In order to flush the connection pool associated with a Datasource you navigate to the Datasource you are interested in, select its Control tab and then push the <emphasis role="bold">FLUSH</emphasis> button. Once the Control operation is executed, the Operation status is returned and listed in the Operations History section at the bottom of the main pane. Multiple operations can be executed and a history of results is maintained until the JBoss Application Server instance is restarted.
+	</para>
+	
+	<para>
+		Other control operations include stopping the JBoss Application Server instance and removing all messages from a JMS Queue.
+	</para>
+	
+</chapter>
+

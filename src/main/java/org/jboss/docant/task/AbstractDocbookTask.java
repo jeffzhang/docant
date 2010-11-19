@@ -311,6 +311,20 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
       }
       else
          log.info("$$ docbook zip can't find");
+      
+      log.info("$$ stage {}", directoryLayout.getStagingDirectory().toString());
+      if (directoryLayout.getStagingDirectory().exists())
+      {
+         try
+         {
+            urls.add(directoryLayout.getStagingDirectory().toURI().toURL());
+         }
+         catch (MalformedURLException e)
+         {
+            throw new JDocBookProcessException("Unable to resolve staging directory to URL", e);
+         }
+      }
+      
       ClassLoader newCl = new URLClassLoader(urls.toArray(new URL[urls.size()]), Thread.currentThread().getContextClassLoader());
       Thread.currentThread().setContextClassLoader(newCl);
    }

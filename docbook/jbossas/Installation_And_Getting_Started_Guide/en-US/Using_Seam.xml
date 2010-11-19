@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<chapter id="Using_Seam">
+	<title>Using Seam</title>
+	<para>
+		JBoss Seam is a framework that provides the glue between the new EJB3 and JSF frameworks that are part of the Java EE 5.0 standard. In fact, the name Seam refers to the seamless manner in which it enables developers to use these two frameworks in an integrated manner. Seam automates many of the common tasks, and makes extensive use of annotations to reduce the amount of xml code that needs to be written. The overall effect is to significantly reduce the total amount of coding that needs to be done.
+	</para>
+	
+	<para>
+		If you are new to Seam, you can find more introductory information from the following url and book:
+<itemizedlist>
+	<listitem>
+		<para>
+				<ulink url="http://docs.jboss.com/seam/2.0.0.GA/reference/en/html_single/">The Seam Reference Guide</ulink>.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				<emphasis>Beginning JBoss Seam</emphasis> by Joseph Faisal Nusairat, Apress 2007.
+			</para>
+		</listitem>
+	
+	</itemizedlist>
+	
+	</para>
+	
+	<para>
+		We have included two versions of the example application, one coded using EJB3 / JSF without using Seam, and one using Seam, to demonstrate clearly the difference in application development using the Seam framework.
+	</para>
+	
+	
+	
+	<section id="Using_Seam_Data_Model">
+		<title>
+			Data Model
+		</title>
+		
+		<para>
+			Let's start off our examination of the Seam implementation in the same way, by examining how the Data Model is implemented. This is done in the <literal>Todo.java</literal> file.
+		</para>
+		
+		<programlisting>@Entity
+@Name("todo")
+public class Todo implements Serializable {
+
+  private long id;
+  private String title;
+  private String description;
+
+  public Todo () {
+    title ="";
+    description ="";
+  }
+
+  @Id @GeneratedValue
+  public long getId() { return id;}
+  public void setId(long id) { this.id = id; }
+
+  @NotNull
+  public String getTitle() { return title; }
+  public void setTitle(String title) {this.title = title;}
+
+  @NotNull
+  @Length(max=250) 
+  public String getDescription() { return description; }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+}</programlisting>
+	
+	<para>
+		The <literal>@Entity</literal> annotation defines the class as an EJB3 entity bean, and tells the container to map the <literal>Todo</literal> class to a relational database table. Each property of the class will become a column in the table. Each instance of the class will become a row in this table. Since we have not used the <literal>@Table</literal> annotation, Seam's "configuration by exception" default will name the table after the class. 
+	</para>
+		
+	<para>
+		<literal>@Entity</literal> and <literal>@Table</literal> are both EJB3 annotations, and are not specific to Seam. It is possible to use Seam completely with POJOs (Plain Old Java Objects) without any EJB3-specific annotations. However, EJB3 brings a lot of advantages to the table, including container managed security, message-driven components, transaction and component level persistence context, and <literal>@PersistenceContext</literal> injection, which we will encounter a little further on.
+	</para>
+	
+	<para>
+		The <literal>@Name</literal> annotation is specific to Seam, and defines the string name for Seam to use to register the Entity Bean. This will be the default name for the relational database table. Each component in a Seam application must have a unique name. In the other components in the Seam framework, such as JSF web pages and session beans, you can reference the managed <literal>Todo</literal> bean using this name. If no instance of this class exists when it is referenced from another component, then Seam will instantiate one.   
+	</para>
+	
+	<para>
+		The <literal>@Id</literal> annotation defines a primary key <literal>id</literal> field for the component. <literal>@GeneratedValue</literal> specifies that the server will automatically generate this value for the component when it is saved to the database.
+	</para>
+	
+	<para>
+		Seam provides support for model-based constraints defined using Hibernate Validator, although Hibernate does not have to be the object persister used. The <literal>@NotNull</literal> annotation is a validation constraint that requires this property to have a value before the component can be persisted into the database. Using this annotation allows the validation to be enforced by the JSF code at the view level, without having to specify the exact validation constraint in the JSF code.
+	</para>
+	
+	<para>
+		At this point the only apparent difference between the Seam version and the EJB3/JSF version of the app is the inclusion of the validator annotation <literal>@NotNull</literal>, and the <literal>@Name</literal> annotation. However, while the EJB3/JSF version of this application requires a further <literal>TodoBean</literal> class to be manually coded and managed in order to handle the interaction between the <literal>Todo</literal> class and the web interface, when using Seam the Seam framework takes care of this work for us. We'll see how this is done in practice as we examine the implementation of the user interface.
+	</para>
+	</section>	
+	
+	<section id="Using_Seam_JSF_Web_Pages">
+		<title>
+			JSF Web Pages - index.xhtml and create.xhtml
+		</title>
+		
+		<para>
+			The <emphasis role="bold">index.xhtml</emphasis> file used is the same as in the EJB3/JSF example.
+		</para>
+		
+		<para>
+			<emphasis role="bold">create.xhtml</emphasis> begins to reveal the difference that coding using the Seam framework makes.
+		</para>
+		
+		<programlisting>&lt;h:form id="create"&gt;
+
+&lt;f:facet name="beforeInvalidField"&gt;
+  &lt;h:graphicImage styleClass="errorImg" value="error.png"/&gt;
+&lt;/f:facet&gt;
+&lt;f:facet name="afterInvalidField"&gt;
+  &lt;s:message styleClass="errorMsg" /&gt;
+&lt;/f:facet&gt;
+&lt;f:facet name="aroundInvalidField"&gt;
+  &lt;s:div styleClass="error"/&gt;
+&lt;/f:facet&gt;
+
+&lt;s:validateAll&gt;
+
+&lt;table&gt;
+
+  &lt;tr&gt;
+    &lt;td&gt;Title:&lt;/td&gt;
+    &lt;td&gt;
+      &lt;s:decorate&gt;
+        &lt;h:inputText id="title" value="#{todo.title}" size="15"/&gt;
+      &lt;/s:decorate&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+
+  &lt;tr&gt;
+    &lt;td&gt;Description:&lt;/td&gt;
+    &lt;td&gt;
+      &lt;s:decorate&gt;
+        &lt;h:inputTextarea id="description" value="#{todo.description}"/&gt;
+      &lt;/s:decorate&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+
+&lt;/table&gt;
+
+&lt;/s:validateAll&gt;
+
+&lt;h:commandButton type="submit" id="create" value="Create"
+                 action="#{todoDao.persist}"/&gt;
+&lt;/h:form&gt;
+		</programlisting>
+		
+		<para>
+			The first thing that is different here is the Java Server Facelet code at the beginning, which works with the <literal>@NotNull</literal> validation constraint of our <literal>todo</literal> class to enforce and indicate invalid input to the user.
+		</para>
+		
+		<para>
+			Also notice here that rather than requiring the use of a <literal>TodoBean</literal> class as we did in the EJB3/JSF example we back the form directly with a <literal>Todo</literal> entity bean. When this page is called, JSF asks Seam to resolve the variable <literal>todo</literal> due to JSF EL references such as <literal>#{todo.title}</literal>. Since there is no value already bound to that variable name, Seam will instantiate an entity bean of the <literal>todo</literal> class and return it to JSF, after storing it in the Seam context. The Seam context replaces the need for an intermediary bean.
+		</para>
+		
+		<para>
+			The form input values are validated against the Hibernate Validator constraints specified in the <literal>todo</literal> class. JSF will redisplay the page if the constraints are violated, or it will bind the form input values to the <literal>Todo</literal> entity bean. 
+		</para>
+		
+		<para>
+			Entity beans shouldn't do database access or transaction management, so we can't use the <literal>Todo</literal> entity bean as a JSF action listener. Instead, creation of a new todo item in the database is accomplished by calling the <literal>persist</literal> method of a <literal>TodoDao</literal> session bean. When JSF requests Seam to resolve the variable <literal>todoDao</literal> through the JSF EL expression <literal>#{todoDao.persist}</literal>, Seam will either instantiate an object if one does not already exist, or else pass the existing stateful <literal>todoDao</literal> object from the Seam context. Seam will intercept the <literal>persist</literal> method call and inject the <literal>todo</literal> entity from the session context. 
+		</para>
+		
+		<para>
+			Let's have a look at the <literal>TodoDao</literal> class (defined in <literal>TodoDao.java</literal>) to see how this injection capability is implemented.
+		</para>
+	</section>
+	
+	<section id="Using_Seam_Session_Bean">
+		<title>
+			Data Access using a Session Bean
+		</title>
+		
+		<para>
+			Let's go through a listing of the code for the <literal>TodoDao</literal> class. 
+		</para>
+				
+		<programlisting>@Stateful
+@Name("todoDao")
+public class TodoDao implements TodoDaoInt {
+
+  @In (required=false) @Out (required=false)
+  private Todo todo;
+
+  @PersistenceContext (type=EXTENDED)
+  private EntityManager em;
+
+  // Injected from pages.xml
+  Long id;
+ 
+  public String persist () {
+    em.persist (todo);
+    return "persisted";
+  }
+
+  @DataModel
+  private List &lt;Todo&gt; todos;
+
+  @Factory("todos")
+  public void findTodos () {
+    todos = em.createQuery("select t from Todo t")
+                                  .getResultList();
+  }
+
+  public void setId (Long id) {
+    this.id = id;
+    
+    if (id != null) {
+      todo = (Todo) em.find(Todo.class, id);
+    } else {
+      todo = new Todo ();
+    }
+  }
+  
+  public Long getId () {
+    return id;
+  }
+
+  public String delete () {
+    em.remove( todo );
+    return "removed";
+  }
+
+  public String update () {
+    return "updated";
+  }
+
+  @Remove @Destroy
+  public void destroy() {}
+
+}</programlisting>
+
+		<para>
+			First of all notice that this is a stateful session bean. Seam can use both stateful and stateless session beans, the two most common types of EJB3 beans.
+		</para>
+		
+		<para>
+			The <literal>@In</literal> and <literal>@Out</literal> annotations define an attribute that is injected by Seam. The attribute is injected to this object or from this object to another via a Seam context variable named <literal>todo</literal>, a reference to the Seam registered name of our <literal>Todo</literal> class defined in <literal>Todo.java</literal>.
+		</para>
+		
+		<para>
+			The <literal>@PersistenceContext</literal> annotation injects the EJB3 Entity manager, allowing this object to persist objects to the database. Because this is a stateful session bean and the <literal>PersistenceContext</literal> type is set to <literal>EXTENDED</literal>, the same Entity Manager instance is used until the Remove method of the session bean is called. The database to be used (a <literal>persistence-unit</literal>) is defined in the file <filename>resources/META-INF/persistence.xml</filename>
+		</para>
+		
+		<para>
+			Note that this session bean has simultaneous access to context associated with web request (the form values of the <literal>todo</literal> object), and state held in transactional resources (the <literal>EntityManager</literal>). This is a break from traditional J2EE architectures, but Seam does not force you to work this way. You can use more traditional forms of application layering if you wish.
+		</para>
+		
+		<para>
+			The <literal>@DataModel</literal> annotation initializes the <literal>todos</literal> property, which will be outjected or "exposed" to the view. The <literal>@Factory</literal> annotated method performs the work of generating the <literal>todos</literal> list, and is called by Seam if it attempts to access the exposed <literal>DataModel</literal> property and finds it to be null. Notice the absence of property access methods for the <literal>todos</literal> property. Seam takes care of this for you automatically. 
+		</para>
+		
+		<para>
+			Let's take a look at the JSF code that we use for displaying and editing the list of todos, to get an idea of how to use these interfaces in practice.
+		</para>
+		
+		</section>
+		
+		<section id="Using_Seam_Display_and_Edit">
+			<title>
+				JSF Web Pages - todos.xhtml and edit.xhtml
+			</title>
+			
+			<para>	
+				Using the <literal>DataModel</literal> exposed property of the Session Bean it becomes trivial to produce a list of todos:
+			</para>
+			
+			<programlisting>&lt;h:form&gt;
+
+&lt;h:dataTable value="#{todos}" var="todo"&gt;
+  &lt;h:column&gt;
+    &lt;f:facet name="header"&gt;Title&lt;/f:facet&gt;
+    #{todo.title}
+  &lt;/h:column&gt;
+  &lt;h:column&gt;
+    &lt;f:facet name="header"&gt;Description&lt;/f:facet&gt;
+    #{todo.description}
+  &lt;/h:column&gt;
+  &lt;h:column&gt;
+    &lt;a href="edit.seam?tid=#{todo.id}"&gt;Edit&lt;/a&gt;
+  &lt;/h:column&gt;
+&lt;/h:dataTable&gt;
+
+&lt;center&gt;
+  &lt;h:commandButton action="create"
+            value="Create New Todo" type="submit"/&gt;
+&lt;/center&gt;
+
+&lt;/h:form&gt;
+</programlisting>
+		
+		<para> 
+			When the JSF variable resolver encounters <literal>{#todos}</literal> and requests <literal>todos</literal>, Seam finds that there is no "todos" component in the current scope, so it calls the @Factory("todos") method to make one. The todos object is then outjected once the factory method is done since it is annotated with the @DataModel annotation. <!--Seam responses by finding the <literal>todos</literal> <literal>DataModel</literal> registered with it, and outjecting that from the bean.-->
+		</para>
+		
+		<para>
+			Constructing the view for the edit page is similarly straight forward:
+		</para>
+		
+		<programlisting>&lt;h:form id="edit"&gt;
+  
+&lt;f:facet name="beforeInvalidField"&gt;
+  &lt;h:graphicImage styleClass="errorImg" value="error.png"/&gt;
+&lt;/f:facet&gt;
+&lt;f:facet name="afterInvalidField"&gt;
+  &lt;s:message styleClass="errorMsg" /&gt;
+&lt;/f:facet&gt;
+&lt;f:facet name="aroundInvalidField"&gt;
+  &lt;s:div styleClass="error"/&gt;
+&lt;/f:facet&gt;
+
+&lt;s:validateAll&gt;
+
+&lt;table&gt;
+
+  &lt;tr&gt;
+    &lt;td&gt;Title:&lt;/td&gt;
+    &lt;td&gt;
+      &lt;s:decorate&gt;
+        &lt;h:inputText id="title" value="#{todo.title}" size="15"/&gt;
+      &lt;/s:decorate&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+
+  &lt;tr&gt;
+    &lt;td&gt;Description:&lt;/td&gt;
+    &lt;td&gt;
+      &lt;s:decorate&gt;
+        &lt;h:inputTextarea id="description" value="#{todo.description}"/&gt;
+      &lt;/s:decorate&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+
+&lt;/table&gt;
+
+&lt;/s:validateAll&gt;
+
+&lt;h:commandButton type="submit" id="update" value="Update"
+                 action="#{todoDao.update}"/&gt;
+&nbsp;
+&lt;h:commandButton type="submit" id="delete" value="Delete"
+                 action="#{todoDao.delete}"/&gt;
+&lt;/h:form&gt;
+		</programlisting>
+		
+		<para>
+			Here we see the same factors in play. JSF validation code taking advantage of the validation constraints defined in our Entity Bean, and the use of the <literal>todoDao</literal> Session Bean's <literal>update</literal> and <literal>delete</literal> methods to update the database.
+		</para>
+		
+		<para>
+			The call from <filename>todos.xhtml</filename>: <literal>edit.seam?tid=#{todo.id}</literal> causes Seam to create a <literal>todoDao</literal> and set it's <literal>id</literal> property to <literal>tid</literal>. Setting its <literal>id</literal> property causes the <literal>todoDao</literal> to retrieve the appropriate record from the database.
+		</para>
+		
+		<para>
+			The functionality that allows the edit page to be called with a parameter in this way is implemented through <literal>pages.xml</literal>. Let's have a look at the  <literal>pages.xml</literal> file and how it is used by Seam applications.
+		</para>
+	</section>
+	
+	<section id="Using_Seam_XML_Files">
+		<title>
+			Xml Files
+		</title>
+		
+		<para>
+			Seam drastically reduces the amount of xml coding that needs to be done. One file that is of interest is the  <literal>pages.xml</literal>, packaged in the <literal>app.war</literal> file's <literal>WEB-INF</literal> directory. This file is available in the <literal>resources/WEB-INF</literal> directory in the source code bundle. The  <literal>pages.xml</literal> file is used to define page descriptions including Seam page parameters (HTTP <literal>GET</literal> parameters), page actions, page navigation rules, error pages etc. <!--This file defines a number of attributes that affect global behaviour of the application.--> Among other things it can be used in a Seam application to define exception handlers and redirections.
+		</para>
+		<para>
+			In the case of our sample application we are using it to define a Seam page parameter. The <literal>pages.xml</literal> in this example contains the following code:
+		</para>
+		
+		<programlisting>&lt;page view-id="/edit.xhtml"&gt;
+    &lt;param name="tid" value="#{todoDao.id}" 
+           converterId="javax.faces.Long"/&gt;
+&lt;/page&gt;</programlisting>
+		<para>
+			This defines a parameter named <literal>tid</literal> for the <literal>edit.xhtml</literal> page. When the <literal>edit.xhtml</literal> page is loaded, the HTTP <literal>GET</literal> request parameter <literal>tid</literal> is converted to a <literal>Long</literal> value and assigned to the <literal>id</literal> property of the <literal>todoDao</literal> object. You can have as many page parameters as required to bind HTTP <literal>GET</literal> request parameters to the back-end components in your application.
+		</para>
+	</section>
+	
+	<section id="Further_Information">
+		<title>
+			Further Information
+		</title>
+		
+		<para>
+			This completes our walkthrough of the sample Seam application.	For further, detailed information on developing applications using the Seam framework, please refer to the <ulink url="http://docs.jboss.com/seam/2.0.0.GA/reference/en/html_single/">The Seam Reference Guide</ulink>.
+		</para>
+	</section>
+</chapter>

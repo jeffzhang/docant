@@ -1,0 +1,24 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="EJB3">
+	<title>
+		EJB 3 in JBoss Application Server 6.0.0
+	</title>
+	
+	<para>
+		There are a number of implementation features that you should be aware of when developing applications for JBoss Application Server 6.0.0. 
+	</para>
+	
+	<section>
+		<title>
+			Unimplemented features
+		</title>
+		
+		<para>
+			The Release Notes for JBoss Application Server contain information on EJB3 features that are not yet implemented, or partially implemented. The Release Notes include links to issues in JIRA for information on workarounds and further details.
+		</para>
+	</section>
+			
+</chapter>

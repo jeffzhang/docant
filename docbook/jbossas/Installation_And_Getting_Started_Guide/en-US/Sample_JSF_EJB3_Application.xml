@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+]>
+<chapter id="Sample_JSF_EJB3_Application">
+	<title>Sample JSF-EJB3 Application</title>
+	<para>
+		We use a simple "TODO" application to show how JSF and EJB3 work together in a web application. The "TODO" application works like this: You can create a new 'todo' task item using the "Create" web form. Each 'todo' item has a 'title' and a 'description'. When you submit the form, the application saves your task to a relational database. Using the application, you can view all 'todo' items, edit/delete an existing 'todo' item and update the task in the database.
+	</para>
+	<para>
+		The sample application comprises the following components:
+		<itemizedlist>
+			<listitem>
+				<para>
+					Entity objects - These objects represent the data model; the properties in the object are mapped to column values in relational database tables.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					JSF web pages - The web interface used to capture input data and display result data. The data fields on these web pages are mapped to the data model via the JSF Expression Language (EL).
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					EJB3 Session Bean - This is where the functionality is implemented. We make use of a Stateless Session Bean.
+				</para>
+			</listitem>
+		</itemizedlist>
+	</para>
+	<section id="Sample_JSF_EJB3_Application-Data_Model">
+		<title>Data Model</title>
+		<para>
+			Let's take a look at the contents of the Data Model represented by the <literal>Todo</literal> class in the <literal>Todo.java</literal> file. Each instance of the <literal>Todo</literal> class corresponds to a row in the relational database table. The 'Todo' class has three properties: id, title and description. Each of these correspond to a column in the database table.
+		</para>
+		<para>
+			 The 'Entity class' to 'Database Table' mapping information is specified using EJB3 Annotations in the 'Todo' class. This eliminates the need for XML configuration and makes it a lot clearer. The <literal>@Entity</literal> annotation defines the <literal>Todo</literal> class as an Entity Bean. The <literal>@Id</literal> and <literal>@GeneratedValue</literal> annotations on the <literal>id</literal> property indicate that the <literal>id</literal> column is the primary key and that the server automatically generates its value for each <literal>Todo</literal> object saved into the database.  
+		</para>
+		<para>
+<programlisting>
+@Entity
+public class Todo implements Serializable {
+
+  private long id;
+  private String title;
+  private String description;
+
+  public Todo () {
+    title ="";
+    description ="";
+  }
+
+  @Id @GeneratedValue
+  public long getId() { return id;}
+  public void setId(long id) { this.id = id; }
+
+  public String getTitle() { return title; }
+  public void setTitle(String title) {this.title = title;}
+
+  public String getDescription() { return description; }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+}
+</programlisting>
+		</para>
+	</section>
+	<section id="Sample_JSF_EJB3_Application-JSF_Web_Pages">
+		<title>JSF Web Pages</title>
+		<para>
+			In this section we will show you how the web interface is defined using JSF pages. We will also see how the data model is mapped to the web form using JSF EL. Using the #{...} notation to reference Java objects is called <emphasis role="bold">JSF EL</emphasis> (JSF Expression Language). Lets take a look at the pages used in our application:
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis role="bold">index.xhtml</emphasis>: This page displays two options: 1. Create New Todo 2. Show all Todos. When you click on the Submit button the corresponding action is invoked. 
+					</para>
+					<para>
+<programlisting>
+&lt;h:form&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;h:commandLink type="submit" value="Create New Todo" action="create"/&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;h:commandLink type="submit" value="Show All Todos" action="todos"/&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/h:form&gt;
+</programlisting>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">create.xhtml</emphasis>: When you try to create a new task, this JSF page captures the input data. We use the <literal>todoBean</literal> to back the form input text fields. The #{todoBean.todo.title} symbol refers to the "title" property of the "todo" object in the "TodoBean" class. The #{todoBean.todo.description} symbol refers to the "description" property of the "todo" object in the "TodoBean" class.  The #{todoBean.persist} symbol refers to the "persist" method in the "TodoBean" class. This method creates the "Todo" instance with the input data (title and description) and persists the data.
+					</para>
+					
+<programlisting role="xml">
+&lt;h:form id="create"&gt;
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Title:&lt;/td&gt;
+    &lt;td&gt;
+      &lt;h:inputText id="title" value="#{todoBean.todo.title}" size="15"&gt;
+        &lt;f:validateLength minimum="2"/&gt;
+      &lt;/h:inputText&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Description:&lt;/td&gt;
+    &lt;td&gt;
+      &lt;h:inputTextarea id="description" value="#{todoBean.todo.description}"&gt;
+        &lt;f:validateLength minimum="2" maximum="250"/&gt;
+      &lt;/h:inputTextarea&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;h:commandButton type="submit" id="create" value="Create"
+                 action="#{todoBean.persist}"/&gt;
+&lt;/h:form&gt;
+</programlisting>
+
+<para>
+	<xref linkend="Sample_JSF_EJB3_Application-JSF_Web_Pages-jsfejb3_create_todo"/> shows the "Create Todo" web page with the input fields mapped to the data model.
+					</para>
+					<figure id="Sample_JSF_EJB3_Application-JSF_Web_Pages-jsfejb3_create_todo">
+						<title>The "Create Todo" web page </title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/jsfejb3_create_todo.png"/>
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">todos.xhtml</emphasis>: This page displays the list of all "todos" created. There is also an option to choose a "todo" item for 'edit' or 'delete'.
+					</para>
+					<para>
+						 The list of all 'todos' is fetched by #{todoBean.todos} symbol referring to the 'getTodos()' property in the 'TodoBean' class. The JSF <literal>dataTable</literal> iterates through the list and displays each <literal>Todo</literal> object in a row. The 'Edit' option is available across each row. The #{todo.id} symbol represents the "id" property of the "todo" object.
+					</para>
+					<para>
+<programlisting>
+&lt;h:form&gt;
+&lt;h:dataTable value="#{todoBean.todos}" var="todo"&gt;
+  &lt;h:column&gt;
+    &lt;f:facet name="header"&gt;Title&lt;/f:facet&gt;
+    #{todo.title}
+  &lt;/h:column&gt;
+  &lt;h:column&gt;
+    &lt;f:facet name="header"&gt;Description&lt;/f:facet&gt;
+    #{todo.description}
+  &lt;/h:column&gt;
+  &lt;h:column&gt;
+    &lt;a href="edit.faces?tid=#{todo.id}"&gt;Edit&lt;/a&gt;
+  &lt;/h:column&gt;
+&lt;/h:dataTable&gt;
+&lt;center&gt;
+  &lt;h:commandButton action="create"
+            value="Create New Todo" type="submit"/&gt;
+&lt;/center&gt;
+&lt;/h:form&gt;
+</programlisting>
+					<xref linkend="Sample_JSF_EJB3_Application-JSF_Web_Pages-jsfejb3_todos"/> shows the "Show All Todos" web page with the data fields mapped to the data model.
+					</para>
+					<figure id="Sample_JSF_EJB3_Application-JSF_Web_Pages-jsfejb3_todos">
+						<title>The "Show All Todos" web page </title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/jsfejb3_todos.png"/>
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">edit.xhtml</emphasis>: This page allows you to edit the "todo" item's 'title' and 'description' properties. The #{todoBean.update} and #{todoBean.delete} symbols represent the "update" and "delete" methods in the "TodoBean" class.
+					</para>
+					
+<programlisting role="xml">
+&lt;h2&gt;Edit #{todoBean.todo.title}&lt;/h2&gt;
+&lt;h:form id="edit"&gt;
+&lt;input type="hidden" name="tid" value="#{todoBean.todo.id}"/&gt;
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Title:&lt;/td&gt;
+    &lt;td&gt;
+      &lt;h:inputText id="title" value="#{todoBean.todo.title}" size="15"&gt;
+        &lt;f:validateLength minimum="2"/&gt;
+      &lt;/h:inputText&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Description:&lt;/td&gt;
+    &lt;td&gt;
+      &lt;h:inputTextarea id="description" value="#{todoBean.todo.description}"&gt;
+        &lt;f:validateLength minimum="2" maximum="250"/&gt;
+      &lt;/h:inputTextarea&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;h:commandButton type="submit" id="update" value="Update"
+                 action="#{todoBean.update}"/&gt;
+&lt;h:commandButton type="submit" id="delete" value="Delete"
+                 action="#{todoBean.delete}"/&gt;
+&lt;/h:form&gt;
+</programlisting>
+<para>
+					<xref linkend="Sample_JSF_EJB3_Application-JSF_Web_Pages-jsfejb3_edit_todo"/> shows the "Edit Todo" web page with the mapping to the data model.
+					</para>
+					<figure id="Sample_JSF_EJB3_Application-JSF_Web_Pages-jsfejb3_edit_todo">
+						<title>The "Edit Todo" web page </title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/jsfejb3_edit_todo.png"/>
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</listitem>
+			</itemizedlist>
+		</para>
+		<note>
+			<para>
+				We have used XHTML pages in the sample applications because we recommend using Facelets instead of JSP to render JSF view pages.
+			</para>
+		</note>
+	</section>
+	<section id="Sample_JSF_EJB3_Application-EJB3_Session_Beans">
+		<title>EJB3 Session Beans</title>
+		<para>
+			EJB 3.0 is one of the major improvements introduced with Java EE 5.0. It aims at reducing the complexity of older versions of EJB and simplifies Enterprise Java development and deployment. You will notice that to declare a class as a 'Session Bean' you simply have to annotate it. Using annotations eliminates the complexity involved with too many deployment descriptors. Also the only interface an EJB3 Session Bean requires is a business interface that declares all the business methods that must be implemented by the bean. 
+		</para>
+		<para>
+			We will explore the two important source files associated with the Bean implementation in our application: <literal>TodoDaoInt.java</literal> and <literal>TodoDao.java</literal>.
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis role="bold">Business interface</emphasis>: <literal>TodoDaoInt.java</literal>
+					</para>
+					<para>We define here the methods that need to be implemented by the bean implementation class. Basically, the business methods that will be used in our application are defined here.
+						
+<programlisting role="JAVA">
+public interface TodoDaoInt {
+
+  public void persist (Todo todo);
+  public void delete (Todo todo);
+  public void update (Todo todo);
+
+  public List &lt;Todo&gt; findTodos ();
+  public Todo findTodo (String id);
+}
+</programlisting>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">Stateless Session Bean</emphasis>: <literal>TodoDao.java</literal>
+					</para>
+					<para>
+						The <literal>@Stateless</literal> annotation marks the bean as a stateless session bean. In this class, we need to access the Entity bean <literal>Todo</literal> defined earlier. For this we need an <literal>EntityManager</literal>. The <literal>@PersistenceContext</literal> annotation tells the JBoss Server to inject an entity manager during deployment.
+<programlisting>
+@Stateless
+public class TodoDao implements TodoDaoInt {
+
+  @PersistenceContext
+  private EntityManager em;
+
+  public void persist (Todo todo) {
+    em.persist (todo);
+  }
+
+  public void delete (Todo todo) {
+    Todo t = em.merge (todo);
+    em.remove( t );
+  }
+
+  public void update (Todo todo) {
+    em.merge (todo);
+  }
+
+  public List &lt;Todo&gt; findTodos () {
+    return (List &lt;Todo&gt;) em.createQuery("select t from Todo t")
+                                  .getResultList();
+  }
+
+  public Todo findTodo (String id) {
+    return (Todo) em.find(Todo.class, Long.parseLong(id));
+  }
+
+}
+</programlisting>
+					</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+	</section>
+	<section id="Sample_JSF_EJB3_Application-Configuration_and_Packaging">
+		<title>Configuration and Packaging</title>
+		<para>
+			We will build the sample application using Ant and explore the configuration and packaging details. Please install Ant if currently not installed on your computer.
+		</para>
+		<section id="Building_The_Application">
+			<title>Building The Application</title>
+			<para>Let's look at building the example application and then explore the configuration files in detail.
+			</para>
+			<para>
+				In <xref linkend="About_the_Example_Applications"/>, we looked at the directory structure of the <literal>jsfejb3</literal> sample application. At the command line, go to the <literal>jsfejb3</literal> directory. There you will see a <literal>build.xml</literal> file. This is our Ant build script for compiling and packaging the archives. To build the application, you need to first of all edit the <literal>build.xml</literal> file and edit the value of <literal>jboss-dist</literal> to reflect the location where the JBoss Application Server is installed. Once you have done this, just type the command <literal>ant</literal> and your output should look like this:
+			</para>
+<screen>[user@localhost jsfejb3]$ ant
+Buildfile: build.xml
+
+compile:
+    [mkdir] Created dir: /jboss/gettingstarted/jsfejb3/build/classes
+    [javac] Compiling 4 source files to /home/user/Desktop/gettingstarted/jsfejb3/build/classes
+    [javac] Note: /jboss/gettingstarted/jsfejb3/src/TodoDao.java uses unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
+
+war:
+    [mkdir] Created dir: /jboss/gettingstarted/jsfejb3/build/jars
+      [war] Building war: /jboss/gettingstarted/jsfejb3/build/jars/app.war
+
+ejb3jar:
+      [jar] Building jar: /jboss/gettingstarted/jsfejb3/build/jars/app.jar
+
+ear:
+      [ear] Building ear: /jboss/gettingstarted/jsfejb3/build/jars/jsfejb3.ear
+
+main:
+
+BUILD SUCCESSFUL
+Total time: 3 seconds
+
+</screen>
+			<para>
+				If you get the BUILD SUCCESSFUL message, you will find a newly created <literal>build</literal> directory with 2 sub-directories in it: <itemizedlist>
+					<listitem>
+						<para>
+							<emphasis role="bold">classes</emphasis>: containing the compiled class files.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis role="bold">jars</emphasis>: containing three archives - <literal>app.jar</literal>, <literal>app.war</literal> and <literal>jsfejb3.ear</literal>. <itemizedlist>
+								<listitem>
+									<para>
+										app.jar : EJB code and descriptors.
+									</para>
+								</listitem>
+								<listitem>
+									<para>
+										app.war : web application which provides the front end to allow users to interact with the business components (the EJBs). The web source (HTML, images etc.) contained in the <literal>jsfejb3/view</literal> directory is added unmodified to this archive. The Ant task also adds the <literal>WEB-INF</literal> directory that contains the files which aren’t meant to be directly accessed by a web browser but are still part of the web application. These include the deployment descriptors (<literal>web.xml</literal>) and extra jars required by the web application.
+									</para>
+								</listitem>
+								<listitem>
+									<para>
+										jsfejb3.ear : The EAR file is the complete application, containing the EJB modules and the web module. It also contains an additional descriptor, <literal>application.xml</literal>. It is also possible to deploy EJBs and web application modules individually but the EAR provides a convenient single unit.
+									</para>
+								</listitem>
+							</itemizedlist>
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+		</section>
+		<section id="Configuration_Files">
+			<title>Configuration Files</title>
+			<para>
+				Now that we have built the application, lets take a closer look at some of the important Configuration files. We have built the final archive ready for deployment - <literal>jsfejb3.ear</literal>. The contents of your EAR file should look like this:	
+			</para>
+<programlisting>
+jsfejb3.ear
+|+ app.jar   // contains the EJB code
+    |+ import.sql
+    |+ Todo.class
+    |+ TodoDao.class
+    |+ TodoDaoInt.class
+    |+ META-INF
+        |+ persistence.xml
+|+ app.war   // contains web UI
+    |+ index.html
+    |+ index.xhtml
+    |+ create.xhtml
+    |+ edit.xhtml
+    |+ todos.xhtml
+    |+ TodoBean.class
+    |+ style.css
+    |+ META-INF
+    |+ WEB-INF
+       |+ faces-config.xml
+       |+ navigation.xml
+       |+ web.xml
+|+ META-INF  // contains the descriptors
+    |+ application.xml
+    |+ jboss-app.xml
+</programlisting>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<literal>application.xml</literal>: This file lists the JAR files in the EAR (in our case <literal>app.jar</literal>) and tells the JBoss server what files to look for and where. The root URL for the application is also specified in this file as 'context-root'.
+<programlisting>
+&lt;application&gt;
+  &lt;display-name&gt;Sample Todo&lt;/display-name&gt;
+  &lt;module&gt;
+    &lt;web&gt;
+      &lt;web-uri&gt;app.war&lt;/web-uri&gt;
+      &lt;context-root&gt;/jsfejb3&lt;/context-root&gt;
+    &lt;/web&gt;
+  &lt;/module&gt;
+  &lt;module&gt;
+    &lt;ejb&gt;app.jar&lt;/ejb&gt;
+  &lt;/module&gt;
+&lt;/application&gt;
+</programlisting>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<literal>jboss-app.xml</literal>: Every EAR application should specify a unique string name for the class loader. In our case, we use the application name 'jsfejb3' as the class loader name.
+<programlisting>
+&lt;jboss-app&gt;
+  &lt;loader-repository&gt;
+    jsfejb3:archive=jsfejb3.ear
+  &lt;/loader-repository&gt;
+&lt;/jboss-app&gt;
+</programlisting>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<literal>app.jar</literal>: This contains EJB3 Session Bean and Entity Bean classes and the related configuration files. In addition, the <literal>persistence.xml</literal> file configures the back-end data source (in our case the default HSQL database) for the <literal>EntityManager</literal>. 
+<programlisting>
+&lt;persistence&gt;
+   &lt;persistence-unit name="helloworld"&gt;
+      &lt;provider&gt;org.hibernate.ejb.HibernatePersistence&lt;/provider&gt;
+      &lt;jta-data-source&gt;java:/DefaultDS&lt;/jta-data-source&gt;
+      &lt;properties&gt;
+         &lt;property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/&gt;
+         &lt;property name="hibernate.hbm2ddl.auto" value="create-drop"/&gt;
+      &lt;/properties&gt;
+   &lt;/persistence-unit&gt;
+&lt;/persistence&gt;
+</programlisting>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<literal>app.war</literal>: This contains the Web UI files packaged according to the Web Application aRchive (WAR) specification. It contains all the web pages and the required configuration files. The <literal>web.xml</literal> file is an important file for all JAVA EE web applications. It is the web deployment descriptor file. The <literal>faces-config.xml</literal> file is the configuration file for JSF. The <literal>navigation.xml</literal> file contains the rules for JSF page navigation.
+					</para>
+<programlisting>
+//faces-config.xml
+&lt;faces-config&gt;
+  &lt;application&gt;
+    &lt;view-handler&gt;
+      com.sun.facelets.FaceletViewHandler
+    &lt;/view-handler&gt;
+  &lt;/application&gt;
+  &lt;managed-bean&gt;
+    &lt;description&gt;Dao&lt;/description&gt;
+    &lt;managed-bean-name&gt;todoBean&lt;/managed-bean-name&gt;
+    &lt;managed-bean-class&gt;TodoBean&lt;/managed-bean-class&gt;
+    &lt;managed-bean-scope&gt;request&lt;/managed-bean-scope&gt;
+  &lt;/managed-bean&gt;
+&lt;/faces-config&gt;
+</programlisting>
+				</listitem>
+			</itemizedlist>
+		</section>
+	</section>
+	<section id="The_Database">
+		<title>The Database</title>
+		<section id="The_Database-Creating_the_Database_Schema">
+			<title>Creating the Database Schema</title>
+			<para>
+				To pre-populate the database, we have supplied SQL Code (<literal>import.sql</literal>) to run with HSQL in the <literal>examples/jsfejb3/resources</literal> directory. When you build the application using Ant, this is packaged in the app.jar file within the jsfejb3.ear file. When the application is deployed, you should be able to view the pre-populated data.
+			</para>
+		</section>
+		<section id="The_Database-The_HSQL_Database_Manager_Tool">
+			<title>The HSQL Database Manager Tool</title>
+			<para>
+				Just as a quick aside at this point, start up the JMX console application and click on the <literal>service=Hypersonic</literal> link which you’ll find under the section <literal>jboss</literal>. If you can’t find this, make sure the Hypersonic service is enabled in the <literal>hsqldb-ds.xml</literal> file.
+			</para>
+			<para>
+				This will take you to the information for the Hypersonic service MBean. Scroll down to the bottom of the page and click the <literal>invoke</literal> button for the <literal>startDatabaseManager()</literal> operation. This starts up the HSQL Manager, a Java GUI application which you can use to manipulate the database directly.
+			</para>
+			<figure id="The_HSQL_Database_Manager_Tool-The_HSQL_Database_Manger_">
+				<title>The HSQL Database Manger </title>
+				<mediaobject>
+					<imageobject>
+						<imagedata align="center" fileref="images/hsql-manager.png"/>
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</section>
+	</section>
+	<section id="Sample_JSF_EJB3_Application-Deploying_the_Application">
+		<title>Deploying the Application</title>
+		<para>
+			Deploying an application in JBoss is simple and easy. You just have to copy the EAR file to the <literal>deploy</literal> directory in the 'server configuration' directory of your choice. Here, we will deploy it to the 'default' configuration, so we copy the EAR file to the <literal>JBOSS_DIST/jboss-as/server/default/deploy</literal> directory.
+		</para>
+		<para>
+			You should see something close to the following output from the server:
+		</para>
+<screen>
+15:32:23,997 INFO  [EARDeployer] Init J2EE application: file:/jboss/jboss-as-5.0.0&lt;release&gt;/server/default/deploy/jsfejb3.ear
+15:32:24,212 INFO  [JmxKernelAbstraction] creating wrapper delegate for: org.jboss.ejb3.
+entity.PersistenceUnitDeployment
+15:32:24,213 INFO  [JmxKernelAbstraction] installing MBean: persistence.units:ear=
+jsfejb3.ear,jar=app.jar,unitName=helloworld with dependencies:
+15:32:24,213 INFO  [JmxKernelAbstraction]       jboss.jca:name=DefaultDS,service=
+DataSourceBinding
+15:32:24,275 INFO  [PersistenceUnitDeployment] Starting persistence unit persistence.
+units:ear=jsfejb3.ear,jar=app.jar,unitName=helloworld
+15:32:24,392 INFO  [Ejb3Configuration] found EJB3 Entity bean: Todo
+15:32:24,450 WARN  [Ejb3Configuration] Persistence provider caller does not implements 
+the EJB3 spec correctly. PersistenceUnitInfo.getNewTempClassLoader() is null.
+15:32:24,512 INFO  [Configuration] Reading mappings from resource : META-INF/orm.xml
+15:32:24,512 INFO  [Ejb3Configuration] [PersistenceUnit: helloworld] no META-INF/orm.xml 
+found
+15:32:24,585 INFO  [AnnotationBinder] Binding entity from annotated class: Todo
+15:32:24,586 INFO  [EntityBinder] Bind entity Todo on table Todo
+.
+.
+.
+.
+15:32:26,311 INFO  [SchemaExport] Running hbm2ddl schema export
+15:32:26,312 INFO  [SchemaExport] exporting generated schema to database
+15:32:26,314 INFO  [SchemaExport] Executing import script: /import.sql
+15:32:26,418 INFO  [SchemaExport] schema export complete
+15:32:26,454 INFO  [NamingHelper] JNDI InitialContext properties:{java.naming.factory.
+initial=org.jnp.interfaces.NamingContextFactory, java.naming.factory.url.pkgs=org.jboss.
+naming:org.jnp.interfaces}
+15:32:26,484 INFO  [JmxKernelAbstraction] creating wrapper delegate for: org.jboss.ejb3.
+stateless.StatelessContainer
+15:32:26,485 INFO  [JmxKernelAbstraction] installing MBean: jboss.j2ee:ear=jsfejb3.ear,
+jar=app.jar,name=TodoDao,service=EJB3 with dependencies:
+15:32:26,513 INFO  [JmxKernelAbstraction]       persistence.units:ear=jsfejb3.ear,
+jar=app.jar,unitName=helloworld
+15:32:26,557 INFO  [EJBContainer] STARTED EJB: TodoDao ejbName: TodoDao
+15:32:26,596 INFO  [EJB3Deployer] Deployed: file:/jboss/jboss-as-5.0.0&lt;release&gt;
+server/default/tmp/deploy/
+tmp33761jsfejb3.ear-contents/app.jar
+15:32:26,625 INFO  [TomcatDeployer] deploy, ctxPath=/jsfejb3, warUrl=.../tmp/deploy/
+tmp33761jsfejb3.ear-contents/app-exp.war/
+15:32:26,914 INFO  [EARDeployer] Started J2EE application: file:/jboss/jboss-as-5.0.0&lt;release&gt;/server/default/deploy/jsfejb3.ear
+</screen>
+		<para>
+			If there are any errors or exceptions, make a note of the error message. Check that the EAR is complete and inspect the WAR file and the EJB jar files to make sure they contain all the necessary components (classes, descriptors etc.).
+		</para>
+		<para>
+			You can safely redeploy the application if it is already deployed. To undeploy it you just have to remove the archive from the <literal>deploy</literal> directory. There’s no need to restart the server in either case. If everything seems to have gone OK, then point your browser at the application URL.
+		</para>
+		<para>
+			<ulink url="http://localhost:8080/jsfejb3"/>
+		</para>
+		<para>
+			You will be forwarded to the application main page. <xref linkend="Deploying_the_Application-Sample_TODO"/> shows the sample application in action.
+		</para>
+		<figure id="Deploying_the_Application-Sample_TODO">
+			<title>Sample TODO</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata align="center" fileref="images/sample_jsfejb3.png"/>
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
+
+</chapter>

@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Updating_Applications">
+	<title>Updating Applications</title>
+	<para>
+		To update an application, select it from the navigation panel and then in the main panel click on the Content Tab. <emphasis role="bold">BROWSE</emphasis> to the location of where the updated application resides then hit the <emphasis role="bold">UPDATE</emphasis> button. Example below of updating an .EAR deployment:
+	</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata scalefit="1" fileref="images/Update_EAR.png"/>
+		</imageobject>
+	</mediaobject>
+	
+	<important>
+		<para>
+			The file to be updated must have the same name as the application you plan to update.
+		</para>
+	</important>
+</chapter>
+

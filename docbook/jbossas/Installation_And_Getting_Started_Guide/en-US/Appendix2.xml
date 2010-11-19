@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE appendix PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+]>
+<appendix id="appendix2">
+        <title>Further Information Sources</title>
+    <para>
+        Developers wanting to get familiar with software development and implementation in JBoss Application Server can read: <emphasis>JBoss in Action: Configuring the JBoss Application Server</emphasis>. (Manning, 2009. Javid Jamae, Peter Johnson).
+    </para>
+    <para>
+        For more JBoss documentation related to JBoss Application Server 6 and its' underylying technologies, refer to the manuals available online at <ulink url="http://www.jboss.org/jbossas/docs/6-x.html"/>.
+    </para>
+    <para>
+        For the latest information on EJB 3.1 with thorough JBoss coverage see <ulink url="http:http://www.amazon.ca/Enterprise-JavaBeans-3-1-Andrew-Rubinger/dp/0596158025"><emphasis>Enterprise JavaBeans 3.1, 6th Edition</emphasis></ulink>. (O'Reilly, 2010. Andrew Rubinger, Bill Burke, Richard Monson-Haefel).   The book examples show how Java EE integration testing is made easier using <ulink url="http://www.jboss.org/arquillian">Arquillian</ulink> and <ulink url="http://jboss.org/shrinkwrap">ShrinkWrap</ulink>, two breakthrough community projects simplifying Java EE integration testing.
+    </para>
+    <para>
+        To learn more about Hibernate, see <emphasis>Java Persistence With Hibernate</emphasis>. (Manning, 2007. Christian Bauer, Gavin King)
+    </para>
+    <para>
+        For complete coverage of the JBoss Seam framework, we recommend <emphasis>Seam in Action</emphasis>. (Manning, 2009. Dan Allen).
+    </para>
+</appendix>

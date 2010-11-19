@@ -1,0 +1,40 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-User_Interface_Overview">
+	<title>User Interface Overview</title>
+	<para>
+		Once successfully logged in, you have an overall summary of the system that the JBoss Application Server is running on such as Operating System information and host name.
+	</para>
+	
+	<para>
+		The Administration Console pages are split up into two main areas:
+	</para>
+	
+	<itemizedlist>
+		<listitem>
+			<para>
+				The left navigation panel (blue background) allows the user to browse the different resources which are deployed into their JBoss Application Server instance. A tree metaphor is used to represent the resource hierarchy, with the root being the machine the JBoss Application Server instance is running on. The tree can be expanded to show child resources, for example the JBoss Application Server instance and then within that a list of Datasources.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				The main resource panel (white background) shows information about a particular resource or resources which were selected from the navigation on the left. This is also the place that allows direct access to all the administrative tasks for a resource (for example, update its configuration), delete it. The resource showing in the main pane is normally highlighted in <emphasis role="bold">bold</emphasis> in the navigation pane.
+			</para>
+		</listitem>
+	</itemizedlist>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata scalefit="1" fileref="images/Metrics_Summary.png"/>
+		</imageobject>
+  	</mediaobject>
+	
+	<note>
+		<para>
+			The currently running JBoss Application Server instance, with its configuration shown in parentheses, is found under the <emphasis>JBossAS Servers</emphasis> folder near the top of the navigation tree. Only one running server is managed at a time through the Administration Console. Click on the <emphasis>JBoss AS 6 (all)</emphasis> link and an overview of the JBoss Application Server instance which is running the Administration Console is shown.
+		</para>
+	</note>
+</chapter>
+

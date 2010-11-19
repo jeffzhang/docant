@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                         "http://www.docbook.org/xml/4.4/docbookx.dtd">
+
+<chapter id="Getting_Started">
+    <title>Getting Started</title>
+        <section id="Configuring your Java Environment"><title>
+                        <para>
+                         You must have a working installation of <emphasis>JDK 1.6</emphasis> before you install JBoss Application Server. You can install the 32-bit or 64-bit JVM depending on your requirements. 
+                        </para>
+                        <para>Be sure to create an environment variable that points to the JDK installation directory and call it <literal>JAVA_HOME</literal>. Add <literal>$JAVA_HOME/bin</literal> to the system path to be able to run <literal>java</literal> from the command line. You can do this by adding the following lines to the <filename>.bashrc</filename> file in your home directory. In this example /usr/java/jdk1.6.0_18 is the JDK installation directory.
+               <programlisting>
+               export JAVA_HOME=/usr/java/jdk1.6.0_18 export PATH=$PATH:$JAVA_HOME/bin </programlisting> 
+
+		Set this variable for the user account doing the installation and also for the user account that will run the server.  </para>
+                <para>
+                 Make sure that the <literal>java</literal> executable is in your path and that you are using an appropriate version. To verify your Java environment, type <literal>java -version</literal> at the shell prompt and you should see something like this:
+                             <programlisting>
+                                [root@hostname]$ java -version
+                                java version "1.6.0_18"
+                                Java(TM) SE Runtime Environment (build 1.6.0_18-b07)
+                                Java HotSpot(TM) Server VM (build 16-b13, mixed mode)
+                            </programlisting>
+                  </para>
+    </section>
+</chapter>

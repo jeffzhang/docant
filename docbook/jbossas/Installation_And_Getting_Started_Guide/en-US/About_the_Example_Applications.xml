@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="About_the_Example_Applications">
+	<title>Sample Applications</title>
+	<para>
+	The JBoss Application Server, ships with various sample applications under <literal>JBOSS_HOME/docs/examples</literal>.		
+	</para>
+	<para>
+		For further details, please refer to the accompanying <filename>readme.txt</filename> for the respective sample applications under the above directory.
+	</para>
+	
+</chapter>
+

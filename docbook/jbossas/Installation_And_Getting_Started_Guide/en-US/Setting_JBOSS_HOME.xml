@@ -1,0 +1,63 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                         "http://www.docbook.org/xml/4.4/docbookx.dtd">
+
+<chapter id="setting_JBOSS_HOME">
+	<title>Setting the JBOSS_HOME variable</title>
+
+<section id="setting_JBOSS_HOME_linux"><title>Setting the <command>JBOSS_HOME</command> variable in Linux.</title>
+	
+	<para>
+		Before you can run the JBoss Application Server, you need to ensure that you've configured the JBOSS_HOME environment variable in your  <filename>.bashrc</filename> file as follows.  In this example the Application Server folder has beeen copied to the <filename>/usr/jboss/jboss-&lt;release&gt;</filename> folder.
+		The following is a <filename>.bashrc</filename> file used in this installation. Please ensure that your <filename>.bashrc</filename> file has a similar configuration.
+
+<screen>[user@localhost ~]$ gedit .bashrc
+	
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+/etc/bashrc
+fi
+......
+# User specific aliases and functions
+# The following are the environment variables for Java, ANT and JBoss
+
+export JAVA_HOME=/usr/java/jdk1.6.0_18
+export PATH=$PATH:$JAVA_HOME/bin
+	
+export ANT_HOME=/usr/ant/apache-ant-1.6.0
+export PATH=$PATH:$ANT_HOME/bin
+
+export JBOSS_HOME=/usr/jboss/jboss-&lt;release&gt;
+export PATH=$PATH:$JBOSS_HOME/bin
+</screen>
+
+			To implement your <filename>.bashrc</filename> file changes run the following command.
+
+<screen>[user@localhost ~]$ source .bashrc
+[user@localhost ~]$</screen>
+
+			If no errors are displayed on your terminal, you are now ready to run your JBoss Application Server.
+			</para>
+						
+		</section>
+	
+<section id="setting_JBOSS_HOME_windows"> <title>Setting the <command>JBOSS_HOME</command> variable in Windows.</title>
+	<para>
+		<itemizedlist>
+			<listitem>
+				<para>
+				Create an environment variable called <literal>JBOSS_HOME</literal> that points to the JBoss Application Server installation directory, for example: <literal>C:\Program Files\JBoss\jboss-&lt;release&gt;\</literal>.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+				In order to run JBoss Application Server from the command line, add the <literal>jboss-&lt;release&gt;\bin</literal> directory to your path, for example: <literal>C:\Program Files\JBoss\jboss-&lt;release&gt;\bin</literal>. To do this, open the Control Panel from the Start Menu, switch to Classic View if necessary, open the System Control Panel applet, select the Advanced Tab, and click on the Environment Variables button.
+				</para>
+			</listitem>
+		</itemizedlist>
+		You are now ready to start JBoss Application Server 6.
+	</para>
+	
+</section>
+	
+</chapter>

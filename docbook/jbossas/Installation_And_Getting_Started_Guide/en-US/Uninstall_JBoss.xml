@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                         "http://www.docbook.org/xml/4.5/docbookx.dtd">
+<chapter id="Uninstall_JBoss">
+    <title>Uninstall JBoss</title>
+    <para>
+        The JBoss Application Server may be uninstalled by simply deleting the JBoss Application Server's installation directory. You will also need to remove the <emphasis>JBOSS_HOME</emphasis> environment variables discussed in <xref linkend="setting_JBOSS_HOME"/> for your Linux or Windows platform.
+    </para>
+</chapter>

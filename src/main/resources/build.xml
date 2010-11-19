@@ -1,0 +1,80 @@
+<project name="Manual" default="process" basedir=".">
+
+  <property name="build.dir" value="build"/>
+  <import file="${basedir}/support.xml"/>
+
+  <macrodef name="transformer">
+    <attribute name="srcDir"/>
+    <attribute name="srcDocName"/>
+    <attribute name="pdfName"/>
+    <sequential>
+      <delete dir="${basedir}/target/docbook/publish"/>
+
+      <docant sourceDirectory="src/main/docbook/@{srcDir}" 
+              sourceDocumentName="@{srcDocName}"
+              baseOutputDirectory="target">
+
+	<format name="html_single" 
+	stylesheetResource="classpath:/xslt/org/jboss/xhtml-single.xsl"
+	targetFinalName="index.html"/>
+
+	<format name="html" 
+	stylesheetResource="classpath:/xslt/org/jboss/xhtml.xsl"
+	targetFinalName="index.html"/>
+	<format name="pdf" 
+	stylesheetResource="classpath:/xslt/org/jboss/pdf.xsl"
+	targetFinalName="@{pdfName}"/>
+      </docant>
+      <mkdir dir="${basedir}/target/publish/@{srcDir}"/>
+      <move file="${basedir}/target/docbook/publish" tofile="${basedir}/target/publish/@{srcDir}"/>
+
+    </sequential>
+  </macrodef>
+
+  <target name="process">
+<!-- works, completed
+    <transformer srcDir="ironjacamar/developerguide" 
+            srcDocName="master.xml"
+            pdfName="ironjacamar_developerguide.pdf"/>
+
+    <transformer srcDir="jbossas/Admin_Console_Guide" 
+            srcDocName="Admin_Console_Guide.xml"
+            pdfName="jbossas_adminconsole.pdf"/>
+
+    <transformer srcDir="hornetq/user-manual" 
+            srcDocName="master.xml"
+            pdfName="hornetq_usermanual.pdf"/>
+-->
+<!-- works, remove a little
+    <transformer srcDir="ironjacamar/userguide" 
+            srcDocName="master.xml"
+            pdfName="ironjacamar_userguide.pdf"/>
+
+    <transformer srcDir="jbossas/Installation_And_Getting_Started_Guide" 
+            srcDocName="Installation_And_Getting_Started_Guide.xml"
+            pdfName="jbossas_getstarted.pdf"/>
+-->
+<!-- works, remove a lot
+
+    <transformer srcDir="hibernate/manual" 
+            srcDocName="HIBERNATE_-_Relational_Persistence_for_Idiomatic_Java.xml"
+            pdfName="hibernate_manual.pdf"/>
+-->
+<!-- can't work
+
+    <transformer srcDir="spring/reference" 
+            srcDocName="spring-framework-reference.xml"
+            pdfName="spring-framework-reference.pdf"/>
+
+    <transformer srcDir="spring/reference" 
+            srcDocName="spring-framework-reference.xml"
+            pdfName="spring-framework-reference.pdf"/>
+-->
+
+    <transformer srcDir="jbossas/Admin_Console_Guide" 
+            srcDocName="Admin_Console_Guide.xml"
+            pdfName="jbossas_adminconsole.pdf"/>
+
+  </target>
+
+</project>

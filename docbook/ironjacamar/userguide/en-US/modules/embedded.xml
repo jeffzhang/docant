@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="embedded">
+   <title>Embedded</title>
+
+   <section id="embedded_overview">
+      <title>Overview</title>
+
+      <para>The IronJacamar embedded configuration provides a way of running a JCA container
+        in-VM.</para>
+
+      <para>The configuration is useful when you want a</para>
+
+      <itemizedlist spacing="compact">
+        <listitem>
+          JCA container within your environment
+        </listitem>
+        <listitem>
+          JCA container when doing unit testing
+        </listitem>
+      </itemizedlist>
+
+      <para>Especially the ability to unit test your resource adapter archives before deploying them
+        into a testing or a production environment will benefit developers.</para>
+
+      <para>In order to enhance the experience with working with the embedded configuration the container 
+        integrates with the <ulink url="http://www.jboss.org/community/wiki/ShrinkWrap">ShrinkWrap</ulink>
+        and <ulink url="http://community.jboss.org/en/arquillian">Arquillian</ulink> frameworks.</para>
+
+   </section>
+
+   <section id="embedded_deployment">
+      <title>Deployment</title>
+
+      <para>You will need all the JAR files located in the</para>
+
+      <programlisting>
+$IRON_JACAMAR_HOME/lib
+$IRON_JACAMAR_HOME/lib/embedded
+      </programlisting>
+
+      <para>directories on your application class loader - f.ex.</para>
+
+      <programlisting>
+java -classpath allthejarfiles.jar yourapp
+      </programlisting>
+
+      <para>in order to use the embedded configuration.</para>
+
+      <para>If you want integration with the Arquillian framework you need to add the JAR files located
+        in the</para>
+
+      <programlisting>
+$IRON_JACAMAR_HOME/lib/embedded/arquillian
+      </programlisting>
+
+      <para>directory as well.</para>
+
+      <para>The code generator will generate a test suite based on the Arquillian functionality, so
+        that environment can be used as a starting point for your own integration.</para>
+
+   </section>
+
+   <section id="embedded_usage">
+      <title>Usage</title>
+
+      <para>IronJacamar Embedded supports both a simple and an advanced usage model, using pre-assembled
+        resource adapter archives (.rar) or dynamic resource adapter archives based on ShrinkWrap.</para>
+
+      <section id="embedded_usage_simple">
+        <title>Simple usage</title>
+
+        <para>The code sample below shows a simple usage of deploying a pre-assembled resource adapter archive
+          into the IronJacamar Embedded environment.</para>
+
+        <programlisting>
+import org.jboss.jca.embedded.EmbeddedJCA;
+
+import java.net.URL;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class MyTestCase
+{
+   /** Embedded */
+   private static EmbeddedJCA embedded;
+
+   /** JNDI prefix */
+   private static final String JNDI_PREFIX = "java:/eis/";
+
+   /**
+    * Simple test to verify deployment of myresourceadapter.rar
+    * @throws Throwable throwable exception 
+    */
+   @Test
+   public void testDeployment() throws Throwable
+   {
+      URL archive = getURL("myresourceadapter.rar");
+ 
+      Context context = null;
+ 
+      try
+      {
+         embedded.deploy(archive);
+
+         context = new InitialContext();
+         Object o = context.lookup(JNDI_PREFIX + "myresourceadapter");
+         assertNotNull(o);
+      }
+      catch (Throwable t)
+      {
+         fail(t.getMessage());
+      }
+      finally
+      {
+         embedded.undeploy(archive);
+
+         if (context != null)
+         {
+            try
+            {
+               context.close();
+            }
+            catch (NamingException ne)
+            {
+               // Ignore
+            }
+         }
+      }
+   }
+
+   @BeforeClass
+   public static void beforeClass() throws Throwable
+   {
+      // Create an embedded JCA instance
+      embedded = new EmbeddedJCA();
+
+      // Startup
+      embedded.startup();
+   }
+
+   @AfterClass
+   public static void afterClass() throws Throwable
+   {
+      // Shutdown
+      embedded.shutdown();
+   }
+}
+        </programlisting>
+
+        <callout>
+          <note>Note that, the url for the archive must end with the <code>.rar</code> extension
+            - either representing a file or a directory.</note>
+        </callout>
+
+        <para>See the IronJacamar Embedded API documentation for additional functionality.</para>
+
+        <section id="embedded_usage_automaticactivation">
+          <title>Automatic activation of archives</title>
+
+          <para>IronJacamar features a bean called <code>RAActivator</code> which will automatic
+            create a JNDI binding for connection factories and administration objects. However, 
+            sometimes it is of benefit to define these bindings in a <code>-ra.xml</code> file, and therefore
+            <code>RAActivator</code> has to be disabled during that deployment phase.</para>
+          
+          <para>This done by using the following code snippet</para>
+
+          <programlisting>
+import org.jboss.jca.deployers.fungal.RAActivator;
+
+// Disable RAActivator
+RAActivator raa = embedded.lookup("RAActivator", RAActivator.class);
+
+if (raa == null)
+   throw new IllegalStateException("RAActivator not defined");
+
+raa.setEnabled(false);
+
+embedded.deploy("myrar.rar");
+embedded.deploy("myrar-ra.xml");
+
+raa.setEnabled(true);
+          </programlisting>
+
+          <para>which disables the bean, does the deployments and then reenables the bean again.</para>
+
+        </section>
+
+      </section>
+
+      <section id="embedded_usage_advanced">
+        <title>Advanced usage</title>
+
+        <para>The IronJacamar Embedded container environment supports the following open source
+          testing projects:</para>
+
+        <orderedlist>
+          <listitem>
+            <ulink url="http://www.jboss.org/community/wiki/ShrinkWrap">ShrinkWrap</ulink>
+          </listitem>
+          <listitem>
+            <ulink url="http://community.jboss.org/en/arquillian">Arquillian</ulink>
+          </listitem>
+        </orderedlist>
+
+        <para>These extensions allow the developer to use the embedded platform with greater ease
+          as there doesn't have to be a physical representation of the resource adapter archive located
+          to the disk.</para>
+
+        <para>The Arquillian integration furthermore allows the developer to leave all the embedded container
+          setup to the integration instead.</para>
+
+        <section id="embedded_usage_advanced_shrinkwrap">
+          <title>ShrinkWrap integration</title>
+
+          <para>The code sample below shows an advanced usage of deploying a dynamic ShrinkWrap resource adapter archive
+            into the IronJacamar Embedded environment.</para>
+
+          <programlisting>
+<![CDATA[
+import org.jboss.jca.embedded.EmbeddedJCA;
+import org.jboss.jca.embedded.rars.simple.MessageListener;
+import org.jboss.jca.embedded.rars.simple.TestActivationSpec;
+import org.jboss.jca.embedded.rars.simple.TestConnection;
+import org.jboss.jca.embedded.rars.simple.TestConnectionInterface;
+import org.jboss.jca.embedded.rars.simple.TestManagedConnection;
+import org.jboss.jca.embedded.rars.simple.TestManagedConnectionFactory;
+import org.jboss.jca.embedded.rars.simple.TestResourceAdapter;
+
+import java.util.UUID;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import org.jboss.logging.Logger;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.api.spec.ResourceAdapterArchive;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class ShrinkWrapTestCase
+{
+   private static Logger log = Logger.getLogger(ShrinkWrapTestCase.class);
+
+   /** Embedded */
+   private static EmbeddedJCA embedded;
+
+   /** JNDI prefix */
+   private static final String JNDI_PREFIX = "java:/eis/";
+
+   /**
+    * Basic ShrinkWrap ResourceAdapterArchive test case
+    * @exception Throwable Thrown if case of an error
+    */
+   @Test
+   public void testBasic() throws Throwable
+   {
+      String deploymentName = UUID.randomUUID().toString();
+
+      ResourceAdapterArchive raa = ShrinkWrap.create(ResourceAdapterArchive.class,
+                                                     deploymentName + ".rar");
+
+      JavaArchive ja = 
+         ShrinkWrap.create(JavaArchive.class, UUID.randomUUID().toString() + ".jar");
+
+      ja.addClasses(MessageListener.class, TestActivationSpec.class, 
+                    TestConnection.class, TestConnectionInterface.class, 
+                    TestManagedConnection.class, TestManagedConnectionFactory.class,
+                    TestResourceAdapter.class);
+
+      raa.addLibrary(ja);
+      raa.addManifestResource("simple.rar/META-INF/ra.xml", "ra.xml");
+
+      Context context = null;
+ 
+      try
+      {
+         embedded.deploy(raa);
+
+         context = new InitialContext();
+         Object o = context.lookup(JNDI_PREFIX + deploymentName);
+         assertNotNull(o);
+      }
+      catch (Throwable t)
+      {
+         log.error(t.getMessage(), t);
+         fail(t.getMessage());
+      }
+      finally
+      {
+         embedded.undeploy(raa);
+
+         if (context != null)
+         {
+            try
+            {
+               context.close();
+            }
+            catch (NamingException ne)
+            {
+               // Ignore
+            }
+         }
+      }
+   }
+
+   /**
+    * Lifecycle start, before the suite is executed
+    * @exception Throwable Thrown if case of an error
+    */
+   @BeforeClass
+   public static void beforeClass() throws Throwable
+   {
+      // Create and set an embedded JCA instance
+      embedded = new EmbeddedJCA();
+
+      // Startup
+      embedded.startup();
+   }
+
+   /**
+    * Lifecycle stop, after the suite is executed
+    * @exception Throwable Thrown if case of an error
+    */
+   @AfterClass
+   public static void afterClass() throws Throwable
+   {
+      // Shutdown embedded
+      embedded.shutdown();
+
+      // Set embedded to null
+      embedded = null;
+   }
+}
+]]>
+          </programlisting>
+          
+          <callout>
+            <note>Note that, the name for the <code>ResourceAdapterArchive</code> must end with the
+              <code>.rar</code> extension.</note>
+          </callout>
+          
+          <para>See the <ulink url="http://www.jboss.org/community/wiki/ShrinkWrap">
+              ShrinkWrap</ulink> web site for a full description of the project and additional documentation.</para>
+
+        </section>
+
+        <section id="embedded_usage_advanced_arquillian">
+          <title>Arquillian integration</title>
+
+          <para>The code sample below shows an advanced usage of deploying a dynamic ShrinkWrap resource adapter archive
+            into the IronJacamar Embedded environment using Arquillian.</para>
+
+          <para>This setup allows the developer to skip the entire IronJacamar Embedded container setup and handling of its
+            lifecycle methods.</para>
+
+          <programlisting>
+<![CDATA[
+package org.jboss.jca.embedded.unit;
+
+import org.jboss.jca.embedded.rars.simple.MessageListener;
+import org.jboss.jca.embedded.rars.simple.TestActivationSpec;
+import org.jboss.jca.embedded.rars.simple.TestConnection;
+import org.jboss.jca.embedded.rars.simple.TestConnectionFactory;
+import org.jboss.jca.embedded.rars.simple.TestConnectionInterface;
+import org.jboss.jca.embedded.rars.simple.TestConnectionManager;
+import org.jboss.jca.embedded.rars.simple.TestManagedConnection;
+import org.jboss.jca.embedded.rars.simple.TestManagedConnectionFactory;
+import org.jboss.jca.embedded.rars.simple.TestResourceAdapter;
+
+import java.util.UUID;
+
+import javax.annotation.Resource;
+
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.logging.Logger;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.api.spec.ResourceAdapterArchive;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import static org.junit.Assert.*;
+
+/**
+ * Unit test for Arquillian integration
+ * 
+ * @author <a href="mailto:jesper.pedersen@jboss.org">Jesper Pedersen</a>
+ */
+@RunWith(Arquillian.class)
+public class ArquillianTestCase
+{
+   // --------------------------------------------------------------------------------||
+   // Class Members ------------------------------------------------------------------||
+   // --------------------------------------------------------------------------------||
+
+   private static Logger log = Logger.getLogger(ArquillianTestCase.class);
+
+   private static String deploymentName = "ArquillianRA";
+
+   /** The resource adapter */
+   @Resource
+   private TestConnectionFactory cf;
+
+   /**
+    * Define the deployment
+    * @return The deployment archive
+    */
+   @Deployment
+   public static ResourceAdapterArchive createDeployment()
+   {
+      ResourceAdapterArchive raa =
+         ShrinkWrap.create(ResourceAdapterArchive.class, deploymentName + ".rar");
+
+      JavaArchive ja = ShrinkWrap.create(JavaArchive.class, 
+                                         UUID.randomUUID().toString() + ".jar");
+      ja.addClasses(MessageListener.class, TestActivationSpec.class, TestConnection.class,
+                    TestConnectionFactory.class, TestConnectionManager.class, 
+                    TestConnectionInterface.class, TestManagedConnection.class, 
+                    TestManagedConnectionFactory.class, TestResourceAdapter.class);
+
+      raa.addLibrary(ja);
+      raa.addManifestResource("simple.rar/META-INF/ra.xml", "ra.xml");
+
+      return raa;
+   }
+
+   //-------------------------------------------------------------------------------------||
+   // Tests ------------------------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   /**
+    * Basic
+    * @exception Throwable Thrown if case of an error
+    */
+   @Test
+   public void testBasic() throws Throwable
+   {
+      assertNotNull(cf);
+   }
+}
+]]>
+          </programlisting>
+          
+          <callout>
+            <note>Note that, the name for the <code>ResourceAdapterArchive</code> must end with the
+              <code>.rar</code> extension.</note>
+          </callout>
+          
+          <para>See the <ulink url="http://community.jboss.org/en/arquillian">
+              Arquillian</ulink> web site for a full description of the project and additional documentation.</para>
+
+        </section>
+
+      </section>
+
+   </section>
+
+
+</chapter>

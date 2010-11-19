@@ -1,0 +1,102 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Overview">
+	<title>Overview</title>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata scalefit="1" fileref="images/AS_Banner.png"/>
+		</imageobject>
+	</mediaobject>
+	
+<para>The JBoss AS Administration Console is a SEAM-based web application for managing and monitoring a single JBoss AS instance.  Known in the community as the open source project Embedded Jopr (pronounced "jopper"):  Embedded because it runs inside a JBoss Application Server and Jopr because it uses the same infrastructure the Jopr project which is the open source enterprise management solution for JBoss middleware projects. The JBoss AS Administration Console (also referred to as Console in this guide) has been included in JBoss Application Server distributions since release 5.1.0.  Successive releases continue to improve the server management capabilities eventually replacing the jmx- and web consoles.</para>
+	
+	<para>This release of the Administration Console provides the following administrative features:</para>
+	
+	<itemizedlist>
+		<listitem>
+			<para>Deploy, Undeploy, and Update Enterprise Applications
+				including:</para>
+			
+			<itemizedlist>
+				<listitem>
+					<para>Enterprise Applications (EARs)</para>
+				</listitem>
+				
+				<listitem>
+					<para>Web Applications (WARs)</para>
+				</listitem>
+				
+				<listitem>
+					<para>Resource Adapters(RARs)</para>
+				</listitem>
+				
+				<listitem>
+					<para>EJB JARs (EJB2 and EJB3)</para>
+				</listitem>
+			</itemizedlist>
+		</listitem>
+		
+		<listitem>
+			<para>Persistent configuration changes for the following
+				resources:</para>
+			
+			<itemizedlist>
+				<listitem>
+					<para>Datasources</para>
+				</listitem>
+				
+				<listitem>
+					<para>Connection Factories</para>
+				</listitem>
+				
+				<listitem>
+					<para>Service Binding Manager</para>
+				</listitem>
+				
+				<listitem>
+					<para>JMS Queues and Topics based on JBoss Messaging</para>
+				</listitem>
+			</itemizedlist>
+		</listitem>
+	</itemizedlist>
+	
+	<itemizedlist>
+		<listitem>
+			<para>View statistics and carry out operations on many other
+				components:</para>
+			
+			<itemizedlist>
+				<listitem>
+					<para>JBoss Application Server examples: version, memory
+						usage, thread count and stop operation</para>
+				</listitem>
+				
+				<listitem>
+					<para>Hibernate Session factories</para>
+				</listitem>
+				
+				<listitem>
+					<para>JBoss Web vhosts: supported aliases</para>
+				</listitem>
+				
+				<listitem>
+					<para>JBoss Web connectors: for example, Maximum Request Time</para>
+				</listitem>
+				
+				<listitem>
+					<para>EARs and WARs: for example, Average Response Time and lifecycle
+						operations (start, stop and reload)</para>
+				</listitem>
+			</itemizedlist>
+		</listitem>
+		
+		<listitem>
+			<para>Monitor all standard JVM metrics and execute operations. For example, garbage collection.</para>
+		</listitem>
+  </itemizedlist>
+<para>Let's take a closer look at how easy it is to manage your JBoss AS instance from a single administration point.</para>
+
+</chapter>

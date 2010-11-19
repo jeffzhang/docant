@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Application_undeployment_and_resource_removal">
+	<title>Application undeployment and resource removal</title>
+	<para>
+		Many types of resources including applications can be deleted by navigating to the Resources' Type specific (for example, Enterprise Application (EAR)s) Summary Tab and simply clicking the <emphasis role="bold">DELETE</emphasis> button next to the name of the resource you want to delete. For example, to undeploy an EAR file, choose the <emphasis>Enterprise Application (EAR)s</emphasis> folder from the navigation and then in the main panel find the application you are looking to remove and click the <emphasis role="bold">DELETE</emphasis> button next to it. Once the removal has been confirmed, the Application will be undeployed from the server and will no longer be able to be managed. You will have to deploy it again if it is needed. As noted above, Embedded Applications do not have the delete option available.
+	</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata scalefit="1" fileref="images/Datasource_Summary.png"/>
+		</imageobject>
+  	</mediaobject>
+</chapter>
+

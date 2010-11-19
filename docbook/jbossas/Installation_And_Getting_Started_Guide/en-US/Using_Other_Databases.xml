@@ -1,0 +1,295 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+]>
+
+<chapter id="Using_other_Databases">
+	<title>Using other Databases</title>
+	<para>
+		In the previous chapters, we’ve been using the JBossAS default datasource in our applications. This datasource is configured to use the embedded Hypersonic database instance shipped by default with the distribution. This datasource is bound to the JNDI name <literal>java:/DefaultDS</literal> and its descriptor is named <literal>hsqldb-ds.xml</literal> under the deploy directory 
+	</para>
+	<para>
+		Having a database included with JBossAS is very convenient for running the server and examples out-of-the-box. However, this database is not a production quality database and as such should not be used with enterprise-class deployments. As a consequence of this JBoss Support does not provide any official support for Hypersonic.
+	</para>
+	<para>
+		In this chapter we will explain in details how to configure and deploy a datasource to connect JBossAS to the most popular database servers available on the market today.
+	</para>
+	
+	<section id="Using_other_Databases-DataSource_Configuration_Files">
+		<title>DataSource Configuration Files</title>
+		<para>
+			Datasource configuration file names end with the suffix <literal>-ds.xml</literal> so that they will be recognized correctly by the JCA deployer. The <literal>docs/example/jca</literal> directory contains sample files for a wide selection of databases and it is a good idea to use one of these as a starting point. For a full description of the configuration format, the best place to look is the DTD file <literal>docs/dtd/jboss-ds_1_5.dtd</literal>. Additional documentation on the files and the JBoss JCA implementation can also be found in the JBoss Application Server Guide available at <ulink url="http://labs.jboss.com/projects/docs/"/>.
+		</para>
+		
+		<para>
+			Local transaction datasources are configured using the <literal>local-tx-datasource</literal> element and XA-compliant ones using <literal>xa-tx-datasource</literal>. The example file <literal>generic-ds.xml</literal> shows how to use both types and also some of the other elements that are available for things like connection pool configuration. Examples of both local and XA configurations are available for Oracle, DB2 and Informix.
+		</para>
+		
+		
+		
+		<para>
+			If you look at the example files <literal> firebird-ds.xml</literal>, <literal> facets-ds.xml</literal> and <literal>sap3-ds.xml</literal>, you’ll notice that they have a completely different format, with the root element being <literal>connection-factories</literal> rather than <literal>datasources</literal>. These use an alternative, more generic JCA configuration syntax used with a pre-packaged JCA resource adapter. The syntax is not specific to datasource configuration and is used, for example, in the <literal>jms-ds.xml</literal> file to configure the JMS resource adapter.
+		</para>
+		<para>We would also highly recommend consulting the JCA wiki pages at http://wiki.jboss.org/wiki/Wiki.jsp?page=JBossJCA
+	</para>
+		<para>
+			Next, we’ll work through some step-by-step examples to illustrate what’s involved setting up a datasource for a specific database.
+		</para>
+	</section>
+	
+	<section id="Using_other_Databases-Using_MySQL_as_the_Default_DataSource">
+		<title>Using MySQL as the Default DataSource</title>
+		<para>
+			The MySQL® database has become the world's most popular open source database thanks to its consistent fast performance, high reliability and ease of use. This database server is used in millions of installations ranging from large corporations to specialized embedded applications across every continent of the world. . In this section, we'll be using the community version of their database server (GA 5.0.45)  and the latest JDBC driver (GA 5.1.5) both available at <ulink url="http://www.mysql.com"></ulink>.
+		</para>
+	
+		
+		
+		
+		
+		
+		<section id="Using_MySQL_as_the_Default_DataSource-Installing_the_JDBC_Driver_and_Deploying_the_DataSource">
+			<title>Installing the JDBC Driver and Deploying the datasource</title>
+			
+			<para>
+				To make the JDBC driver classes available to the JBoss Application Server, copy the archive <literal>mysql-mysql-connector-java-5.1.5-bin.jar</literal> from the Connector/J distribution to the <literal>lib</literal> directory in the <literal>default</literal> server configuration (assuming that is the server configuration you’re running).
+			</para>
+			<para>
+				Then create a text file in the deploy directory called mysql-ds.xml with the following datasource descriptor:
+			</para>
+			
+<programlisting role="XML">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;datasources&gt;
+	&lt;local-tx-datasource&gt;
+	&lt;jndi-name&gt;DefaultDS&lt;/jndi-name&gt;
+	&lt;connection-url&gt;jdbc:mysql://localhost:3306/test&lt;/connection-url&gt;
+	&lt;driver-class&gt;com.mysql.jdbc.Driver&lt;/driver-class&gt;
+	&lt;user-name&gt;root&lt;/user-name&gt;
+	&lt;password&gt;jboss&lt;/password&gt;
+	&lt;valid-connection-checker-class-name&gt;org.jboss.resource.adapter.jdbc.vendor.MySQLValidConnectionChecker&lt;/valid-connection-checker-class-name&gt;
+	&lt;metadata&gt;
+	&lt;type-mapping&gt;mySQL&lt;/type-mapping&gt;
+	&lt;/metadata&gt;
+	&lt;/local-tx-datasource&gt;
+&lt;/datasources&gt;</programlisting>
+
+<para>
+The datasource is pointing at the database called test provided by default with MySQL 5.x.
+Remember to update the connection url attributes as well as the combo username/password to match your environment setup.
+</para>
+		</section>
+		
+		
+		
+		<section id="Using_MySQL_as_the_Default_DataSource-Testing_the_MySQL_DataSource">
+			<title>Testing the MySQL DataSource</title>
+			<para>
+				Using the test client described in <xref linkend="creating_a_jdbc_client"/>, you may now verify the proper installation of your datasource. 
+			</para>
+				
+		</section>
+
+	</section>
+	
+	<section id="Configuring_a_datasource_for_Oracle_DB">
+		<title>Configuring a datasource for Oracle DB</title>
+		<para>
+			Oracle is one of the main players in the commercial database field and most readers will probably have come across it at some point. You can download it freely for non-commercial purposes from <ulink url="http://www.oracle.com/technology/products/database/xe/index.html"/>
+		</para>
+		<para>
+		In this section, we'll connect the server to Oracle Database 10g Express Edition using the latest JDBC driver (11g)  available at <ulink url="http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html"/>
+		</para>
+			
+		
+		
+		<section id="Setting_up_an_XADataSource_with_Oracle_9i-Installing_the_JDBC_Driver_and_Deploying_the_DataSource">
+			<title>Installing the JDBC Driver and Deploying the DataSource</title>
+			<para>
+				To make the JDBC driver classes available to JBoss Application Server, copy the archive ojdbc5.jar to the lib directory in the default server configuration (assuming that is the server configuration you’re running).
+			</para>
+			<para>
+				Then create a text file in the <filename>deploy</filename> directory called <filename>oracle-ds.xml</filename> with the following datasource descriptor :
+			</para>
+				
+<programlisting role="XML">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;datasources&gt;
+	&lt;local-tx-datasource&gt;
+		&lt;jndi-name&gt;DefaultDS&lt;/jndi-name&gt;
+		&lt;connection-url&gt;jdbc:oracle:thin:@localhost:1521:xe&lt;/connection-url&gt;
+		&lt;driver-class&gt;oracle.jdbc.driver.OracleDriver&lt;/driver-class&gt;
+		&lt;user-name&gt;SYSTEM&lt;/user-name&gt;
+		&lt;password&gt;jboss&lt;/password&gt;
+		&lt;valid-connection-checker-class-name&gt;org.jboss.resource.adapter.jdbc.vendor.OracleValidConnectionChecker&lt;/valid-connection-checker-class-name&gt;
+		&lt;metadata&gt;
+			&lt;type-mapping&gt;Oracle9i&lt;/type-mapping&gt;
+		&lt;/metadata&gt;
+	&lt;/local-tx-datasource&gt;
+&lt;/datasources&gt;</programlisting>
+			
+			<para>
+				The datasource is pointing at the database/SID called “xe” provided by default with Oracle XE.
+			</para>
+			<para>
+				Of course, you need to update the connection url attributes as well as the username/password combination to match your environment setup.
+			</para>
+
+		</section>
+		
+		
+		
+
+		
+		
+		
+	
+		
+		
+		
+		<section id="Setting_up_an_XADataSource_with_Oracle_9i-Testing_the_Oracle_DataSource">
+			<title>Testing the Oracle DataSource</title>
+			<para>
+				Before you can verify the datasource configuration, Oracle XE should be reconfigured to avoid port conflict with JBossAS as by default they  both start a web server on port 8080.
+			</para>
+			<para>Open up an Oracle SQLcommand line and execute the following commands:
+			</para>
+<screen>
+<command>SQL> connect;
+Enter user-name: SYSTEM
+Enter password:</command>
+Connected.
+SQL> <command>begin
+2  dbms_xdb.sethttpport('8090');
+3  end;
+4  /</command>
+PL/SQL procedure successfully completed.
+SQL> <command>select dbms_xdb.gethttpport from dual;</command>
+GETHTTPPORT
+-----------
+8090
+</screen>
+
+<para>
+	The web server started by Oracle XE to provide http-based administration tools is now running on port 8090.
+	Start the JBossAS server instance as you would normally do. You are now ready to use the test client described in Chapter 6.5 to verify the proper installation of your datasource. 
+</para>
+	
+		</section>
+	</section>
+
+	
+	<section><title>Configuring a datasource for Microsoft SQL Server 200x</title>
+		<para>In this section, we'll connect the server to MS SQL Server 2000 using the latest JDBC driver (v1.2) available at <ulink url="http://msdn2.microsoft.com/en-us/data/aa937724.aspx"/>.
+		</para>
+		
+		<section><title>Installing the JDBC Driver and Deploying the DataSource</title>
+		<para>
+			To make the JDBC driver classes available to JBoss Application Server, copy the archive <filename>sqljdbc.jar</filename> from the <filename>sqljdbc_1.2</filename> distribution to the <filename>lib</filename> directory in the default server configuration (assuming that is the server configuration you’re running).
+		</para>
+		<para>
+			Then create a text file in the <literal>deploy</literal> directory called <literal>mssql-ds.xml</literal> with the following datasource descriptor :
+<programlisting><![CDATA[ 
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+  <local-tx-datasource>
+  <jndi-name>DefaultDS</jndi-name>
+  <connection-url>jdbc:sqlserver://localhost:1433;DatabaseName=pubs</connection-url>
+  <driver-class>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver-class>
+  <user-name>sa</user-name>
+  <password>jboss</password>
+  <check-valid-connection-sql>SELECT 1 FROM sysobjects</check-valid-connection-sql>
+  <metadata>
+	  <type-mapping>MS SQLSERVER2000</type-mapping>
+  </metadata>
+  </local-tx-datasource>
+</datasources> ]]>		
+</programlisting>
+
+The datasource is pointing at a database “pubs” provided by default with MS SQL Server 2000.
+</para>
+<para>
+Remember to update the connection url attributes as well as the username/password combination to match your environment setup.
+
+</para>
+		
+<section id="testing_the_datasource"><title>Testing the datasource</title>
+	<para>Using the test client described in <xref linkend="creating_a_jdbc_client"/>, you may now verify the proper installation of your datasource.
+	</para>
+</section>
+	</section>
+</section>	
+	
+
+<section id="configuring_jbossmessaging_persistence_manager"><title>Configuring JBoss Messaging Persistence Manager</title>
+	<para>
+		The persistence manager of JBoss Messaging uses the default datasource to create tables to store messages, transaction data and other indexes. Configuration of "persistence" is grouped in <filename>xxx-persistence-service.xml</filename> files. JBoss Application Server ships with a default <filename>hsqldb-persistence-service.xml</filename> file, which configures the Messaging server to use the Hypersonic database instance that ships by default with the JBoss Application Server.
+	</para>
+	<para>
+		You can view the <filename>hsqldb-persistence-service.xml</filename> file in  configurations based on the <emphasis>all</emphasis> or <emphasis>default</emphasis> configurations:
+		
+		<screen>&lt;JBoss_Home&gt;/server/all/deploy/messaging/hsqldb-persistence-service.xml  and
+			&lt;JBoss_Home&gt;/server/default/deploy/messaging/hsqldb-persistence-service.xml</screen>
+		
+	</para>
+	
+	
+	<warning><title>Warning</title>
+		<para>Please note that the Hypersonic database is not recommended for production environments due to its limited support for transaction isolation and its low reliability under high load</para>
+	</warning>
+	
+	<para>
+		More information on configuring JBoss Messaging can be found in the <ulink url="http://www.jboss.org/file-access/default/members/jbossas/freezone/docs/Server_Configuration_Guide/beta500/html-single/index.html#d0e3471">JBoss AS Configuration Guide</ulink>.
+		
+	</para>
+	
+	
+</section>	
+
+
+<section id="creating_a_jdbc_client"><title>Creating a JDBC client</title>
+	<para>
+		When testing a newly configured datasource we suggest using some very basic JDBC client code embedded in a JSP page.
+		First of all, you should create an exploded WAR archive under the deploy directory which is simply a folder named "<literal>jdbcclient.war</literal>". 
+In this folder, create a text document named client.jsp and paste the code below:
+<programlisting><![CDATA[
+<%@page contentType="text/html"
+ import="java.util.*,javax.naming.*,javax.sql.DataSource,java.sql.*"
+ %>
+ <%
+   
+  DataSource ds = null;
+  Connection con = null; 
+  PreparedStatement pr = null; 
+  InitialContext ic; 
+  try {
+  ic = new InitialContext();
+  ds = (DataSource)ic.lookup( "java:/DefaultDS" );
+  con = ds.getConnection(); 
+  pr = con.prepareStatement("SELECT USER_ID, PASSWD FROM JBM_USER");
+  ResultSet rs = pr.executeQuery();
+  while (rs.next()) {
+  out.println("<br> " +rs.getString("USER_ID") + " | " +rs.getString("PASSWD")); 
+  }
+  rs.close();
+  pr.close();
+  }catch(Exception e){
+  out.println("Exception thrown " +e); 
+  }finally{
+  if(con != null){
+  con.close();
+ }      
+}]]> %> </programlisting>
+
+Open up a web browser and hit the url: <ulink url="http://localhost:8080/jdbcclient/client.jsp"/>.
+A list of users and password should show up as a result of the jdbc query:
+<screen>
+dynsub | dynsub 
+guest | guest 
+j2ee | j2ee 
+john | needle 
+nobody | nobody 	
+</screen>
+      
+	</para>
+</section>
+	
+</chapter>
+

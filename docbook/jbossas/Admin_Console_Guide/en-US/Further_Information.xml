@@ -1,0 +1,41 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Further_Information">
+	<title>Further Information</title>
+	<para>
+		For more information on the JBoss Application Server, Administration Console, and supporting technologies, refer to the following project links.
+	</para>
+               <itemizedlist>
+                     <listitem>
+                     		<ulink url="http://www.jboss.org/jbossas">JBoss Application Server</ulink>
+                     </listitem>
+
+                     <listitem>
+                     		<ulink url="http://www.jboss.org/embjopr">Embedded Jopr</ulink>
+                     </listitem>
+
+                     <listitem>
+                     		<ulink url="http://www.jboss.org/jopr">Jopr</ulink>
+                     </listitem>
+
+                     <listitem>
+                     		<ulink url="http://www.seamframework.org">SEAM Framework</ulink>
+                     </listitem>
+
+                     <listitem>
+                     		<ulink url="http://www.jboss.org/richfaces">RichFaces</ulink>
+                     </listitem>
+
+                     <listitem>
+                     		<ulink url="http://community.jboss.org/wiki/AS6ProfileServiceDesign">JBoss AS 6 Profile Service Design</ulink>
+                     </listitem>
+
+                     <listitem>
+                     		<ulink url="http://www.jboss.org/jsfunit">JSFUnit</ulink>
+                     </listitem>
+               </itemizedlist>
+
+</chapter>
+

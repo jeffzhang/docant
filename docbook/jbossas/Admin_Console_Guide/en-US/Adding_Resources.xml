@@ -1,0 +1,88 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Adding_Resources">
+	<title>Adding Resources</title>
+	<para>
+		Other resources, in addition to applications, can be added to your JBoss Application Server instance using the Administration Console. In fact whether you adding new resources or modifying resources already deployed to the running server, the Administration Console offers easy management of the resource properties avoiding error-prone editing of XML configuration files.
+	</para>
+	
+	<para>
+		Similar to deploying an application, choose the specific type of resource you want to add from the navigation panel (for example, <emphasis>Local Tx Datasources</emphasis> rather than just <emphasis>Datasources</emphasis>), this will bring up the Summary tab for this type. Next hit the <emphasis role="bold">Add a new resource</emphasis> button on the right hand side of the main panel. You will be prompted for the template that will be used to create the configuration.
+	</para>
+	
+	<para>
+		A template is just a set of suggested values to use for the properties defined on that resource. For example, the Oracle templates contain suggested values that are typically used when creating a Datasource for connecting to an Oracle database. Your template choices for datasource types are:</para>
+	
+	<itemizedlist>
+		<listitem>
+			<para>Local Tx Datasource</para>
+			
+			<itemizedlist>
+				<listitem>
+					<para>Oracle Local TX (Local Tx Datasource)</para>
+				</listitem>
+				
+				<listitem>
+					<para>default (Local Tx Datasource)</para>
+				</listitem>
+			</itemizedlist>
+		</listitem>
+		
+		<listitem>
+			<para>No Tx Datasources</para>
+			
+			<itemizedlist>
+				<listitem>
+					<para>Oracle No TX (No Tx Datasource)</para>
+				</listitem>
+				
+				<listitem>
+					<para>default (No Tx Datasource)</para>
+				</listitem>
+			</itemizedlist>
+		</listitem>
+		
+		<listitem>
+			<para>XA Datasources</para>
+			
+			<itemizedlist>
+				<listitem>
+					<para>Oracle XA (XA Datasource)</para>
+				</listitem>
+				
+				<listitem>
+					<para>default (XA Datasource)</para>
+				</listitem>
+			</itemizedlist>
+		</listitem>
+	</itemizedlist>
+	
+	<para>
+		After selecting the appropriate template, click <emphasis role="bold">CONTINUE</emphasis>. Add the appropriate configuration information for the datasource. Next to each editable property is a description detailing the use of the property, default value if any, and the affect of the property change. Common configuration errors are detected and will be highlighted after attempting to save. Check the Unset box if the property will not be used. At the end of your configuration session, click <emphasis role="bold">SAVE</emphasis> at the bottom of the page which deploys the configuration information to the server. Click <emphasis role="bold">CANCEL</emphasis> if you decide not to create the new resource.
+	</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata depth="43"
+				   fileref="images/Admin-Console-QuickStart_html_1736bd6b.jpg"
+				   width="247" />
+		</imageobject>
+	</mediaobject>
+	
+	<para>
+		After you have saved the new configuration the main panel should return to displaying a list of resources along with a message about whether or not the resource creation succeeded.
+	</para>
+	
+	<important>
+		<para>
+			Any database drivers needed for the Datasource to function correctly must be deployed to the JBoss Application Server instance separately.
+		</para>
+	</important>
+	
+	<para>
+		A similar procedure works for creating JMS Destinations and Connection Factories. For Connection Factories however the required resource adapter must already be deployed prior to configuring the connection factory. If this has not yet been done, simply navigate to the Resource Adapters (RAR)s or Enterprise Application (EAR)s (for a resource adapter deployed as part of an Enterprise Archive) and deploy the adaptor JAR file.
+	</para>
+</chapter>
+

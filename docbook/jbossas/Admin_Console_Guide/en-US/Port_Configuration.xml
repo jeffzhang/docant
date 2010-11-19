@@ -1,0 +1,50 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Port_Configuration">
+	<title>Port Configuration</title>
+	<para>The Service Binding Manager co-ordinates which ports the JBoss Application Server instance listens on when it starts up and the Administration Console provides a mechanism for configuring this service to change which ports get used. In the navigation pane select the SBM: <emphasis>&lt;machine&gt; : JBossAS Servers : JBoss AS 6 (default) : Service Binding Manager</emphasis>. Next go to its Configuration tab and for the Active Binding Set Name property enter the name of the new port set you wish the JBoss Application Server instance to use and hit the <emphasis role="bold">SAVE</emphasis> button at the bottom of the page. Out of the box, the JBoss Application Server ships with four port sets defined as:</para>
+	
+	<itemizedlist>
+		<listitem>
+			<para>
+				ports-default: The standard ports, for instance JBoss Web listens for HTTP requests on 8080. You can view all of the standard port settings on the Configuration tab of the Service Binding Manager resource.
+			</para>
+		</listitem>
+		
+		<listitem>
+			<para>
+				ports-01: The standard ports incremented by 100. For example, HTTP is on 8180
+			</para>
+		</listitem>
+		
+		<listitem>
+			<para>
+				ports-02: The standard ports incremented by 200. For example, HTTP is on 8280
+			</para>
+		</listitem>
+		
+		<listitem>
+			<para>
+				ports-03: The standard ports incremented by 300. For example, HTTP is on 8380
+			</para>
+		</listitem>
+	</itemizedlist>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata contentdepth="" contentwidth="" fileref="images/Binding.png"
+				   width="" />
+		</imageobject>
+	</mediaobject>
+	
+	<para>
+		If you wish to specify a different range of ports to use then you can create your own Service Binding Set resource through the Administration Console. Select the <emphasis>Service Binding Sets</emphasis> folder from the navigation, hit the <emphasis role="bold">Add a new resource</emphasis> button on the main panel and enter in the necessary information.
+	</para>
+	
+	<para>
+		Once you have updated the configuration for the Service Binding Manager, the JBoss Application Server instance must be restarted for those changes to take effect. After the restart, the new ports will be used when accessing the Administration Console (for example, http://localhost:8180/admin-console).
+	</para>
+</chapter>
+

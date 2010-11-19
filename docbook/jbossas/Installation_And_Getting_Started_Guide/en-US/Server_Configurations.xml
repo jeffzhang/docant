@@ -1,0 +1,1218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                         "http://www.docbook.org/xml/4.4/docbookx.dtd">
+<section id="The_JBoss_Server___A_Quick_Tour-Server_Configurations">
+<title>Server Configurations</title>
+<para>
+	Fundamentally, the JBoss architecture consists of the microcontainer, bootstrap beans loaded into the micrcontainer, a collection of deployers for loading various deployment types, and various mcbean(-jboss-beans.xml) and legacy mbean(jboss-service.xml) deployments.
+	This makes it easy to assemble different configurations and gives you the flexibility to tailor them to meet your requirements.
+</para>
+<para>
+	You don’t have to run a large, monolithic server all the time; you can remove the components you don’t need (which can also reduce the server startup time considerably) and you can also integrate additional services into JBoss by writing your own MBeans. You certainly do not need to do this to be able to run standard Java EE 5 applications though.
+</para>
+<para>
+	You don’t need a detailed understanding of the microcontainer to use JBoss, but it’s worth keeping a picture of this basic architecture in mind as it is central to the way JBoss works.
+</para>
+<para>
+	The JBoss Application Server ships with three different server configurations. Within the	<literal>&lt;JBoss_Home&gt;/server</literal> directory, you will find five subdirectories:
+	<literal>minimal</literal>, <literal>default</literal>, <literal>standard</literal>, <literal>all</literal> and <literal>web</literal> - one for each server configuration. Each of these configurations provide a different set of services. The <literal>default</literal> configuration is the one used if you don’t specify another one when starting up the server.
+</para>
+<para>
+	<variablelist>
+		<varlistentry>
+			<term>minimal</term>
+			<listitem>
+				<para>
+					has a minimal configuration—the bare minimum services required to start JBoss. It starts the logging service, a JNDI server and a URL deployment scanner to find new deployments. This is what you would use if you want to use JMX/JBoss to start your own services without any other Java EE 5 technologies. This is just the bare server. There is no web container, no EJB or JMS support.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>default</term>
+			<listitem>
+				<para>
+					is a base Java EE 5 server profile containing a default set of services. It has the most frequently used services required to deploy a Java EE application. It does not include the JAXR service, the IIOP service, or any of the clustering services.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>all</term>
+			<listitem>
+				<para>
+					The all configuration starts all the available services. This includes the RMI/IIOP and clustering services, which are not loaded in the default configuration. 
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>standard</term>
+			<listitem>
+				<para>
+					is the JavaEE 5 certified configuration of services. 
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>web</term>
+			<listitem>
+				<para>
+					is a lightweight web container oriented profile that previews the JavaEE 6 web profile.
+				</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+</para>
+<para>
+	If you want to know which services are configured in each of these instances, the primary differences will be in the <filename class="directory">&lt;JBoss_Home&gt;/server/&lt;instance-name&gt;/deployers/</filename> directory and also the services deployments in the <filename class="directory">&lt;JBoss_Home&gt;/server/&lt;instance-name&gt;/deploy</filename> directory. For example, the default profile deployers and deploy directory contents are:
+<programlisting>
+[usr@localhost &lt;JBoss_Home&gt;]$<literal>ls server/default/deployers </literal>
+alias-deployers-jboss-beans.xml		jboss-aop-jboss5.deployer
+bsh.deployer				jboss-jca.deployer
+clustering-deployer-jboss-beans.xml		jbossweb.deployer
+dependency-deployers-jboss-beans.xml	jbossws.deployer
+directory-deployer-jboss-beans.xml	j	sr77-deployers-jboss-beans.xml
+ear-deployer-jboss-beans.xml		metadata-deployer-jboss-beans.xml
+ejb-deployer-jboss-beans.xml		seam.deployer
+ejb3.deployer				security-deployer-jboss-beans.xml
+hibernate-deployer-jboss-beans.xml
+[usr@localhost &lt;JBoss_Home&gt;]$<literal>ls server/default/deploy </literal>
+ROOT.war				jsr88-service.xml
+cache-invalidation-service.xml	legacy-invokers-service.xml
+ejb2-container-jboss-beans.xml	mail-ra.rar
+ejb2-timer-service.xml		mail-service.xml
+ejb3-connectors-jboss-beans.xml	management
+ejb3-container-jboss-beans.xml	messaging
+ejb3-interceptors-aop.xml		monitoring-service.xml
+ejb3-timer-service.xml		profileservice-jboss-beans.xml
+hdscanner-jboss-beans.xml		properties-service.xml
+hsqldb-ds.xml			quartz-ra.rar
+http-invoker.sar			remoting-jboss-beans.xml
+jboss-local-jdbc.rar		schedule-manager-service.xml
+jboss-xa-jdbc.rar			scheduler-service.xml
+jbossweb.sar			security
+jbossws.sar			sqlexception-service.xml
+jca-jboss-beans.xml		transaction-jboss-beans.xml
+jms-ra.rar			transaction-service.xml
+jmx-console.war			uuid-key-generator.sar
+jmx-invoker-service.xml		vfs-jboss-beans.xml
+jmx-remoting.sar
+</programlisting>
+	while the web profile deployers and deploy directory contents are:
+<programlisting>
+[usr@localhost &lt;JBoss_Home&gt;]$<literal>ls server/web/deployers </literal>
+alias-deployers-jboss-beans.xml	jbossweb.deployer
+ejb3.deployer			metadata-deployer-jboss-beans.xml
+jboss-aop-jboss5.deployer		security-deployer-jboss-beans.xml
+jboss-jca.deployer
+[usr@localhost &lt;JBoss_Home&gt;]$<literal>ls server/web/deployers </literal>
+ROOT.war				jbossweb.sar
+ejb3-container-jboss-beans.xml	jca-jboss-beans.xml
+hdscanner-jboss-beans.xml		jmx-console.war
+hsqldb-ds.xml			jmx-invoker-service.xml
+http-invoker.sar			security
+jboss-local-jdbc.rar		transaction-jboss-beans.xml
+jboss-xa-jdbc.rar
+</programlisting>
+</para>
+<note>
+	<para>
+		The <emphasis role="bold">default</emphasis> configuration is the one used if you don’t specify another one when starting up the server. 
+	</para>
+	<para>
+		To start the server using an alternate configuration refer to <xref linkend="Starting_and_Stopping_the_Server-Start_the_Server_With_Alternate_Configuration"/>.
+	</para>
+</note>
+<section id="Server_Configuration_Directory_Structure">
+	<title>Server Configuration Directory Structure</title>
+	<para>
+		The directory server configuration you’re using, is effectively the server root while JBoss is running. It contains all the code and configuration information for the services provided by the particular server configuration. It’s where the log output goes, and it’s where you deploy your applications. <xref linkend="Server_Configuration_Directory_Structure_table"/> shows the directories inside the server configuration directory (<filename class="directory">&lt;JBoss_Home&gt;/server/&lt;instance-name&gt;</filename>) and their functions.
+	</para>
+	<para>
+		<table id="Server_Configuration_Directory_Structure_table">
+			<title>Server Configuration Directory Structure</title>
+			<tgroup cols="2">
+				<colspec colname="c1" colnum="1" colwidth="1*"/>
+				<colspec colname="c2" colnum="2" colwidth="4*"/>
+				<thead>
+					<row>
+						<entry>
+							Directory
+						</entry>
+						<entry>
+							Description
+						</entry>
+					</row>
+				</thead>
+				<tbody>
+					<row>
+						<entry>
+							<filename class="directory">conf</filename>
+						</entry>
+						<entry>
+							The <filename class="directory">conf</filename> directory contains the <filename>bootstrap.xml</filename> bootstrap descriptor file for a given server configuration. This defines the core microcontainer beans that are fixed for the lifetime of the server. 
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<filename class="directory">data</filename>
+						</entry>
+						<entry>
+							The <filename class="directory">data</filename> directory is available for use by services that want to store content in the file system. It holds persistent data for services intended to survive a server restart. Serveral JBoss services, such as the embedded Hypersonic database instance, store data here.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<filename class="directory">deploy</filename>
+						</entry>
+						<entry>
+							The <filename class="directory">deploy</filename> directory contains the hot-deployable services (those which can be added to or removed from the running server). It also contains applications for the current server configuration. You deploy your application code by placing application packages (JAR, WAR and EAR files) in the <filename class="directory">deploy</filename> directory. The directory is constantly scanned for updates, and any modified components will be re-deployed automatically.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<filename class="directory">lib</filename>
+						</entry>
+						<entry>
+							This directory contains JAR files (Java libraries that should not be hot deployed) needed by this server configuration. You can add required library files here for JDBC drivers etc. All JARs in this directory are loaded into the shared classpath at startup. Note that this directory only contains those jars unique to the server configuration. Jars common across the server configurations are now located in <filename class="directory">&lt;JBoss_Home&gt;/common/lib</filename>.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<filename class="directory">log</filename>
+						</entry>
+						<entry>
+							This is where the log files are written. JBoss uses the Jakarta <literal>log4j</literal> package for logging and you can also use it directly in your own applications from within the server. This may be overridden through the <filename class="directory">conf/</filename><filename>jboss-log4j.xml</filename> configuration file.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<filename class="directory">tmp</filename>
+						</entry>
+						<entry>
+							The <filename class="directory">tmp</filename> directory is used for temporary storage by JBoss services. The deployer, for example, expands application archives in this directory.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<filename class="directory">work</filename>
+						</entry>
+						<entry>
+							This directory is used by Tomcat for compilation of JSPs.
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+	</para>
+</section>
+<section id="The_default_Server_Configuration_File_Set">
+	<title>The "default" Server Configuration File Set</title>
+	<para>
+		The "<literal>default</literal>" server configuration file set is located in the <literal>&lt;JBoss_Home&gt;/server/default</literal> directory. The following example illustrates a truncated directory structure of the <literal>jboss-as-&lt;release&gt;</literal> server configuration files:
+<screen>[user@localhost &lt;JBoss_Home&gt;]$ tree
+|-- bin
+|-- client
+|-- common
+|   |-- lib
+|   |   |-- antlr.jar
+|   |   |-- ... many more jars
+|-- docs
+|   |-- dtd
+|   |-- examples
+|   |   |-- binding-manager
+|   |   |   `-- sample-bindings.xml
+|   |   |-- jca
+|   |   |-- jms
+|   |   |-- jmx
+|   |   |-- netboot
+|   |   |   `-- netboot.war
+|   |   `-- varia
+|   |       |-- deployment-service
+|   |       |-- derby-plugin.jar
+|   |       |-- entity-resolver-manager
+|   |       |   `-- xmlresolver-service.xml
+|   |       `-- jboss-bindings.xml
+|   `-- schema
+|-- lib
+|   |-- commons-codec.jar
+|   |-- commons-httpclient.jar
+|   |-- commons-logging.jar
+|   |-- concurrent.jar
+|   |-- endorsed
+|   |   |-- serializer.jar
+|   |   |-- xalan.jar
+|   |   `-- xercesImpl.jar
+|   |-- getopt.jar
+|   |-- jboss-common.jar
+|   |-- jboss-jmx.jar
+|   |-- jboss-system.jar
+|   |-- jboss-xml-binding.jar
+|   `-- log4j-boot.jar
+`-- server
+|-- all
+|   |-- conf
+|   |   |-- bootstrap/
+|   |   |   |-- aop.xml
+|   |   |   |-- bindings.xml
+|   |   |   |-- aop.xml
+|   |   |   |-- classloader.xml
+|   |   |   |-- deployers.xml
+|   |   |   |-- jmx.xml
+|   |   |   |-- profile-repository.xml
+|   |   |   |-- profile.xml
+|   |   |   |-- vfs.xml
+|   |   |-- bootstrap.xml
+|   |   |-- bootstrap-norepo.xml
+|   |   |-- jacorb.properties
+|   |   |-- java.policy
+|   |   |-- jax-ws-catalog.xml
+|   |   |-- jboss-log4j.xml
+|   |   |-- jboss-service.xml
+|   |   |-- jbossjta-properties.xml
+|   |   |-- jndi.properties
+|   |   |-- login-config.xml
+|   |   |-- props
+|   |   |   |-- jbossws-roles.properties
+|   |   |   |-- jbossws-users.properties
+|   |   |   |-- jmx-console-roles.properties
+|   |   |   `-- jmx-console-users.properties
+|   |   |-- standardjboss.xml
+|   |   |-- standardjbosscmp-jdbc.xml
+|   |   `-- xmdesc
+|   |-- deploy
+|   |-- deploy-hasingleton
+|   |   `-- jms
+|   |-- deployers
+|   `-- lib
+|-- default
+|   |-- conf
+|   |   |-- bootstrap/
+|   |   |   |-- aop.xml
+|   |   |   |-- bindings.xml
+|   |   |   |-- aop.xml
+|   |   |   |-- classloader.xml
+|   |   |   |-- deployers.xml
+|   |   |   |-- jmx.xml
+|   |   |   |-- profile-repository.xml
+|   |   |   |-- profile.xml
+|   |   |   |-- vfs.xml
+|   |   |-- bootstrap.xml
+|   |   |-- bootstrap-norepo.xml
+|   |   |-- jacorb.properties
+|   |   |-- java.policy
+|   |   |-- jax-ws-catalog.xml
+|   |   |-- jboss-log4j.xml
+|   |   |-- jboss-service.xml
+|   |   |-- jbossjta-properties.xml
+|   |   |-- jndi.properties
+|   |   |-- login-config.xml
+|   |   |-- props
+|   |   |   |-- jbossws-roles.properties
+|   |   |   |-- jbossws-users.properties
+|   |   |   |-- jmx-console-roles.properties
+|   |   |   `-- jmx-console-users.properties
+|   |   |-- standardjboss.xml
+|   |   |-- standardjbosscmp-jdbc.xml
+|   |   `-- xmdesc
+|   |       |-- AttributePersistenceService-xmbean.xml
+|   |       |-- ClientUserTransaction-xmbean.xml
+|   |       |-- JNDIView-xmbean.xml
+|   |       |-- Log4jService-xmbean.xml
+|   |       |-- NamingBean-xmbean.xml
+|   |       |-- NamingService-xmbean.xml
+|   |       |-- TransactionManagerService-xmbean.xml
+|   |       |-- org.jboss.deployment.JARDeployer-xmbean.xml
+|   |       |-- org.jboss.deployment.MainDeployer-xmbean.xml
+|   |       `-- org.jboss.deployment.SARDeployer-xmbean.xml
+|   |-- data
+|   |   |-- hypersonic
+|   |   |-- jboss.identity
+|   |   |-- tx-object-store
+|   |   `-- xmbean-attrs
+|   |-- deploy
+|   |-- lib
+|   |-- log
+|   |   |-- boot.log
+|   |   |-- server.log
+|   |   `-- server.log.2008-08-09
+|   |-- tmp
+|   `-- work
+|       `-- jboss.web
+|           `-- localhost
+`-- minimal
+|-- conf
+|   |-- bootstrap/
+|   |-- bootstrap/aop.xml
+|   |-- bootstrap/classloader.xml
+|   |-- bootstrap/deployers.xml
+|   |-- bootstrap/jmx.xml
+|   |-- bootstrap/profile.xml
+|   |-- bootstrap.xml
+|   |-- jboss-log4j.xml
+|   |-- jboss-service.xml
+|   |-- jndi.properties
+|   `-- xmdesc
+|       |-- NamingBean-xmbean.xml
+|       `-- NamingService-xmbean.xml
+|-- deploy/
+|-- deploy/hdscanner-jboss-beans.xml
+|-- deployers/
+`-- lib
+|-- jboss-minimal.jar
+|-- jnpserver.jar
+`-- log4j.jar</screen>
+
+</para>
+	<section id="The_default_Server_Configuration_File_Set-Contents_of_conf_directory">
+		<title>Contents of "conf" directory</title>
+		<para>
+			The files in the <literal>conf</literal> directory are explained in the following table.
+		</para>
+		<para>
+			<table id="Contents_of_conf_directory-Contents_of_conf_directory">
+				<title>Contents of "conf" directory</title>
+				<tgroup cols="2">
+					<colspec colname="c1" colnum="1" colwidth="4*"/>
+					<colspec colname="c2" colnum="2" colwidth="4*"/>
+					<thead>
+						<row>
+							<entry>
+								File
+							</entry>
+							<entry>
+								Description
+							</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<literal>bootstrap.xml</literal>
+							</entry>
+							<entry>
+								This is the <literal>bootstrap.xml</literal> file that defines which additional microcontainer deployments will be loaded as part of the bootstrap phase.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>bootstrap/*</literal>
+							</entry>
+							<entry>
+								This directory contains the microcontainer bootstrap descriptors that are referenced from the <literal>bootstrap.xml</literal> file.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>jboss-service.xml</literal>
+							</entry>
+							<entry>
+								<literal>jboss-service.xml</literal> legacy core mbeans that have yet to be ported to either bootstrap deployments, or deploy services. This file will go away in the near future.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>jbossjta-properties.xml</literal>
+							</entry>
+							<entry>
+								<literal>jbossjta-properties.xml</literal> specifies the JBossTS transaction manager default properties.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>jndi.properties</literal>
+							</entry>
+							<entry>
+								The <literal>jndi.properties</literal> file specifies the JNDI <literal>InitialContext</literal> properties that are used within the JBoss server when an <literal>InitialContext</literal> is created using the no-arg constructor.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>java.policy</literal>
+							</entry>
+							<entry>
+								A placeholder java security policy file that simply grants all permissions.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>jboss-log4j.xml</literal>
+							</entry>
+							<entry>
+								This file configures the Apache log4j framework category priorities and appenders used by the JBoss server code.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>login-config.xml</literal>
+							</entry>
+							<entry>
+								This file contains sample server side authentication configurations that are applicable when using JAAS based security.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>props/*</literal>
+							</entry>
+							<entry>
+								The <literal>props</literal> directory contains the users and roles property files for the <literal>jmx-console</literal>.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>standardjboss.xml</literal>
+							</entry>
+							<entry>
+								This file provides the default container configurations.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>standardjbosscmp-jdbc.xml</literal>
+							</entry>
+							<entry>
+								This file provides a default configuration file for the JBoss CMP engine.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>xmdesc/*-mbean.xml</literal>
+							</entry>
+							<entry>
+								The <literal>xmdesc</literal> directory contains XMBean descriptors for several services configured in the <literal>jboss-service.xml</literal> file.
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</para>
+	</section>
+
+	<section id="The_default_Server_Configuration_File_Set-Contents_of_deployers_directory">
+		<title>Contents of "deployers" directory</title>
+		<para>
+			The files in the <literal>deployers</literal> directory are explained in the following table.
+		</para>
+		<para>
+			<table id="Contents_of_deployers_directory_table1">
+				<title>Contents of "deployers" directory</title>
+				<tgroup cols="2">
+					<colspec colname="c1" colnum="1" colwidth="4*"/>
+					<colspec colname="c2" colnum="2" colwidth="4*"/>
+					<thead>
+						<row>
+							<entry>
+								File
+							</entry>
+							<entry>
+								Description
+							</entry>
+						</row>
+					</thead>
+					<tbody>
+					<row>
+						<entry>
+							<literal>alias-deployers-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							Deployers that know how to handle The know how to handle &lt;alias&gt; in &lt;deployment&gt; as true controller context.
+								Meaning they will only get active/installed when their original is installed. 
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>bsh.deployer</literal>
+						</entry>
+						<entry>
+							This file configures the bean shell deployer, which deploys bean shell scripts as JBoss mbean services.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>clustering-deployer-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							Clustering-related deployers which add dependencies on needed clustering services to clustered EJB3, EJB2 beans and to distributable web applications. 
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>dependency-deployers-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							Deployers for aliases.txt, jboss-dependency.xml  jboss-depedency.xml adds generic dependency on whatever. aliases.txt adds human-readable name for deployments, e.g. vfszip://home/blah/.../jboss-5.0.0.GA/server/default/deploy/some-long-name.ear aliased to ales-app.ear.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>directory-deployer-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							Adds legacy behavior for directories, handling its children as possible deployments.
+							e.g. .sar's lib directory to treat its .jar files as deployments
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>ear-deployer-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							JavaEE 5 enterprise application related deployers
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>ejb-deployer-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							Legacy JavaEE 1.4 ejb jar related deployers
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>ejb3.deployer</literal>
+						</entry>
+						<entry>
+							This is a deployer that supports JavaEE 5 ejb3, JPA, and application client deployments, .
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>hibernate-deployer-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							Deployers for Hibernate -hibernate.xml descriptors, which are similar to Hibernate's .cfg.xml files.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>jboss-aop-jboss5.deployer</literal>
+						</entry>
+						<entry>
+							JBossAspectLibrary and base aspects. Why is this in deployers, dependencies?
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>jboss-jca.deployer</literal>
+						</entry>
+						<entry>
+							<literal>jboss-jca.deployer</literal> description
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<literal>jbossweb.deployer</literal>
+						</entry>
+						<entry>
+							The JavaEE 5 servlet, JSF, JSP deployers.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>jbossws.deployer</literal>
+						</entry>
+						<entry>
+							The JavaEE 5 webservices endpoint deployers.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>jsr77-deployers-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							Deployers for creating the JSR77 MBeans from the JavaEE components.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>metadata-deployer-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							Deployers for processing the JavaEE metadata from xml, annotations.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>seam.deployer</literal>
+						</entry>
+						<entry>
+							Deployer providing integration support for JBoss Seam applications.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>security-deployer-jboss-beans.xml</literal>
+						</entry>
+						<entry>
+							Deployers for configuration the security layers of the JavaEE components.
+						</entry>
+					</row>
+				</tbody>
+				</tgroup>
+			</table>
+		</para>
+	</section>
+
+	<section id="The_default_Server_Configuration_File_Set-Contents_of_deploy_directory">
+		<title>Contents of "deploy" directory</title>
+		<para>
+			The files in the <literal>deploy</literal> directory are explained in the following table.
+		</para>
+		<para>
+			<table id="Contents_of_deploy_directory_table">
+				<title>Contents of "deploy" directory</title>
+				<tgroup cols="2">
+					<colspec colname="c1" colnum="1" colwidth="4*"/>
+					<colspec colname="c2" colnum="2" colwidth="4*"/>
+					<thead>
+						<row>
+							<entry>
+								File
+							</entry>
+							<entry>
+								Description
+							</entry>
+						</row>
+					</thead>
+								<tbody>
+									<row>
+										<entry>
+											<literal>ROOT.war</literal>
+										</entry>
+										<entry>
+											<literal>ROOT.war</literal> establishes the '/' root
+											web application. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>cache-invalidation-service.xml</literal>
+										</entry>
+										<entry> This is a service that allows for custom
+											invalidation of the EJB caches via JMS
+											notifications. It is disabled by default. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>ejb2-container-jboss-beans.xml</literal>
+										</entry>
+										<entry>
+											<literal>ejb2-container-jboss-beans.xml</literal>
+											UserTransaction integration bean for the EJB2
+											containers. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>ejb2-timer-service.xml</literal>
+										</entry>
+										<entry>
+											<literal>ejb2-timer-service.xml</literal> contains
+											the ejb timer service beans. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>ejb3-connectors-jboss-beans.xml</literal>
+										</entry>
+										<entry>
+											<literal>ejb3-connectors-jboss-beans.xml</literal>
+											EJB3 remoting transport beans. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>ejb3-container-jboss-beans.xml</literal>
+										</entry>
+										<entry>
+											<literal>ejb3-container-jboss-beans.xml</literal>
+											UserTransaction integration bean for the EJB3
+											containers. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>ejb3-interceptors-aop.xml</literal>
+										</entry>
+										<entry>
+											<literal>ejb3-interceptors-aop.xml</literal> defines
+											the EJB3 container aspects. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>ejb3-timer-service.xml</literal>
+										</entry>
+										<entry>
+											<literal>ejb3-timer-service.xml</literal> an
+											alternate quartz based timer service </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>hdscanner-jboss-beans.xml</literal>
+										</entry>
+										<entry>
+											<literal>hdscanner-jboss-beans.xml</literal> the
+											deploy directory hot deployment scanning bean
+										</entry>
+									</row>
+									<row>
+										<entry>hsqldb-ds.xml</entry>
+										<entry>configures the Hypersonic embedded database
+											service configuration file. It sets up the embedded
+											database and related connection factories. </entry>
+									</row>
+									<row>
+										<entry>http-invoker.sar</entry>
+										<entry>contains the detached invoker that supports RMI
+											over HTTP. It also contains the proxy bindings for
+											accessing JNDI over HTTP. </entry>
+									</row>
+									<row>
+										<entry>jboss-local-jdbc.rar</entry>
+										<entry>is a JCA resource adaptor that implements the JCA
+											<literal>ManagedConnectionFactory</literal>
+											interface for JDBC drivers that support the
+											<literal>DataSource</literal> interface but not
+											JCA. </entry>
+									</row>
+									<row>
+										<entry>jboss-xa-jdbc.rar</entry>
+										<entry>JCA resource adaptors for XA DataSources</entry>
+									</row>
+									<row>
+										<entry>
+											<literal>jbossweb.sar</literal>
+										</entry>
+										<entry>an mbean service supporting TomcatDeployer with
+											web application deployment service
+										management.</entry>
+									</row>
+										<row>
+											<entry><literal>jbossws.sar</literal></entry>
+											<entry>provides JEE web services support. </entry>
+										</row>
+										<row>
+										<entry>
+											<literal>jca-jboss-beans.xml</literal>
+										</entry>
+										<entry>
+											<literal>jca-jboss-beans.xml</literal> is the
+											application server implementation of the JCA
+											specification. It provides the connection management
+											facilities for integrating resource adaptors into
+											the JBoss server. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>jms-ra.rar</literal>
+										</entry>
+										<entry>
+											<literal>jms-ra.rar</literal> JBoss JMS Resource
+											Adapter </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>messaging/connection-factories-service.xml</literal>
+										</entry>
+										<entry>configures the DLQ, ExpiryQueue JMS connection
+											factory</entry>
+									</row>
+									<row>
+										<entry>
+											<literal>messaging/destinations-service.xml</literal>
+										</entry>
+										<entry>The message persistence store service</entry>
+									</row>
+									<row>
+										<entry>
+											<literal>messaging/destinations-service.xml</literal>
+										</entry>
+										<entry>configures the DLQ, ExpiryQueue JMS destinations.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											<literal>messaging/jms-ds.xml</literal>
+										</entry>
+										<entry>
+											<literal>jms-ds.xml</literal> configures the
+											JMSProviderLoader and JmsXA inflow resource adaptor
+											connection factory binding. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>messaging/legacy-service.xml</literal>
+										</entry>
+										<entry>
+											<literal>legacy-service.xml</literal> configures the
+											JMSProviderLoader and JmsXA inflow resource adaptor
+											connection factory binding. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>messaging/messaging-jboss-beans.xml</literal>
+										</entry>
+										<entry> The <literal>messaging-jboss-beans.xml</literal>
+											file configures JMS security and management beans.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											<literal>messaging/messaging-service.xml</literal>
+										</entry>
+										<entry> The <literal>messaging-service.xml</literal>
+											file configures the core JBoss Messaging service.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											<literal>messaging/remoting-bisocket-service.xml</literal>
+										</entry>
+										<entry> The
+											<literal>remoting-bisocket-service.xml</literal>
+											configures the JMS remoting service layer. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>jmx-console.war</literal>
+										</entry>
+										<entry> The <literal>jmx-console.war</literal> directory
+											provides the JMX Console. The JMX Console provides a
+											simple web interface for managing the MBean server.
+										</entry>
+</row>
+						<row>
+										<entry>
+											<literal>jmx-invoker-service.xml</literal>
+										</entry>
+										<entry>
+											<literal>jmx-invoker-service.xml</literal> is an
+											MBean service archive that exposes a subset of the
+											JMX <literal>MBeanServer</literal> interface methods
+											as an RMI interface to enable remote access to the
+											JMX core functionality. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>jmx-remoting.sar</literal>
+										</entry>
+										<entry>
+											<literal>jmx-remoting.sar</literal> is a
+											javax.management.remote implementation providing
+											access to the JMX server. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>legacy-invokers-service.xml</literal>
+										</entry>
+										<entry>
+											<literal>legacy-invokers-service.xml</literal> the
+											legacy detached jmx invoker remoting services.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											<literal>jsr-88-service.xml</literal>
+										</entry>
+										<entry>
+											<literal>jsr-88-service.xml</literal> provides the
+											JSR 88 remote deployment service. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>mail-ra.rar</literal>
+										</entry>
+										<entry>
+											<literal>mail-ra.rar</literal> is a resource adaptor
+											that provides a JavaMail connector. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>mail-service.xml</literal>
+										</entry>
+										<entry> The <literal>mail-service.xml</literal> file is
+											an MBean service descriptor that provides JavaMail
+											sessions for use inside the JBoss server. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>monitoring-service.xml</literal>
+										</entry>
+										<entry> The <literal>monitoring-service.xml</literal>
+											file configures alert monitors like the console
+											listener and email listener used by JMX
+											notifications. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>profileservice-jboss-beans.xml</literal>
+										</entry>
+										<entry>
+											<literal>profileservice-jboss-beans.xml</literal>
+											description </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>properties-service.xml</literal>
+										</entry>
+										<entry> The <literal>properties-service.xml</literal> file is an MBean service descriptor that allows for customization of the JavaBeans <literal>PropertyEditor</literal>s as well as the definition of system properties. </entry>
+										</row>
+										<row>
+											<entry>
+											<literal>quartz-ra.rar</literal>
+											</entry>
+											<entry>
+											<literal>quartz-ra.rar</literal> is a resource adaptor for inflow of Quartz events </entry>
+										</row>
+										<row>
+											<entry>
+											<literal>remoting-jboss-beans.xml</literal>
+											</entry>
+											<entry>
+											<literal>remoting-jboss-beans.xml</literal>
+											contains the unified invokers based on JBoss
+											Remoting. </entry>
+										</row>
+						<row>
+							<entry>
+								<literal>scheduler-service.xml</literal>
+							</entry>
+							<entry> The <literal>scheduler-service.xml</literal> and
+								<literal>schedule-manager-service.xml</literal>
+								files are MBean service descriptors that provide a
+								scheduling type of service. </entry>
+						</row>
+						<row>
+										<entry>
+											<literal>security/security-jboss-beans.xml</literal>
+										</entry>
+										<entry>
+											<literal>security-jboss-beans.xml</literal> security
+											domain related beans. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>security/security-policies-jboss-beans.xml</literal>
+										</entry>
+										<entry>
+											<literal>security-policies-jboss-beans.xml</literal>
+											security authorization related beans for ejb and web
+											authorization. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>sqlexception-service.xml</literal>
+										</entry>
+										<entry> The <literal>sqlexception-service.xml</literal>
+											file is an MBean service descriptor for the handling
+											of vendor specific <literal>SQLException</literal>s.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											<literal>transaction-jboss-beans.xml</literal>
+										</entry>
+										<entry>
+											<literal>transaction-jboss-beans.xml</literal> JTA
+											transaction manager related beans. </entry>
+									</row>
+									<row>
+										<entry>
+											<literal>transaction-service.xml</literal>
+										</entry>
+										<entry>
+											<literal>transaction-service.xml</literal>
+											ClientUserTransaction proxy service configuration.
+										</entry>
+									</row>
+									<row>
+										<entry>
+											<literal>uuid-key-generator.sar</literal>
+										</entry>
+										<entry> The <literal>uuid-key-generator.sar</literal>
+											service provides a UUID-based key generation
+											facility. </entry>
+									</row>
+								</tbody>
+				</tgroup>
+			</table>
+		</para>
+	</section>
+
+</section>
+<section id="The_all_Server_Configuration_File_Set">
+	<title>The "all" Server Configuration File Set</title>
+	<para>
+		The "all" server configuration file set is located in the <filename class="directory">&lt;JBoss_Home&gt;/server/all</filename> directory. In addition to the services in the "default" set, the all configuration contains several other services in the <literal>conf/</literal> directory as shown below.
+	</para>
+	<para>
+		<table id="The_all_Server_Configuration_File_Set-Additional_Services_in_conf_directory_for_all_configuration">
+			<title>Additional Services in "conf" directory for "all" configuration</title>
+			<tgroup cols="2">
+				<colspec colname="c1" colnum="1" colwidth="4*"/>
+				<colspec colname="c2" colnum="2" colwidth="4*"/>
+				<thead>
+					<row>
+						<entry>
+							File
+						</entry>
+						<entry>
+							Description
+						</entry>
+					</row>
+				</thead>
+				<tbody>
+					<row>
+						<entry>
+							<literal>cluster-service.xml</literal>
+						</entry>
+						<entry>
+							This service configures clustering communication for most clustered services in JBoss.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>deploy-hasingleton-service.xml</literal>
+						</entry>
+						<entry>
+							This provides the HA singleton service, allowing JBoss to manage services that must be active on only one node of a cluster.
+						</entry>
+					</row>
+				
+					<row>
+						<entry>
+							<literal>httpha-invoker.sar</literal>
+						</entry>
+						<entry>
+							This service provides HTTP tunneling support for clustered environments.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>iiop-service.xml</literal>
+						</entry>
+						<entry>
+							This provides IIOP invocation support.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>juddi-service.sar</literal>
+						</entry>
+						<entry>
+							This service provides UDDI lookup services.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<literal>snmp-adaptor.sar</literal>
+						</entry>
+						<entry>
+							This is a JMX to SNMP adaptor. It allows for the mapping of JMX notifications onto SNMP traps.
+						</entry>
+					</row>
+				
+				</tbody>
+			</tgroup>
+		</table>
+	</para>
+</section>
+<section id="EJB3_Services">
+		<title>EJB3 Services </title>
+		<para>
+			The following table explains the files providing ejb3 services.
+		</para>
+		<para>
+			<table id="EJB3_Services_-EJB3_Services">
+				<title>EJB3 Services</title>
+				<tgroup cols="2">
+					<colspec colname="c1" colnum="1" colwidth="4*"/>
+					<colspec colname="c2" colnum="2" colwidth="4*"/>
+					<thead>
+						<row>
+							<entry>
+								File
+							</entry>
+							<entry>
+								Description
+							</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<literal>ejb3-interceptors-aop.xml</literal>
+							</entry>
+							<entry>
+								This service provides the AOP interceptor stack configurations for EJB3 bean types.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>ejb3.deployer</literal>
+							</entry>
+							<entry>
+								This service deploys EJB3 applications into JBoss.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>jboss-aop-jdk50.deployer</literal>
+							</entry>
+							<entry>
+								This is a Java 5 version of the AOP deployer. The AOP deployer configures the <literal>AspectManagerService</literal> and deploys JBoss AOP applications.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>jbossws.sar</literal>
+							</entry>
+							<entry>
+								This provides Java EE 5 web services support.
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</para>
+		<para>
+			Finally, in the EJB3 "all" configuration there are two additional services.
+		</para>
+		<para>
+			<table id="EJB3_Services_-Additional_Services_in_EJB3_all_Configuration">
+				<title>Additional Services in EJB3 "all" Configuration</title>
+				<tgroup cols="2">
+					<colspec colname="c1" colnum="1" colwidth="4*"/>
+					<colspec colname="c2" colnum="2" colwidth="4*"/>
+					<thead>
+						<row>
+							<entry>
+								File
+							</entry>
+							<entry>
+								Description
+							</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<literal>ejb3-clustered-sfsbcache-service.xml</literal>
+							</entry>
+							<entry>
+								This provides replication and failover for EJB3 stateful session beans.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<literal>ejb3-entity-cache-service.xml</literal>
+							</entry>
+							<entry>
+								This provides a clustered cache for EJB3 entity beans.
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</para>
+</section>
+	<section>
+		<title></title>
+	</section>
+	
+</section>

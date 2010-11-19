@@ -57,11 +57,11 @@
   <property name="build.dir" value="${basedir}/build" />
   <property name="doc.dir" value="${basedir}/doc" />
   <property name="target.dir" value="${basedir}/target" />
-  <property name="tools.dir" value="${basedir}/tools" />
+
   <property name="reports.dir" value="${basedir}/reports" />
   <property name="test.dir" value="${reports.dir}" />
-  <property name="root.dir" value="${basedir}/root" />
-
+  <property name="down.dir" value="${basedir}/down" />
+  <property name="release.dir" value="${basedir}/target/release" />
 
   <property name="javac.debug" value="on" />
   <property name="javac.deprecation" value="on" />
@@ -91,12 +91,21 @@
   <!-- ================================= 
        Versions              
        ================================= -->
-  <property name="version.jdocbook" value="1.0.3"/>
+<!--
+  <property name="version.jdocbook-core" value="1.0.3"/>
+-->
+  <property name="version.jdocbook-core" value="1.0.4"/>
+  <property name="version.jdocbook-core-ext" value="2010-11-18-SNAPSHOT"/>
+
+  <property name="version.docbook-xsl" value="1.76.1"/>
+  <property name="version.docbook-xsl-old" value="1.72.0"/>
+
   <property name="version.ant" value="1.8.1"/>
   <property name="version.saxon" value="6.5.3"/>
   <property name="version.slf4j" value="1.5.8"/>
   <property name="version.doctype-changer" value="1.1"/>
   <property name="version.xercesImpl" value="2.9.1"/>
+  <property name="version.xml-apis" value="1.3.04"/>
   <property name="version.saxon" value="6.5.3"/>
   <property name="version.avalon-framework" value="4.3.1"/>
   <property name="version.xml-resolver" value="1.1"/>
@@ -110,7 +119,28 @@
   <property name="version.jboss.highlight" value="1.0.0"/>
   <property name="version.jhighlight" value="1.0"/>
   <property name="version.richfaces.highlight" value="3.1.4.GA"/>
+  <property name="version.batik" value="1.7"/>
+
   <property name="version.jbossorg-docbook-xslt" value="1.1.1"/>
+  <property name="version.jbossorg-jdocbook-style" value="1.1.1"/>
+
+  <!-- ================================= 
+       Target: download-docbook-files
+       ================================= -->
+  <target name="download-docbook-files">
+    <mkdir dir="${down.dir}/docbook"/>
+    <property name="docbook.url" value="http://www.docbook.org/xml"/>
+    <get src="${docbook.url}/4.3/docbook-xml-4.3.zip" dest="${down.dir}/docbook/docbook-xml-4.3.zip" skipexisting="true"/>
+    <get src="${docbook.url}/4.4/docbook-xml-4.4.zip" dest="${down.dir}/docbook/docbook-xml-4.4.zip" skipexisting="true"/>
+    <get src="${docbook.url}/4.5/docbook-xml-4.5.zip" dest="${down.dir}/docbook/docbook-xml-4.5.zip" skipexisting="true"/>
+    <get src="${docbook.url}/5.0/docbook-5.0.zip" dest="${down.dir}/docbook/docbook-5.0.zip" skipexisting="true"/>
+
+    <get src="http://sourceforge.net/projects/docbook/files/docbook-xsl/${version.docbook-xsl}/docbook-xsl-${version.docbook-xsl}.zip/download"
+         dest="${down.dir}/docbook/docbook-xsl-${version.docbook-xsl}.zip" skipexisting="true"/>
+
+    <get src="http://archive.apache.org/dist/xmlgraphics/batik/batik-${version.batik}.zip"
+         dest="${down.dir}/docbook/batik-${version.batik}.zip" skipexisting="true"/>
+  </target>
 
   <!-- ================================= 
        Bootstrap Ivy
@@ -131,7 +161,11 @@
 
     <mkdir dir="${build.dir}" />
     <mkdir dir="${target.dir}" />
-    <mkdir dir="${root.dir}"/>
+
+<!-- temp using hacked file -->
+    <get src="http://jeffzhang.github.com/docant/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar"
+         dest="${build.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar" skipexisting="true"/>
+
   </target>
   
   <!-- ================================= 
@@ -139,6 +173,8 @@
        ================================= -->
   <target name="resolve" depends="init">
     <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision].[ext]" sync="true"/>
+    <copy file="${build.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar" 
+          tofile="${lib.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar"/>
   </target>
   
   <!-- ================================= 
@@ -183,6 +219,65 @@
         <attribute name="Implementation-Vendor-Id" value="org.jboss"/>
       </manifest>
     </jar>
+  </target>
+
+
+  <!-- ================================= 
+       Target: release 
+       ================================= -->
+  <target name="release" depends="download-docbook-files, jars">
+    <delete dir="${release.dir}"/>
+    <mkdir dir="${release.dir}"/>
+    <mkdir dir="${release.dir}/lib"/>
+    <mkdir dir="${release.dir}/target"/>
+    <property name="staging.dir" value="${release.dir}/target/docbook/staging"/>
+    <mkdir dir="${staging.dir}"/>
+
+    <copy todir="${release.dir}">
+      <fileset dir="src/main/resources"
+               includes="*.xml"/>
+    </copy>
+
+    <copy file="src/main/resources/catalog.xml.template" tofile="${staging.dir}/catalog.xml">
+      <filterset>
+        <filter token="OLD" value="${version.docbook-xsl-old}"/>
+        <filter token="NEW" value="${version.docbook-xsl}"/>
+      </filterset>
+    </copy>
+
+    <copy todir="${release.dir}/lib">
+      <fileset dir="${target.dir}"
+               includes="*.jar"/>
+      <fileset dir="${lib.dir}"
+               includes="*.jar"/>
+    </copy>
+
+    <copy todir="${release.dir}/lib/common">
+      <fileset dir="${lib.dir}/common"
+               includes="*.jar"/>
+    </copy>
+
+    <copy todir="${release.dir}/lib/docbook">
+      <fileset dir="${down.dir}/docbook"
+               includes="*.zip"/>
+    </copy>
+
+    <copy todir="${release.dir}/src/main/docbook">
+      <fileset dir="docbook"/>
+    </copy>
+
+    <unzip src="${down.dir}/docbook/batik-${version.batik}.zip" dest="${release.dir}/lib/batik">
+      <patternset>
+        <include name="batik-${version.batik}/lib/batik-*.jar"/>
+        <include name="batik-${version.batik}/lib/js.jar"/>
+      </patternset>
+      <mapper type="flatten"/>
+    </unzip>
+
+    <unzip src="${down.dir}/docbook/docbook-xsl-${version.docbook-xsl}.zip" dest="${staging.dir}"/>
+    <unzip src="${lib.dir}/style/jbossorg-docbook-xslt-${version.jbossorg-docbook-xslt}.jar" dest="${staging.dir}"/>
+    <unzip src="${lib.dir}/style/jbossorg-jdocbook-style-${version.jbossorg-jdocbook-style}.jdocbook-style" dest="${staging.dir}"/>
+
   </target>
 
   <!-- ================================= 

@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-JBossAS_JVM">
+        <title>JBoss Application Server JVM</title>
+
+
+<para>Additional JVM metrics and monitoring capabilities are available by clicking on the JBoss AS JVM link in the left navigation panel.
+
+        <mediaobject>
+            <imageobject>
+                <imagedata scalefit="1" fileref="images/JBossAS_JVM.png"/>
+            </imageobject>
+        </mediaobject>
+
+
+From here, you can view JVM metrics including virtual memory utilization, execute operations such as garbage collection and thread dumps of daemon and non-daemon threads,
+memory pool metrics, and metrics of classes loaded in the VM.
+</para>
+</chapter>

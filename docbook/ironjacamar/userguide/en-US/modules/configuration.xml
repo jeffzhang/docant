@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="configuration">
+   <title>Configuration</title>
+
+   <para>The configuration for the IronJacamar container is located in the config/ directory.</para>
+
+   <section id="logging">
+      <title>Logging service</title>
+
+      <para>The IronJacamar container uses JBoss Logging framework as the implementation.</para>
+
+      <para>The configuration is done in the</para>
+
+      <programlisting>
+config/logging.properties
+      </programlisting>
+
+      <para>file.</para>
+
+      <para>Consult the <ulink url="http://www.jboss.org/community/wiki/JBossBootLogging">
+          JBoss Logging documentation</ulink> on how the service can be configured.</para>
+
+   </section>
+
+   <section id="transaction">
+      <title>Transaction service</title>
+
+      <para>The IronJacamar container uses the JBoss Transaction Manager as its transaction implementation.</para>
+
+      <para>The configuration is done in the</para>
+
+      <programlisting>
+config/transaction.xml
+      </programlisting>
+
+      <para>file.</para>
+
+      <para>Consult the JBoss Transaction documentation on how the service can be configured.</para>
+
+   </section>
+
+   <section id="jca">
+      <title>JCA</title>
+
+      <section id="jca_deployer">
+        <title>Deployer</title>
+
+        <para>The IronJacamar deployer is configured in the</para>
+
+        <programlisting>
+config/bootstrap/jca.xml
+        </programlisting>
+
+        <para>file.</para>
+
+        <section id="jca_deployer_configuration">
+          <title>Configuration</title>
+
+          <para>The configuration of the resource adapter deployer chain is handled
+            by a <code>org.jboss.jca.deployers.fungal.RAConfiguration</code> bean.</para>
+
+          <programlisting>
+<![CDATA[
+<bean name="RAConfiguration"
+      class="org.jboss.jca.deployers.fungal.RAConfiguration">
+  <property name="ArchiveValidation">true</property>
+  <property name="ArchiveValidationFailOnWarn">false</property>
+  <property name="ArchiveValidationFailOnError">true</property>
+  <property name="BeanValidation">true</property>
+  <property name="PrintStream"><inject bean="JBossStdioContext" property="Out"/></property>
+  <property name="DefaultBootstrapContext"><inject bean="DefaultBootstrapContext"/></property>
+  <property name="JndiStrategy"><inject bean="JndiStrategy"/></property>
+  <property name="TransactionManager"><inject bean="RealTransactionManager"/></property>
+  <property name="MetadataRepository"><inject bean="MDR"/></property>
+</bean>
+ ]]>
+          </programlisting>
+          
+
+          <table frame="all">
+            <title>Resource adapter deployer configuration</title>
+            <tgroup cols="3" align="left" colsep="1" rowsep="1">
+              <colspec colname="c1" colwidth="2*"/>
+              <colspec colname="c2"/>
+              <colspec colname="c3" colwidth="3*"/>
+              <thead>
+                <row>
+                  <entry align="left">Property</entry>
+                  <entry align="left">Type</entry>
+                  <entry align="left">Description</entry>
+                </row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry><code>ArchiveValidation</code></entry>
+                  <entry><code>boolean</code></entry>
+                  <entry>
+                    Toggle archive validation for the deployment units.
+                    <para>Default: <code>true</code></para>
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>ArchiveValidationFailOnWarn</code></entry>
+                  <entry><code>boolean</code></entry>
+                  <entry>
+                    Should an archive validation warning report fail the deployment.
+                    <para>Default: <code>false</code></para>
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>ArchiveValidationFailOnError</code></entry>
+                  <entry><code>boolean</code></entry>
+                  <entry>
+                    Should an archive validation error report fail the deployment.
+                    <para>Default: <code>true</code></para>
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>BeanValidation</code></entry>
+                  <entry><code>boolean</code></entry>
+                  <entry>
+                    Toggle bean validation (JSR-303) for the deployment units.
+                    <para>Default: <code>true</code></para>
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>DefaultBootstrapContext</code></entry>
+                  <entry><code>org.jboss.jca.core.api.bootstrap.CloneableBootstrapContext</code></entry>
+                  <entry>
+                    Specifies the default bootstrap context for resource adapters
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>BootstrapContexts</code></entry>
+                  <entry><code>Map&lt;String, org.jboss.jca.core.api.bootstrap.CloneableBootstrapContext&gt;</code></entry>
+                  <entry>
+                    Bootstrap context map (unique name to a cloneable bootstrap context) which allows
+                    developers to bind (through <code>jboss-ra.xml</code>) their resource adapter to
+                    a specific bootstrap context instance.
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>PrintStream</code></entry>
+                  <entry><code>java.io.PrintStream</code></entry>
+                  <entry>
+                    Specifies which print stream that should be used to handle the <code>LogWriter</code>s
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>MetadataRepository</code></entry>
+                  <entry><code>org.jboss.jca.core.spi.mdr.MetadataRepository</code></entry>
+                  <entry>
+                    The metadata repository
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>ScopeDeployment</code></entry>
+                  <entry><code>boolean</code></entry>
+                  <entry>
+                    Should each deployment be scoped (isolated) from the container. This feature allows
+                    deployment of libraries of a different version than used in the container environment.
+                    <para>Default: <code>false</code></para>
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>JndiStrategy</code></entry>
+                  <entry><code>org.jboss.jca.core.spi.naming.JndiStrategy</code></entry>
+                  <entry>
+                    Specifies the JNDI strategy policy for binding the connection factories into
+                    the naming environment
+                    
+                    <para>The JNDI strategies are located in the <code>org.jboss.jca.core.naming</code>
+                      package</para>
+                    <itemizedlist spacing="compact">
+                      <listitem>
+                        <code>NoopJndiStrategy</code>: A no operation JNDI strategy 
+                        which doesn't bind/unbind any objects
+                      </listitem>
+                      <listitem>
+                        <code>SimpleJndiStrategy</code>: A simple JNDI strategy 
+                        which can bind/unbind a single connection factory
+                      </listitem>
+                      <listitem>
+                        <code>ExplicitJndiStrategy</code>: A JNDI strategy 
+                        which can requires explicit JNDI names to bind/unbind a connection factory
+                      </listitem>
+                    </itemizedlist>
+                  </entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+        </section>
+
+        <section id="jca_deployer_radeployer">
+          <title>Resource adapter deployer</title>
+
+          <para>The initial deployer for resource adapter archives is handled
+            by a <code>org.jboss.jca.deployers.fungal.RADeployer</code> bean.</para>
+
+          <programlisting>
+<![CDATA[
+<bean name="RADeployer"
+      interface="com.github.fungal.spi.deployers.Deployer" 
+      class="org.jboss.jca.deployers.fungal.RADeployer">
+  <property name="Configuration"><inject bean="RAConfiguration"/></property>
+  <depends>BeanValidation</depends>
+  <depends>JBossStdioContextSelector</depends>
+</bean>
+ ]]>
+          </programlisting>
+
+          <para>This deployer will register the resource adapters with the metadata repository in
+            the system.</para>
+          
+
+          <table frame="all">
+            <title>Resource adapter deployer</title>
+            <tgroup cols="3" align="left" colsep="1" rowsep="1">
+              <colspec colname="c1" colwidth="2*"/>
+              <colspec colname="c2"/>
+              <colspec colname="c3" colwidth="3*"/>
+              <thead>
+                <row>
+                  <entry align="left">Property</entry>
+                  <entry align="left">Type</entry>
+                  <entry align="left">Description</entry>
+                </row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry><code>Configuration</code></entry>
+                  <entry><code>org.jboss.jca.deployers.fungal.RAConfiguration</code></entry>
+                  <entry>
+                    The configuration for the deployer
+                  </entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+        </section>
+
+        <section id="jca_deployer_raxmldeployer">
+          <title>Resource adapter metadata deployer</title>
+
+          <para>The deployer for deploying our <code>-ra.xml</code> deployment descriptor is handled
+            by a <code>org.jboss.jca.deployers.fungal.RaXmlDeployer</code> bean.</para>
+          
+          <para>The deployment descriptor is defined by the <code>resource-adapters-1_0.xsd</code> schema.</para>
+
+          <programlisting>
+<![CDATA[
+<bean name="RaXmlDeployer"
+      interface="com.github.fungal.spi.deployers.Deployer" 
+      class="org.jboss.jca.deployers.fungal.RaXmlDeployer">
+  <property name="Configuration"><inject bean="DeployerConfiguration"/></property>
+  <property name="Kernel"><inject bean="Kernel"/></property>
+  <depends>BeanValidation</depends>
+  <depends>JBossStdioContextSelector</depends>
+</bean>
+ ]]>
+          </programlisting>
+
+          <para>This deployer will activate resource adapters based on the deployment information.</para>
+          
+
+          <table frame="all">
+            <title>Resource adapter metadata deployer</title>
+            <tgroup cols="3" align="left" colsep="1" rowsep="1">
+              <colspec colname="c1" colwidth="2*"/>
+              <colspec colname="c2"/>
+              <colspec colname="c3" colwidth="3*"/>
+              <thead>
+                <row>
+                  <entry align="left">Property</entry>
+                  <entry align="left">Type</entry>
+                  <entry align="left">Description</entry>
+                </row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry><code>Configuration</code></entry>
+                  <entry><code>org.jboss.jca.deployers.fungal.RAConfiguration</code></entry>
+                  <entry>
+                    The configuration for the deployer
+                  </entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+        </section>
+
+        <section id="jca_deployer_raactivator">
+          <title>Resource adapter activator</title>
+
+          <para>The deployer chain features an activator for resource adapter archives is handled
+            by the <code>org.jboss.jca.deployers.fungal.RAActivator</code> bean.</para>
+
+          <programlisting>
+<![CDATA[
+<bean name="RAActivator" 
+      class="org.jboss.jca.deployers.fungal.RAActivator">
+  <property name="Configuration"><inject bean="RAConfiguration"/></property>
+  <property name="Kernel"><inject bean="Kernel"/></property>
+  <property name="ExcludeArchives">
+    <set elementClass="java.lang.String">
+      <value>jdbc-local.rar</value>
+      <value>jdbc-xa.rar</value>
+    </set>
+  </property>
+  <depends>BeanValidation</depends>
+  <depends>JBossStdioContextSelector</depends>
+</bean>
+ ]]>
+          </programlisting>
+
+          <para>This activator will activate any resource adapters which hasn't been activated yet
+            unless they are in the excluded list.</para>
+          
+
+          <table frame="all">
+            <title>Resource adapter activator</title>
+            <tgroup cols="3" align="left" colsep="1" rowsep="1">
+              <colspec colname="c1" colwidth="2*"/>
+              <colspec colname="c2"/>
+              <colspec colname="c3" colwidth="3*"/>
+              <thead>
+                <row>
+                  <entry align="left">Property</entry>
+                  <entry align="left">Type</entry>
+                  <entry align="left">Description</entry>
+                </row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry><code>Configuration</code></entry>
+                  <entry><code>org.jboss.jca.deployers.fungal.RAConfiguration</code></entry>
+                  <entry>
+                    The configuration for the deployer
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>Enabled</code></entry>
+                  <entry><code>boolean</code></entry>
+                  <entry>
+                    Should the activator be enabled. Default is <code>true</code>
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>Kernel</code></entry>
+                  <entry><code>com.github.fungal.api.Kernel</code></entry>
+                  <entry>
+                    The kernel instance
+                  </entry>
+                </row>
+                <row>
+                  <entry><code>ExcludeArchives</code></entry>
+                  <entry><code>java.util.Set</code></entry>
+                  <entry>
+                    A set of resource adapter archives which should be excluded 
+                    from activation
+                  </entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+        </section>
+
+      </section>
+
+      <section id="jca_security">
+        <title>Security</title>
+
+        <para>The Java EE Connector Architecture 1.6 specification allows units of 
+          <code>javax.resource.spi.Work</code> to be executed in a specific security context.</para>
+
+        <para>This is done through the use of Java Authentication Service Provider Interface for Containers (JSR-196)
+          call backs using the <code>javax.security.auth.callback.Callback</code> interface.</para>
+        
+        <para>The support is activated by letting the work instance implement the</para>
+
+        <programlisting>
+javax.resource.spi.work.WorkContextProvider
+        </programlisting>
+
+        <para>interface and returning an instance of <code>javax.resource.spi.work.SecurityContext</code>.</para>
+
+        <para>There is currently support for injecting a user/roles setup based on the files</para>
+
+        <programlisting>
+config/users.properties
+config/roles.properties
+        </programlisting>
+
+        <para>The format of the <code>users.properties</code> file is</para>
+
+        <programlisting>
+username1=password1
+username2=password2
+        </programlisting>
+
+        <para>The format of the <code>roles.properties</code> file is</para>
+
+        <programlisting>
+username1=role1,role2
+username2=role3,role4
+        </programlisting>
+        
+        <para>The user/roles setup can be configured through the <code>UsersRoles</code> bean in the 
+          <code>config/bootstrap/jca.xml</code> file.</para>
+        
+        <programlisting>
+          <![CDATA[
+<!-- Users / roles -->
+<bean name="UsersRoles"
+      interface="org.jboss.jca.core.spi.security.Callback"
+      class="org.jboss.jca.core.security.UsersRoles">
+  <property name="UsersProperties">${iron.jacamar.home}/config/users.properties</property>
+  <property name="RolesProperties">${iron.jacamar.home}/config/roles.properties</property>
+</bean>
+           ]]>
+        </programlisting>
+
+      </section>
+
+   </section>
+
+   <section id="datasources">
+      <title>Datasources</title>
+
+      <para>The IronJacamar project can deploy datasources using the <code>datasources-1_0.xsd</code> schema.</para>
+
+      <para>The configuration is done in the</para>
+
+      <programlisting>
+config/bootstrap/ds.xml
+      </programlisting>
+
+      <para>file.</para>
+
+      <table frame="all">
+        <title>DsXmlDeployer</title>
+        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+          <colspec colname="c1" colwidth="2*"/>
+          <colspec colname="c2"/>
+          <colspec colname="c3" colwidth="3*"/>
+          <thead>
+            <row>
+              <entry align="left">Property</entry>
+              <entry align="left">Type</entry>
+              <entry align="left">Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><code>JDBCLocal</code></entry>
+              <entry><code>String</code></entry>
+              <entry>
+                The name of the <code>jdbc-local.rar</code> deployment
+              </entry>
+            </row>
+            <row>
+              <entry><code>JDBCXA</code></entry>
+              <entry><code>String</code></entry>
+              <entry>
+                The name of the <code>jdbc-xa.rar</code> deployment
+              </entry>
+            </row>
+            <row>
+              <entry><code>TransactionManager</code></entry>
+              <entry><code>javax.transaction.TransactionManager</code></entry>
+              <entry>
+                The transaction manager
+              </entry>
+            </row>
+            <row>
+              <entry><code>MetadataRepository</code></entry>
+              <entry><code>org.jboss.jca.core.spi.mdr.MetadataRepository</code></entry>
+              <entry>
+                The metadata repository
+              </entry>
+            </row>
+            <row>
+              <entry><code>Kernel</code></entry>
+              <entry><code>com.github.fungal.api.Kernel</code></entry>
+              <entry>
+                The kernel
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>The datasource deployer can be removed from the environment by removing the <code>ds.xml</code>
+        file in</para>
+
+      <programlisting>
+config/bootstrap/
+      </programlisting>
+
+      <para>as well as the reference in <code>config/bootstrap/bootstrap.xml</code> to the file.</para>
+
+      <para>Furthermore all <code>jdbc-*.rar</code> files in the <code>system/</code> directory should be removed too.</para>
+
+   </section>
+
+   <section id="webserver">
+      <title>Web server</title>
+
+      <para>The IronJacamar project features a web server which is used to serve web archive deployments.</para>
+
+      <para>The configuration is done in the</para>
+
+      <programlisting>
+system/web.xml
+      </programlisting>
+
+      <para>file.</para>
+
+      <programlisting>
+<![CDATA[
+<bean name="WebServer" class="org.jboss.jca.web.WebServer">
+  <property name="Host">${iron.jacamar.bindaddress:localhost}</property>
+  <property name="Port">8080</property>
+  <property name="ExecutorService"><inject bean="Kernel" property="ExecutorService"/></property>
+</bean>
+]]>
+      </programlisting>
+
+      <table frame="all">
+        <title>Web server</title>
+        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+          <colspec colname="c1" colwidth="2*"/>
+          <colspec colname="c2"/>
+          <colspec colname="c3" colwidth="3*"/>
+          <thead>
+            <row>
+              <entry align="left">Property</entry>
+              <entry align="left">Type</entry>
+              <entry align="left">Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><code>Host</code></entry>
+              <entry><code>String</code></entry>
+              <entry>
+                Set the bind address for the web server
+                <para>Default: <code>localhost</code></para>
+              </entry>
+            </row>
+            <row>
+              <entry><code>Port</code></entry>
+              <entry><code>int</code></entry>
+              <entry>
+                Set the port for the web server
+                <para>Default: <code>8080</code></para>
+              </entry>
+            </row>
+            <row>
+              <entry><code>ExecutorService</code></entry>
+              <entry><code>java.util.concurrent.ExecutorService</code></entry>
+              <entry>
+                The thread pool for the web server
+                <para>Default: The kernel thread pool</para>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>The web server can be removed from the environment by removing the <code>web.xml</code>
+        file in</para>
+
+      <programlisting>
+system/
+      </programlisting>
+
+      <para>Furthermore all <code>.war</code> files in the same directory should be removed too.</para>
+
+      <para>All the Jetty libraries can be removed by deleting the</para>
+
+      <programlisting>
+lib/jetty
+      </programlisting>
+
+      <para>directory.</para>
+
+   </section>
+
+
+</chapter>

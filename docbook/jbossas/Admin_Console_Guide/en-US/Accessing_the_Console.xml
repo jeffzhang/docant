@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. -->
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [ ]>
+<chapter id="Administration_Console_User_Guide-Accessing_the_Console">
+  <title>Accessing the Console</title>
+  <para>
+The Console, as well as the JMX and JBossWS consoles, are deployed "on-demand" by default.  This means that the consoles are deployed when the user requests access. This deferred deployment strategy minimizes the overall server boot time.   This feature can be disabled, however, by passing the following property to the server start command:
+
+<programlisting>
+/run.sh -Djboss.as.deployment.ondemand=false
+</programlisting>
+
+Once the server is started, simply point your browser of choice to:
+
+<programlisting>
+http://localhost:8080/admin-console
+</programlisting>
+
+JBoss AS binds its services to localhost (127.0.0.1) by default, instead of binding to all available interfaces (0.0.0.0). This was primarily done for security reasons because of concerns of users going to production without having secured their servers properly. To enable remote access by binding JBoss services to a particular interface, simply start the JBoss AS server with the <emphasis>-b</emphasis> option. To bind to all available interfaces and re-enable the legacy behaviour use <emphasis>-b 0.0.0.0</emphasis>.  If the server is started with the <emphasis>-b</emphasis> option, you will have to alter the URL accordingly.
+
+    <note>
+      <title>Note</title>
+      <para>It is expected that the JBoss AS Administration Console will work with any custom configuration that supports the
+            installation of Seam applications.</para>
+      <para>JBoss AS Administration Console is not supported with the <emphasis>minimal</emphasis> configuration.</para>
+    </note>
+
+This will bring you to the JBoss AS Administration Console Login page.  
+
+  <imageobject>
+      <imagedata fileref="images/Login.png"/>
+    </imageobject>
+
+Login credentials are the same as used for the JMX console.  A default user/password combination, <emphasis role="bold">admin/admin</emphasis>, is provided for out-of-box access. 
+
+You can change/update the usernames/passwords for the configured security domain by editing the corresponding credential files: 
+ 
+<programlisting>
+server/<emphasis>configuration</emphasis>/conf/props/jmx-console-users.properties
+</programlisting>
+ 
+Similarly, you can change/update roles for the configured security domains by editing corresponding credential files: 
+ 
+<programlisting>
+server/<emphasis>configuration</emphasis>/conf/props/jmx-console-roles.properties
+</programlisting>
+
+For more information on modifying user credentials, refer to the <ulink url="http://community.jboss.org/wiki/securetheJmxConsole">Secure the JMX Console</ulink> wiki.
+</para>
+<para>Click the Login button using the default user provided or your customized administrative login.</para>
+
+<note>
+      <title>Note</title>
+      <para>The Console is expected to work with any browser and has been tested with Mozilla FireFox 3.</para>
+    </note>
+
+</chapter>

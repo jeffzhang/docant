@@ -1,0 +1,27 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Monitoring_the_JBoss_Application_Server_Instance">
+	<title>Monitoring the JBoss Application Server Instance</title>
+	<para>
+		Basic information is provided on every resource managed by the Admin Console via the resources Summary tab. However some resources such as the JBoss Application Server instance itself, also offer more detailed metrics. See below for an example: 
+	</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="images/AS_Metrics.png" />
+		</imageobject>
+	</mediaobject>
+	
+	<para>
+		This metrics are collected from the resource when the Metrics tab is viewed and can be recalculated by hitting the <emphasis role="bold">REFRESH</emphasis> button at the bottom main panel.
+	</para>
+	
+	<note>
+		<para>
+			In order to see JVM resources and metrics, the JBoss Application Server instance must be started with the <property>-Djboss.platform.mbeanserver</property> system property specified as part of <varname>JAVA_OPTS</varname>.
+		</para>
+	</note>
+</chapter>
+

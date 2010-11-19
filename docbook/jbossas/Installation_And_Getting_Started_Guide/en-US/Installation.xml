@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                         "http://www.docbook.org/xml/4.4/docbookx.dtd">
+                         
+<chapter id="Installation">
+    <title>Installation</title>
+    <section id="Zip Distribution"><title>Installation with the Zip Distributino</title>
+       <para>
+       In this form of installation, simply unzip the downloaded zip file to the directory of your choice. You can unzip JBoss Application Server 6 on any operating system that supports the zip format. Zip distributions of the latest milestone releases are available on <ulink url="http://www.jboss.org/jbossas/downloads/">JBoss AS Download</ulink> site. Refer to the Release Notes for additional information on the milestone release you select for download which includes new features and bug fixes included in the release.
+       </para>
+</section> 
+            
+    <section id="Building Distribution from Source"><title>Building Distribution from Source</title>
+      <para>Check out the latest version of the JBoss AS 6 sources from the anonymous <ulink url="http://anonsvn.jboss.org/repos/jbossas/trunk/">JBoss subversion repository</ulink>:</para>
+                <programlisting>
+                        svn co http://anonsvn.jboss.org/repos/jbossas/trunk
+                </programlisting>
+
+<para> If you are already an authorized committer check out the sources providing your username and password from:</para>
+                <programlisting>
+                        svn co https://svn.jboss.org/repos/jbossas/trunk --username your_username
+                </programlisting>
+
+<para>
+The location where the checked out source resides will be referenced as <emphasis>LOCAL_REPO_HOME</emphasis>.
+
+Change directory to <emphasis>$LOCAL_REPO_HOME</emphasis>.
+
+Refer to the <file>README.txt</file> file which gives an overview of building the JBoss Application Server 6 source distribution.  JBoss Application Server 6 builds are fully mavenized.  Build scripts are provided for UNIX and Windows operating systems. These scripts provide default settings to build out of box.  As noted, you can call maven directly but that will require updates to your maven settings.  For the latest information on building JBoss Application Server 6 with maven, refer to the following references:
+<itemizedlist>
+<listitem><ulink url="http://community.jboss.org/wiki/MavenGettingStarted-Users">Maven Getting Started for JBoss Users</ulink></listitem>
+<listitem><ulink url="http://community.jboss.org/wiki/MavenRepository-FAQ">Maven Repository FAQ</ulink></listitem>
+<listitem><ulink url="http://community.jboss.org/wiki/MavenSettingsExample-Developers">Maven Settings Example for Developers</ulink></listitem>
+</itemizedlist>
+If you have additional questions, post your question on the <ulink url="http://community.jboss.org/en/jbossas/">JBoss AS community forum</ulink>.
+</para>
+
+To build JBoss Application Server 6, simply execute:
+
+<programlisting>
+On Unix:
+<literal>./build.sh</literal>
+</programlisting>
+<programlisting>
+On Windows:
+<literal>build</literal>
+</programlisting>
+
+<para>Refer to the <ulink url="http://www.jboss.org/help/contributingcode.html">Contributing Code</ulink> wiki if you're interested in getting involved and want to become a committer. </para>
+</section>
+</chapter>

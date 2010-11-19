@@ -1,0 +1,83 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Navigation_Panel">
+	<title>Navigation Panel</title>
+	<para>All applications and resources discovered during server start up
+		should be available underneath the JBoss Application Server instance in the navigation tree. The
+		example below demonstrates a view with items in the tree expanded.</para>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata scalefit="1" fileref="images/Expanded.png"/>
+		</imageobject>
+	</mediaobject>
+	
+	<note>
+		<para>
+			The navigation panel is currently fixed width so to see wider entries use the scroll bar at the bottom of the panel.
+		</para>
+	</note>
+	
+	<para>The are two sorts of items shown in the navigation panel:</para>
+	
+	<itemizedlist>
+		<listitem>
+			<para>Collection of resources: These items are indicated by a yellow
+				folder icon.</para>
+		</listitem>
+		
+		<listitem>
+			<para>Individual resources: These are indicated by a blue document
+				icon.</para>
+		</listitem>
+	</itemizedlist>
+	
+	<mediaobject>
+		<imageobject>
+			<imagedata depth="152"
+				   fileref="images/Resource_Nav.jpg"
+				   width="326" />
+		</imageobject>
+	</mediaobject>
+	
+	<para>Clicking on a collection resource (for example, the
+		<emphasis>Resources</emphasis> link above) will render in the main panel
+		either:</para>
+	
+	<itemizedlist>
+		<listitem>
+			<para>a list of resource categories from where you can drill down
+				further:</para>
+			
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" fileref="images/Resource_Panel.png"/>
+				</imageobject>
+			</mediaobject>
+		</listitem>
+		
+		<listitem>
+			<para>or a list of actual resources from where you can drill down to see
+				a particular resource. For some resource types you can create or delete
+				instances of a resource from this view.</para>
+			
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" fileref="images/Admin-Console-QuickStart_html_ma5a1ef5.jpg"/>
+				</imageobject>
+			</mediaobject>
+		</listitem>
+	</itemizedlist>
+	
+	<para>Expanding one of the folder nodes in the navigation will show either
+		individual resources or further collections of resources which themselves
+		can be expanded.</para>
+	
+	<para>Click on an individual resource will show the Summary tab for that
+		resource, as seen previously for the JBoss Application Server instance. If available, expanding
+		an individual resource node in the navigation will show the child resources
+  it has deployed within it.</para>
+</chapter>
+

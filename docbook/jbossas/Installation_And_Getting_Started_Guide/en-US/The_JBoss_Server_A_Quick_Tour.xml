@@ -1,0 +1,277 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                         "http://www.docbook.org/xml/4.4/docbookx.dtd"
+[
+<!ELEMENT xi:include (xi:fallback?) >
+<!ATTLIST xi:include
+xmlns:xi            CDATA       #FIXED       "http://www.w3.org/2001/XInclude"
+href                CDATA       #REQUIRED
+parse               (xml|text)  "xml"
+xpointer            CDATA       #IMPLIED
+encoding            CDATA       #IMPLIED
+accept              CDATA       #IMPLIED
+accept-charset      CDATA       #IMPLIED
+accept-language     CDATA       #IMPLIED >
+<!ELEMENT xi:fallback ANY >
+<!ATTLIST xi:fallback
+xmlns:xi            CDATA       #FIXED "http://www.w3.org/2001/XInclude" >
+<!ENTITY % local.preface.class    "| xi:include" >
+<!ENTITY % local.part.class       "| xi:include" >
+<!ENTITY % local.chapter.class    "| xi:include" >
+<!ENTITY % local.divcomponent.mix "| xi:include" >
+<!ENTITY % local.para.char.mix    "| xi:include" >
+<!ENTITY % local.info.class       "| xi:include" >
+<!ENTITY % local.common.attrib    "xml:base CDATA #IMPLIED
+xmlns:xi            CDATA       #FIXED       'http://www.w3.org/2001/XInclude'" >
+
+]>
+
+<chapter id="The_JBoss_Server___A_Quick_Tour">
+	<title>The JBoss Server - A Quick Tour</title>
+
+<section id="Server_Structure">
+	<title>Server Structure</title>
+	<para>
+		Now that you’ve downloaded JBoss and have run the server for the first time, the next thing you will want to know is how the installation is laid out and what goes where. At first glance there seems to be a lot of stuff in there, and it’s not obvious what you need to look at and what you can safely ignore for the time being. To remedy that, we’ll explore the server directory structure, locations of the key configuration files, log files, deployment and so on. It’s worth familiarizing yourself with the layout at this stage as it will help you understand the JBoss service architecture so that you’ll be able to find your way around when it comes to deploying your own applications. 
+	</para>
+</section>
+	
+	<!-- Embedded sections -->
+	
+	<xi:include href="Server_Configurations.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Start_Stop_Server.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<!-- end embedded sections -->
+
+	<section id="The_JBoss_Server___A_Quick_Tour-The_JMX_Console">
+		<title>The JMX Console</title>
+		<para>
+			When the JBoss Server is running, you can get a live view of the server by going to the JMX console application at <ulink url="http://localhost:8080/jmx-console"></ulink>. You should see something similar to <xref linkend="The_JMX_Console-View_of_the_JMX_Management_Console_Web_Application" />. 
+		</para>
+		<para>
+			The JMX Console is the JBoss Management Console which provides a raw view of the JMX MBeans which make up the server. They can provide a lot of information about the running server and allow you to modify its configuration, start and stop components and so on.
+		</para>
+		<para>
+			For example, find the <literal>service=JNDIView</literal> link and click on it. This particular MBean provides a service to allow you to view the structure of the JNDI namespaces within the server. Now find the operation called <literal>list</literal> near the bottom of the MBean view page and click the <literal>invoke</literal> button. The operation returns a view of the current names bound into the JNDI tree, which is very useful when you start deploying your own applications and want to know why you can’t resolve a particular EJB name.
+		</para>
+		<figure id="The_JMX_Console-View_of_the_JMX_Management_Console_Web_Application">
+			<title>View of the JMX Management Console Web Application</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata align="center" fileref="images/jmx-console.png" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para>
+			Look at some of the other MBeans and their listed operations; try changing some of the configuration attributes and see what happens. With a very few exceptions, none of the changes made through the console are persistent. The original configuration will be reloaded when you restart JBoss, so you can experiment freely without doing any permanent damage.
+		</para>
+		<note>
+			<para>
+				If you installed JBoss using the graphical installer, the JMX Console will prompt you for a username and password before you can access it. If you installed using other modes, you can still configure JMX Security manually. We will show you how to secure your console in <xref linkend="Basic_Configuration_Issues-Security_Service"/>.
+			</para>
+		</note>
+	</section>
+	<section id="The_JBoss_Server___A_Quick_Tour-Hot-deployment_of_services_in_JBoss">
+		<title>Hot-deployment of services in JBoss</title>
+		<para>
+			Hot-deployable services are those which can be added to or removed from the running server. These are placed in the <literal>JBOSS_DIST/jboss-as/server/&lt;instance-name&gt;/deploy</literal> directory. Let’s have a look at a practical example of hot-deployment of services in JBoss before we go on to look at server configuration issues in more detail.
+		</para>
+		<para>
+			Start JBoss if it isn’t already running and take a look at the <literal>server/all/deploy</literal> directory. Remove the <literal>mail-service.xml</literal> file and watch the output from the server:
+<programlisting>13:10:05,235 INFO  [MailService] Mail service &#39;java:/Mail&#39; removed from JNDI</programlisting>
+		</para>
+		<para>
+			Then replace the file and watch JBoss re-install the service: <programlisting>13:58:54,331 INFO  [MailService] Mail Service bound to java:/Mail</programlisting>
+			 This is hot-deployment in action.
+		</para>
+	</section>
+
+	<section id="The_JBoss_Server___A_Quick_Tour-Basic_Configuration_Issues">
+		<title>Basic Configuration Issues</title>
+		<para>
+			Now that we have examined the JBoss server, we will take a look at some of the main configuration files and what they are used for. All paths are relative to the server configuration directory (<filename class="directory">server/default</filename>, for example).
+		</para>
+		<section id="The_JBoss_Server___A_Quick_Tour-Bootstrap_Configuration">
+			<title>Bootstrap Configuration</title>
+			<para>The microcontainer bootstrap configuration is described by the <filename>conf/bootstrap.xml</filename> and the <filename>conf/bootstrap/*.xml</filename> it references. It's expected that the number of bootstrap beans will be reduced in the future. It's not expected that you would need to edit the bootstrap configuration files for a typical installation.</para>
+		</section>
+		<section id="Basic_Configuration_Issues-Core_Services">
+			<title>Legacy Core Services</title>
+			<para>
+				The legacy core services specified in the <filename>conf/jboss-service.xml</filename> file are started just after server starts up the microcontainer. If you have a look at this file in an editor you will see MBeans for various services including logging, security, JNDI, JNDIView etc. Try commenting out the entry for the <literal>JNDIView</literal> service.
+			</para>
+			<note>
+				<para>
+					Eventually this file will be dropped as the services are converted to microcontainer beans or mbeans that are deployed as deploy directory services.</para></note>
+			<para>
+				Note that because the mbeans definition had nested comments, we had to comment out the mbean in two sections, leaving the original comment as it was.
+			</para>
+<programlisting>
+&lt;!-- Section 1 commented out
+&lt;mbean code="org.jboss.naming.JNDIView"
+    name="jboss:service=JNDIView"
+    xmbean-dd="resource:xmdesc/JNDIView-xmbean.xml"&gt;
+--&gt;
+    &lt;!-- The HANamingService service name --&gt;
+&lt;!-- Section two commented out
+    &lt;attribute name="HANamingService"&gt;jboss:service=HAJNDI&lt;/attribute&gt;&lt;/mbean&gt;
+--&gt;
+                
+</programlisting>
+			<para>
+				If you then restart JBoss, you will see that the <literal>JNDIView</literal> service no longer appears in the JMX Management Console (JMX Console) listing. In practice, you should rarely, if ever, need to modify this file, though there is nothing to stop you adding extra MBean entries in here if you want to. The alternative is to use a separate file in the <filename class="directory">deploy</filename> directory, which allows your service to be hot deployable.
+			</para>
+		</section>
+		
+		<section id="Basic_Configuration_Issues-Logging_Service">
+			<title>Logging Service</title>
+			<para>
+				In JBoss <literal>log4j</literal> is used for logging. If you are not familiar with the <literal>log4j</literal> package and would like to use it in your applications, you can read more about it at the Jakarta web site (<ulink url="http://jakarta.apache.org/log4j/"></ulink>).
+			</para>
+			<para>
+				Logging is controlled from a central <filename>conf/jboss-log4j.xml</filename> file. This file defines a set of appenders specifying the log files, what categories of messages should go there, the message format and the level of filtering. By default, JBoss produces output to both the console and a log file (<filename>log/server.log</filename>).
+			</para>
+			<para>
+				There are 6 basic log levels used: <literal>TRACE</literal>, <literal>DEBUG</literal>, <literal>INFO</literal>, <literal>WARN</literal>, <literal>ERROR</literal> and <literal>FATAL</literal>. The logging threshold on the console is <literal>INFO</literal>, which means that you will see informational messages, warning messages and error messages on the console but not general debug messages. In contrast, there is no threshold set for the <filename>server.log</filename> file, so all generated logging messages will be logged there.
+			</para>
+			<para>
+				If things are going wrong and there doesn’t seem to be any useful information in the console, always check the <filename>server.log</filename> file to see if there are any debug messages which might help you to track down the problem. However, be aware that just because the logging threshold allows debug messages to be displayed, that doesn&#39;t mean that all of JBoss will produce detailed debug information for the log file. You will also have to boost the logging limits set for individual categories. Take the following category for example.
+			</para>
+<programlisting>&lt;!-- Limit JBoss categories to INFO --&gt; 
+&lt;category name="org.jboss"&gt; 
+    &lt;priority value="<emphasis role="bold">INFO</emphasis>"/&gt; 
+&lt;/category&gt;    
+</programlisting>
+			<para>
+				This limits the level of logging to <literal>INFO</literal> for all JBoss classes, apart from those which have more specific overrides provided. If you were to change this to <literal>DEBUG</literal>, it would produce much more detailed logging output.
+			</para>
+			<para>
+				As another example, let’s say you wanted to set the output from the container-managed persistence engine to <literal>DEBUG</literal> level and to redirect it to a separate file, <filename>cmp.log</filename>, in order to analyze the generated SQL commands. You would add the following code to the <filename>conf/jboss-log4j.xml</filename> file:
+			</para>
+<programlisting>&lt;appender name="CMP" class="org.jboss.logging.appender.RollingFileAppender"&gt; 
+    &lt;errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/&gt; 
+    &lt;param name="File" value="${jboss.server.home.dir}/log/cmp.log"/&gt; 
+    &lt;param name="Append" value="false"/&gt; 
+    &lt;param name="MaxFileSize" value="500KB"/&gt; 
+    &lt;param name="MaxBackupIndex" value="1"/&gt; 
+ 
+    &lt;layout class="org.apache.log4j.PatternLayout"&gt; 
+        &lt;param name="ConversionPattern" value="%d %-5p [%c] %m%n"/&gt; 
+    &lt;/layout&gt; 
+&lt;/appender&gt; 
+ 
+&lt;category name="org.jboss.ejb.plugins.cmp"&gt; 
+    &lt;priority value="DEBUG" /&gt; 
+    &lt;appender-ref ref="CMP"/&gt; 
+&lt;/category&gt; 
+</programlisting>
+			<para>
+				This creates a new file appender and specifies that it should be used by the logger (or category) for the package <literal>org.jboss.ejb.plugins.cmp</literal>.
+			</para>
+			<para>
+				The file appender is set up to produce a new log file every day rather than producing a new one every time you restart the server or writing to a single file indefinitely. The current log file is <filename>cmp.log</filename>. Older files have the date they were written added to their filenames. Please note that the <filename class="directory">log</filename> directory also contains HTTP request logs which are produced by the web container.
+			</para>
+		</section>
+		
+		<section id="Basic_Configuration_Issues-Security_Service">
+			<title>Security Service</title>
+			<para>
+				The security domain information is stored in the file <filename>conf/login-config.xml</filename> as a list of named security domains, each of which specifies a number of JAAS <footnote><para>
+					The Java Authentication and Authorization Service. JBoss uses JAAS to provide pluggable authentication modules. You can use the ones that are provided or write your own if you have more specific requirements.
+				</para>
+			</footnote> login modules which are used for authentication purposes in that domain. When you want to use security in an application, you specify the name of the domain you want to use in the application’s JBoss-specific deployment descriptors, <filename>jboss.xml</filename> (used in defining jboss specific configurations for an application) and/or <filename>jboss-web.xml</filename> (used in defining jboss for a Web application. We'll quickly look at how to do this to secure the JMX Console application which ships with JBoss.
+			</para>
+			<para>
+				Almost every aspect of the JBoss server can be controlled through the JMX Console, so it is important to make sure that, at the very least, the application is password protected. Otherwise, any remote user could completely control your server. To protect it, we will add a security domain to cover the application. 
+				<!--<footnote><para>
+					If you installed JBoss using the Graphical Installer and set the JMX Security up, then you will not have to uncomment the sections, because they are already uncommented. Additionally, the admin password will be set up to whatever you had specified.
+				</para>
+				</footnote>-->
+				
+				This can be done in the <filename>jboss-web.xml</filename> file for the JMX Console, which can be found in <filename class="directory">deploy/jmx-console.war/WEB-INF/</filename> directory. Uncomment the <literal>security-domain</literal> in that file, as shown below.
+			</para>
+			<para>
+<programlisting>&lt;jboss-web&gt;
+    &lt;security-domain&gt;java:/jaas/jmx-console&lt;/security-domain&gt;
+&lt;/jboss-web&gt;
+</programlisting>
+			</para>
+			<para>
+				This links the security domain to the web application, but it doesn&#39;t tell the web application what security policy to enforce, what URLs are we trying to protect, and who is allowed to access them. To configure this, go to the <filename>web.xml</filename> file in the same directory and uncomment the <literal>security-constraint</literal> that is already there. This security constraint will require a valid user name and password for a user in the <literal>JBossAdmin</literal> group.
+			</para>
+<programlisting>&lt;!-- 
+   A security constraint that restricts access to the HTML JMX console
+   to users with the role JBossAdmin. Edit the roles to what you want and
+   uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+   secured access to the HTML JMX console.
+--&gt;
+&lt;security-constraint&gt;
+    &lt;web-resource-collection&gt;
+        &lt;web-resource-name&gt;HtmlAdaptor&lt;/web-resource-name&gt;
+        &lt;description&gt;
+            An example security config that only allows users with the
+            role JBossAdmin to access the HTML JMX console web application
+        &lt;/description&gt;
+        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+        &lt;http-method&gt;GET&lt;/http-method&gt;
+        &lt;http-method&gt;POST&lt;/http-method&gt;
+    &lt;/web-resource-collection&gt;
+    &lt;auth-constraint&gt;
+        &lt;role-name&gt;JBossAdmin&lt;/role-name&gt;
+    &lt;/auth-constraint&gt;
+&lt;/security-constraint&gt;
+</programlisting>
+			<para>
+				That&#39;s great, but where do the user names and passwords come from? They come from the <literal>jmx-console</literal> security domain we linked the application to. We have provided the configuration for this in the <filename>conf/login-config.xml</filename>.
+			</para>
+			<para>
+<programlisting>&lt;application-policy name="jmx-console"&gt;
+    &lt;authentication&gt;
+        &lt;login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+                     flag="required"&gt;
+            &lt;module-option name="usersProperties"&gt;
+                props/jmx-console-users.properties
+            &lt;/module-option&gt;
+            &lt;module-option name="rolesProperties"&gt;
+                props/jmx-console-roles.properties
+            &lt;/module-option&gt;
+        &lt;/login-module&gt;
+    &lt;/authentication&gt; 
+&lt;/application-policy&gt;
+</programlisting>
+			</para>
+			<para>
+				This configuration uses a simple file based security policy. The configuration files are found in the <filename class="directory">conf/props</filename> directory of your server configuration. The usernames and passwords are stored in the <literal>conf/props/jmx-console-users.properties</literal> file and take the form "<literal>username=password</literal>". To assign a user to the <literal>JBossAdmin</literal> group add "<literal>username=JBossAdmin</literal>" to the <literal>jmx-console-roles.properties</literal> file (additional roles on that username can be added comma separated). The existing file creates an <literal>admin</literal> user with the password <literal>admin</literal>. For security, please either remove the user or change the password to a stronger one.
+			</para>
+			<para>
+				JBoss will re-deploy the JMX Console whenever you update its <filename>web.xml</filename>. You can check the server console to verify that JBoss has seen your changes. If you have configured everything correctly and re-deployed the application, the next time you try to access the JMX Console, it will ask you for a name and password. <footnote><para>
+					Since the username and password are session variables in the web browser you may need to restart your browser to use the login dialog window.
+				</para>
+				</footnote>
+			</para>
+			<para>
+				The JMX Console isn&#39;t the only web based management interface to JBoss. There is also the Web Console. Although it&#39;s a Java applet, the corresponding web application can be secured in the same way as the JMX Console. The Web Console is in the file <filename>deploy/management/console-mgr.sar/web-console.war.</filename>. The only difference is that the Web Console is provided as a simple WAR file instead of using the exploded directory structure that the JMX Console did. The only real difference between the two is that editing the files inside the WAR file is a bit more cumbersome.
+			</para>
+		</section>
+		
+		<section id="Basic_Configuration_Issues-Additional_Services">
+			<title>Additional Services</title>
+			<para>
+				The non-core, hot-deployable services are added to the <filename class="directory">deploy</filename> directory. They can be either XML descriptor files, <filename>*-service.xml, *-jboss-beans.xml</filename>, MC <filename>.beans</filename> archive, or JBoss Service Archive (SAR) files. SARs contains an META-INF/jboss-service.xml descriptor and additional resources the service requires (e.g. classes, library JAR files or other archives), all packaged up into a single archive. Similarly, a <filename>.beans</filename> archive contains a META-INF/jboss-beans.xml and additional resources.
+			</para>
+			<para>
+				Detailed information on all these services can be found in the <emphasis>JBoss Application Server: Configuration Guide</emphasis>, which also provides comprehensive information on server internals and the implementation of services such as JTA and the J2EE Connector Architecture (JCA).
+			</para>
+		</section>
+
+	</section>
+	
+	<!--<section id="The_JBoss_Server___A_Quick_Tour-The_Web_Container___Tomcat">
+		<title>The Web Container - Tomcat</title>
+		<para>
+			JBoss Application Server comes with Tomcat as the default web container.
+		</para>
+		<para>
+		</para>
+	</section>-->
+</chapter>
+

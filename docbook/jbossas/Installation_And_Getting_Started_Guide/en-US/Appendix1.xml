@@ -1,0 +1,61 @@
+<?xml version='1.0'?>
+<!DOCTYPE appendix PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+]>
+
+<appendix id="Book-Revision_History">
+	<title></title>
+	<bibliolist>
+		<biblioentry>
+			<revhistory>
+				
+				<revision>
+					<revnumber>6.0.0</revnumber>
+					<date>May 11 2010</date>
+					<author>
+						<firstname>Shelly</firstname>
+						<surname>McGowan</surname>
+						
+					</author>
+					<revdescription>
+						<simplelist>
+							<member>Updated Content </member>
+							
+						</simplelist>
+					</revdescription>
+				</revision>
+				
+				<revision>
+					<revnumber>6.0.0</revnumber>
+					<date>May 11 2010</date>
+					<author>
+						<firstname>Shelly</firstname>
+						<surname>McGowan</surname>
+						
+					</author>
+					<revdescription>
+						<simplelist>
+							<member>Merge Content </member>
+						</simplelist>
+					</revdescription>
+				</revision>
+				
+				<revision>
+					<revnumber>6.0.0.M4<remark></remark></revnumber>
+					<date>Jun 20 2010</date>
+					<author>
+						<firstname>Shelly</firstname>
+						<surname>McGowan</surname>
+					</author>
+					<revdescription>
+						<simplelist>
+							<member></member>
+						</simplelist>
+					</revdescription>
+				</revision>
+			</revhistory>
+			
+		</biblioentry>
+	</bibliolist>
+</appendix>
+
+

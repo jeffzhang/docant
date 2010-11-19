@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-JBCache">
+        <title>JBoss Caches</title>
+
+<para>If you are running the <emphasis role="bold">all</emphasis> configuration or a customized configuration based on <emphasis role="bold">all</emphasis>, the JBoss Cache instances of the running server are shown.  Various metrics and control operations available for the cache instances are easily accessible from the main tabs of the resource panel.</para>
+        <mediaobject>
+             <imageobject>
+                    <imagedata scalefit="1" fileref="images/JBCache.png"/>
+             </imageobject>
+        </mediaobject>
+
+</chapter>

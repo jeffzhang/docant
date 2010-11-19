@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Scripts">
+        <title>Script Execution</title>
+
+<para>Scripts in the server <emphasis role="bold">bin</emphasis> directory are now available for execution via the Administration Console.</para>
+        <mediaobject>
+            <imageobject>
+                <imagedata scalefit="1" fileref="images/Scripts.png"/>
+            </imageobject>
+        </mediaobject>
+
+  <note>
+        <para>
+         Starting the JBoss Application Server from the Administration Console is not supported because the Console requires a running instance of the JBoss Application Server in order to operate.
+        </para>
+  </note>
+
+</chapter>

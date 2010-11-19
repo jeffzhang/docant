@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                         "http://www.docbook.org/xml/4.4/docbookx.dtd">
+<chapter id="Book-Preface">
+        <section id="Introduction">
+	<title>Introduction</title>
+	<para>
+		JBoss Application Server 6 is the open source implementation of the Java EE 6 Enterprise Edition Platform. It comprises the set of technologies for enterprise developers looking for an easy-to-use, out-of-box, robust solution for running enterprise applications.  Offering an extensible core architecture, JBoss Application Server 6 is the ideal choice for users new to enterprise development as well as senior architects looking for a customizable middleware platform.
+	</para>
+	<para>
+		Because it is Java-based, JBoss Application Server 6 runs on any operating system that supports Java. This guide will provide information to get you started using JBoss Application Server 6 in a few easy steps.  It will also provide an overview of the distribution layout and other feature highlight.   The readily available source code is a powerful learning tool to debug the server and understand it.  It also gives you the flexibility to create customized versions for your personal or business use.</para>
+
+</section>
+	<section id="Book-We_Need_Feedback">
+		<title>Help Contribute</title>
+		<para>
+			If you find a typographical error in the <citetitle>Installation Guide and Getting Started Guide</citetitle>, or if you have thought of a way to make this manual better, please submit a report in JIRA: <ulink url="http://jira.jboss.com">http://jira.jboss.com</ulink> against the project <citetitle>JBoss Application Server</citetitle> and component <citetitle>Docs/Installation and Getting Started Guide</citetitle>.</para>
+	</section>
+</chapter>

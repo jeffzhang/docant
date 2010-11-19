@@ -1,0 +1,46 @@
+<?xml version='1.0'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<chapter id="Administration_Console_User_Guide-Resource_Panel">
+	<title>Resource Panel</title>
+	<para>You can see in the example above the main tabs which are present for all individual resources. Not all tabs are available for every sort of resource, though Summary and Metrics tabs will always be enabled. If a feature is not supported for a particular resource then that tab is greyed out (for example, the Administration Console does not support configuring a JBoss Web Virtual Host so the Configuration tab for those sort of resources will be disabled). The following is a breakdown of the functionality behind each tab:</para>
+	
+	<itemizedlist>
+		<listitem>
+			<para>Summary: This presents a quick overview of the resource including
+				relevant metrics on how its operating.</para>
+		</listitem>
+		
+		<listitem>
+			<para>Configuration: If enabled this tab lets you update the
+				configuration of a resource (for example, increase the pool size for a
+				Datasource) or switch the JBoss Application Server instance to use a different set of
+				ports.</para>
+		</listitem>
+		
+		<listitem>
+			<para>Metrics: Shows the same information as the summary tab plus any
+				more detailed metrics which are collected on the resource. Metrics will
+				be gathered each time you visit the page.</para>
+		</listitem>
+		
+		<listitem>
+			<para>Control: If enabled this tab lets you execute operations on the
+				resource (for example, stopping the JBoss Application Server instance).</para>
+		</listitem>
+		
+		<listitem>
+			<para>Content: If enabled this tab lets you update the actual files used
+				to deploy the resource (for example, update the WAR file used to deploy a web
+				application).</para>
+		</listitem>
+	</itemizedlist>
+	
+	<note>
+		<para>
+			The currently selected tab is shown in white, available tabs are blue and unavailable ones are grey.
+		</para>
+	</note>
+</chapter>
+

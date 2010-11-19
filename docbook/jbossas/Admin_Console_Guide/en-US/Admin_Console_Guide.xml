@@ -1,0 +1,27 @@
+<?xml version='1.0'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+
+<book>
+	<xi:include href="Book_Info.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Preface.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Overview.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Accessing_the_Console.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="User_Interface_Overview.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Resource_Panel.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Navigation_Panel.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Common_Tasks.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Updating_Applications.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Application_undeployment_and_resource_removal.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Adding_Resources.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Updating_Resource_Configurations.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />	
+	<xi:include href="Scripts.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Monitoring_the_JBoss_Application_Server_Instance.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="JVM_Metrics.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Flushing_the_Connection_Pool_for_a_Datasource.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Port_Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="JBCache.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Further_Information.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+	<xi:include href="Revision_History.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+</book>
+

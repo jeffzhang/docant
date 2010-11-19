@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preface id="preface">
+  <title>Preface</title>
+
+  <section id="about">
+    <title>About IronJacamar</title>
+
+    <para>The goal of the IronJacamar project is to provide an implementation of the Java Connector
+      Architecture 1.6 specification.</para>
+    
+    <para>The specification can be found here: <ulink url="http://www.jcp.org/en/jsr/detail?id=322">http://www.jcp.org/en/jsr/detail?id=322</ulink>.</para>
+  </section>
+
+  <section id="whythename">
+    <title>Why IronJacamar ?</title>
+
+    <para>The Java EE Connector Architecture container can be viewed as a foundation inside an application server
+      as it provides connectivity to the other containers such that they can communicate with EISes. Iron is often
+      used as foundation in building houses too.</para>
+
+    <para>The Jacamar bird family which lives in Central and South America are glossy elegant birds with long bills 
+      and tails. Why we picked the Jacamar family is left as an exercise for the reader :)</para>
+
+  </section>
+
+  <section id="theteam">
+    <title>The team</title>
+
+    <para>Jesper Pedersen acts as the lead for the IronJacamar project. He can be reached at jesper (dot) pedersen (at) jboss (dot) org.</para>
+    
+    <para>Jeff Zhang is a core developer on the IronJacamar project. He can be reached at jizhang (at) redhat (dot) com.</para>
+
+    <para>Stefano Maestri is a core developer on the IronJacamar project. He can be reached at stefano.maestri (at) redhat (dot) com.</para>
+
+    <para>Gurkan Erdogdu is a core developer on the IronJacamar project. He can be reached at gurkanerdogdu (at) yahoo (dot) com.</para>
+
+  </section>
+
+  <section id="thanksto">
+    <title>Thanks to</title>
+
+    <para>
+      Dimitris Andreadis, Carlo de Wolf, Jason Green, Jonathan Halliday, Søren Hilmer, Ales Justin, Vicky Kak,  
+      Aslak Knutsen, Sacha Labourey, Alexey Loubyansky, Patrick MacDonald, Andrig Miller,
+      Andrew Lee Rubinger, Anil Saldhana, Scott Stark and Jeremy Whiting.
+    </para>
+    
+    <para>And a special thanks goes to Adrian Brock for his continuous support of this project.</para>
+
+  </section>
+
+  <section id="license">
+    <title>License</title>
+
+    <para>Copyright © 2010 Red Hat, Inc. and others.</para>
+    <para>The text of and illustrations in this document are licensed by Red Hat under
+      a Creative Commons Attribution–Share Alike 3.0 Unported license ("CC-BY-SA").</para>
+    <para>An explanation of CC-BY-SA is available at 
+      <ulink url="http://creativecommons.org/licenses/by-sa/3.0/">http://creativecommons.org/licenses/by-sa/3.0/</ulink>. 
+      In accordance with CC-BY-SA, if you distribute this document or an adaptation
+      of it, you must provide the URL for the original version.</para>
+    <para>Red Hat, as the licensor of this document, waives the right to enforce, 
+      and agrees not to assert, Section 4d of CC-BY-SA to the fullest extent 
+      permitted by applicable law.</para>
+    
+  </section>
+
+</preface>

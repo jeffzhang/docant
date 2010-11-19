@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                         "http://www.docbook.org/xml/4.4/docbookx.dtd">
+<chapter id="Test_your_Installation">
+    <title>Test your Installation</title>
+    <para>
+        After you have installed or built the JBoss Application Server, it is wise to perform a simple startup test to validate that there are no major problems with your Java VM/operating system combination. To test your installation, open the  <filename>JBOSS_DIST/jboss-&lt;release&gt;/bin</filename> directory and execute the <filename>run.bat</filename> (for Windows) or <filename>run.sh</filename> (for Unix) script, as appropriate for your operating system. 
+    </para>
+    <para>
+        Your output should look similar to the following (accounting for installation directory differences) and contain no error or exception messages:
+    </para>
+    <screen>
+        [samson@dhcp-1-150 bin]$ sh run.sh 
+        =========================================================================
+        
+        JBoss Bootstrap Environment
+        
+        JBOSS_HOME: /home/jboss-head/build/target/jboss-6.0.0-SNAPSHOT
+        
+        JAVA: /Library/Java/Home/bin/java
+        
+        JAVA_OPTS: -Dprogram.name=run.sh -Xms128m -Xmx512m -XX:MaxPermSize=256m -Dorg.jboss.resolver.warning=true -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000
+        
+        CLASSPATH: /home/jboss-head/build/target/jboss-6.0.0-SNAPSHOT/bin/run.jar
+        
+        =========================================================================
+        
+        ...output truncated
+        21:05:03,808 INFO  [org.jboss.bootstrap.impl.base.server.AbstractServer] (Thread-2) JBossAS [6.0.0.SNAPSHOT "Neo"] Started 
+
+    </screen>
+    <para>
+        Now open <literal>http://localhost:8080</literal> in your web browser. (Make sure you dont have anything else already on your machine using that port).<footnote><para>
+            Note that on some machines, the name localhost may not resolve properly and you may need to use the local loopback address 127.0.0.1 instead.</para></footnote> The contents of your page should look similar to the following: <xref linkend="Test_your_Installation-Test_your_Installation"/>.
+    </para>
+    <para>
+        <figure id="Test_your_Installation-Test_your_Installation">
+            <title>Test your Installation</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata align="center" fileref="images/test_install.png"/>
+                </imageobject>
+            </mediaobject>
+        </figure>
+    </para>
+    <para>
+        You are now ready to use the JBoss Application Server.  This landing page provides links to assist in managing your JBoss AS instance as well as many on-line resources.
+    </para>
+</chapter>

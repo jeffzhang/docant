@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding="UTF-8"?>
+
+<section id="Starting_and_Stopping_the_Server">
+	<title>Starting and Stopping the Server</title>
+	<section id="Starting_and_Stopping_the_Server-Start_the_Server">
+		<title>Start the Server</title>
+		<para>
+			Move to <filename class="directory">JBOSS_HOME/bin</filename> directory and execute the <literal>run.bat</literal> (for Windows) or <literal>run.sh</literal> (for Linux) script, as appropriate for your operating system. 
+		</para>
+<important><title>Remote connection to the JBoss AS server</title>
+	<para>JBoss AS now binds its services to localhost (127.0.0.1) by default, instead of binding to all available interfaces (0.0.0.0). This was primarily done for security reasons because of concerns of users going to production without having secured their servers properly. To enable remote access by binding JBoss services to a particular interface, simply run jboss with the <literal>-b</literal> option. To bind to all available interfaces and re-enable the legacy behaviour use <literal>-b 0.0.0.0</literal>. In any case, be aware you still need to secure your server properly.
+	</para>
+</important>
+<para>
+	For more information including setting up multiple JBoss server instances on one machine and hosting multiple domains with JBoss, please refer to the <ulink url="http://www.jboss.org/file-access/default/members/jbossas/freezone/docs/Server_Configuration_Guide/beta500/html-single/index.html">Administration and Configuration Guide</ulink>. Some examples on binding are shipped in  <filename>&lt;JBOSS_HOME&gt;/docs/examples/binding-manager/sample-bindings.xml</filename>.
+</para>
+
+<para>
+	On starting your server, your screen output should look like the following (accounting for installation directory differences) and contain no error or exception messages:
+</para>
+		
+<programlisting>[user@mypc bin]$ ./run.sh 
+=========================================================================
+
+  JBoss Bootstrap Environment
+
+  JBOSS_HOME: /home/user/jboss-as-version/jbossas
+
+  JAVA: java
+
+  JAVA_OPTS: -Dprogram.name=run.sh -server -Xms256m -Xmx512m -Dsun.rmi.dgc.client.
+gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Djava.net.preferIPv4Stack=true
+
+  CLASSPATH: /home/user/jboss-as-version/jbossas/bin/run.jar
+
+=========================================================================
+
+</programlisting>
+
+<para>More options for the JBoss AS <literal>run</literal> script are discussed in <xref linkend="Starting_and_Stopping_the_Server-Start_the_Server_With_Alternate_Configuration"/> below.</para>
+		<note>
+			<para>
+				Note that the <literal>default</literal> profile will be started when no option is specified.
+			</para>
+		</note>
+	</section>
+	
+	<section id="Starting_and_Stopping_the_Server-Start_the_Server_With_Alternate_Configuration">
+		<title>Start the Server With Alternate Configuration</title>
+		<para>
+			Using <literal>run.sh</literal> without any arguments starts the server using the <literal>default</literal> server configuration file set. To start with an alternate configuration file set, pass the name of the server configuration file set [same as the name of the server configuration directory under <literal>JBOSS_HOME/jbossas/server</literal>] that you want to use, as the value to the <literal>-c</literal> command line option. For example, to start with the <literal>all</literal> configuration file set you should specify:
+		</para>
+<programlisting>[bin]$ ./run.sh -c all
+...
+...
+...
+JBossAS [6.0.0.SNAPSHOT "Neo"] Started
+</programlisting>
+	</section>
+	
+	<section id="Starting_and_Stopping_the_Server-Using_run.sh">
+		<title>Using run.sh</title>
+		<para>
+			The <literal>run</literal> script supports the following options:
+		</para>
+<programlisting>
+usage: run.sh [options]
+-h, --help                          Show help message
+-V, --version                       Show version information
+--                                  Stop processing options
+-D&lt;name&gt;[=&lt;value&gt;]      Set a system property
+-d, --bootdir=&lt;dir&gt;           Set the boot patch directory; Must be absolute or url
+-p, --patchdir=&lt;dir&gt;          Set the patch directory; Must be absolute or url
+-n, --netboot=&lt;url&gt;           Boot from net with the given url as base
+-c, --configuration=&lt;name&gt;    Set the server configuration name
+-B, --bootlib=&lt;filename&gt;      Add an extra library to the front bootclasspath
+-L, --library=&lt;filename&gt;      Add an extra library to the loaders classpath
+-C, --classpath=&lt;url&gt;         Add an extra url to the loaders classpath
+-P, --properties=&lt;url&gt;        Load system properties from the given url
+-b, --host=&lt;host or ip&gt;       Bind address for all JBoss services. 
+-g, --partition=&lt;name&gt;        HA Partition name (default=DefaultDomain)
+-u, --udp=&lt;ip&gt;                UDP multicast address
+-l, --log=&lt;log4j|jdk&gt;         Specify the logger plugin type
+</programlisting>
+
+	</section>
+	
+	<section id="Starting_and_Stopping_the_Server-Stopping_the_Server">
+		<title>Stopping the Server</title>
+		<para>
+			To shutdown the server, you simply issue a Ctrl-C sequence in the console in which JBoss was started. Alternatively, you can use the <literal>shutdown.sh</literal> command.
+		</para>
+<programlisting>[bin]$ ./shutdown.sh --shutdown</programlisting>
+		<para>
+			The <literal>shutdown</literal> script supports the following options:
+		</para>
+<programlisting>A JMX client to shutdown (exit or halt) a remote JBoss server.
+
+usage: shutdown [options] &lt;operation&gt;
+
+options:
+-h, --help                Show this help message (default)
+-D&lt;name&gt;[=&lt;value&gt;]        Set a system property
+--                        Stop processing options
+-s, --server=&lt;url&gt;        Specify the JNDI URL of the remote server
+-n, --serverName=&lt;url&gt;    Specify the JMX name of the ServerImpl
+-a, --adapter=&lt;name&gt;      Specify JNDI name of the MBeanServerConnection to use
+-u, --user=&lt;name&gt;         Specify the username for authentication
+-p, --password=&lt;name&gt;     Specify the password for authentication
+
+operations:
+-S, --shutdown            Shutdown the server
+-e, --exit=&lt;code&gt;         Force the VM to exit with a status code
+-H, --halt=&lt;code&gt;         Force the VM to halt with a status code
+</programlisting>
+		<para>
+			Using the shutdown command requires a server configuration that contains the <literal>jmx-invoker-service.xml</literal> service. Hence you cannot use the shutdown command with the <literal>minimal</literal> configuration.
+		</para>
+	</section>
+	
+	<section id="Starting_and_Stopping_the_Server-Running_as_a_Service_under_Microsoft_Windows">
+		<title> Running as a Service under Microsoft Windows </title>
+		<para>
+			You can configure the server to run as a service under Microsoft Windows, and configure it to start automatically if desired.
+		</para>
+		<para>
+			Download the <literal>JavaService</literal> package from <ulink url="http://forge.objectweb.org/projects/javaservice/">http://forge.objectweb.org/projects/javaservice/</ulink>.
+		</para>
+		<para>
+			Unzip the package and use the <literal>JBossInstall.bat</literal> file to install the JBoss service. You must set the <literal>JAVA_HOME</literal> and <literal>JBOSS_HOME</literal> environment variables to point to the <literal>jdk</literal> and <literal>jbossas</literal> directories before running <literal>JBossInstall.bat</literal>. Run <literal>JBossInstall.bat</literal> with the following syntax:
+		</para>
+<screen>JBossInstall.bat <replaceable>&lt;depends&gt;</replaceable> [-auto | -manual]</screen>
+		<para>
+			Where <replaceable>&lt;depends&gt;</replaceable> is the name of any service that the JBoss AS server depends on, such as the <literal>mysql</literal> database service.
+		</para>
+		<para>
+			Once the service is installed the server can be started by using the command <literal>net start JBoss</literal>, and stopped with the command <literal>net stop JBoss</literal>.
+		</para>
+		<para>
+			Please refer to the documentation included in the <literal>JavaService</literal> package for further information.
+		</para>
+	</section>
+</section>
+
