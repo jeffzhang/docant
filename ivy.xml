@@ -30,38 +30,38 @@
     <repository name="jboss" url="http://repository.jboss.org"/>
   </info>
 
-  <configurations defaultconfmapping="common->default;style->default">
-    <conf name="common" transitive="false"/>
+  <configurations defaultconfmapping="core->default;style->default">
+    <conf name="core" transitive="false"/>
     <conf name="style" transitive="false"/>
   </configurations>
 
   <dependencies>
 <!--
-    <dependency org="org.jboss.jdocbook" name="jdocbook-core" rev="${version.jdocbook-core}" conf="common"/>
+    <dependency org="org.jboss.jdocbook" name="jdocbook-core" rev="${version.jdocbook-core}" conf="core"/>
 -->
-    <dependency org="com.uwyn" name="jhighlight" rev="${version.jhighlight}" conf="common"/>
-    <dependency org="commons-io" name="commons-io" rev="${version.commons-io}" conf="common"/>
-    <dependency org="commons-logging" name="commons-logging" rev="${version.commons-logging}" conf="common"/>
-    <dependency org="jdom" name="jdom" rev="${version.jdom}" conf="common"/>
-    <dependency org="net.socialchange.doctype" name="doctype-changer" rev="${version.doctype-changer}" conf="common"/>
-    <dependency org="org.apache.ant" name="ant" rev="${version.ant}" conf="common"/>
-    <dependency org="org.apache.avalon.framework" name="avalon-framework-api" rev="${version.avalon-framework}" conf="common"/>
-    <dependency org="org.apache.avalon.framework" name="avalon-framework-impl" rev="${version.avalon-framework}" conf="common"/>
-    <dependency org="org.apache.commons" name="commons-exec" rev="${version.commons-exec}" conf="common"/>
+    <dependency org="com.uwyn" name="jhighlight" rev="${version.jhighlight}" conf="core"/>
+    <dependency org="commons-io" name="commons-io" rev="${version.commons-io}" conf="core"/>
+    <dependency org="commons-logging" name="commons-logging" rev="${version.commons-logging}" conf="core"/>
+    <dependency org="jdom" name="jdom" rev="${version.jdom}" conf="core"/>
+    <dependency org="net.socialchange.doctype" name="doctype-changer" rev="${version.doctype-changer}" conf="core"/>
+    <dependency org="org.apache.ant" name="ant" rev="${version.ant}" conf="core"/>
+    <dependency org="org.apache.avalon.framework" name="avalon-framework-api" rev="${version.avalon-framework}" conf="core"/>
+    <dependency org="org.apache.avalon.framework" name="avalon-framework-impl" rev="${version.avalon-framework}" conf="core"/>
+    <dependency org="org.apache.commons" name="commons-exec" rev="${version.commons-exec}" conf="core"/>
 
-    <dependency org="org.apache.xmlgraphics" name="fop" rev="${version.fop}" conf="common"/>
-    <dependency org="org.apache.xmlgraphics" name="xmlgraphics-commons" rev="${version.xmlgraphics-commons}" conf="common"/>
-    <dependency org="org.codehaus.plexus" name="plexus-utils" rev="${version.plexus-utils}" conf="common"/>
+    <dependency org="org.apache.xmlgraphics" name="fop" rev="${version.fop}" conf="core"/>
+    <dependency org="org.apache.xmlgraphics" name="xmlgraphics-commons" rev="${version.xmlgraphics-commons}" conf="core"/>
+    <dependency org="org.codehaus.plexus" name="plexus-utils" rev="${version.plexus-utils}" conf="core"/>
 
-    <dependency org="org.jboss.docs" name="highlight" rev="${version.jboss.highlight}" conf="common"/>
-    <dependency org="org.slf4j" name="slf4j-api" rev="${version.slf4j}" conf="common"/>
-    <dependency org="org.slf4j" name="slf4j-simple" rev="${version.slf4j}" conf="common"/>
-    <dependency org="org.richfaces.docs" name="highlight" rev="${version.richfaces.highlight}" conf="common"/>
-    <dependency org="saxon" name="saxon" rev="${version.saxon}" conf="common"/>
-    <dependency org="xerces" name="xercesImpl" rev="${version.xercesImpl}" conf="common"/>
-    <dependency org="xml-apis" name="xml-apis" rev="${version.xml-apis}" conf="common"/>
-    <dependency org="xml-apis" name="xml-apis-ext" rev="${version.xml-apis}" conf="common"/>
-    <dependency org="xml-resolver" name="xml-resolver" rev="${version.xml-resolver}" conf="common"/>
+    <dependency org="org.jboss.docs" name="highlight" rev="${version.jboss.highlight}" conf="core"/>
+    <dependency org="org.slf4j" name="slf4j-api" rev="${version.slf4j}" conf="core"/>
+    <dependency org="org.slf4j" name="slf4j-simple" rev="${version.slf4j}" conf="core"/>
+    <dependency org="org.richfaces.docs" name="highlight" rev="${version.richfaces.highlight}" conf="core"/>
+    <dependency org="saxon" name="saxon" rev="${version.saxon}" conf="core"/>
+    <dependency org="xerces" name="xercesImpl" rev="${version.xercesImpl}" conf="core"/>
+    <dependency org="xml-apis" name="xml-apis" rev="${version.xml-apis}" conf="core"/>
+    <dependency org="xml-apis" name="xml-apis-ext" rev="${version.xml-apis}" conf="core"/>
+    <dependency org="xml-resolver" name="xml-resolver" rev="${version.xml-resolver}" conf="core"/>
 
     <dependency org="org.jboss" name="jbossorg-docbook-xslt" rev="${version.jbossorg-docbook-xslt}" conf="style"/>
 

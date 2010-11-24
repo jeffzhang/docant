@@ -128,6 +128,7 @@
        Target: download-docbook-files
        ================================= -->
   <target name="download-docbook-files">
+    <mkdir dir="${down.dir}"/>
     <mkdir dir="${down.dir}/docbook"/>
     <property name="docbook.url" value="http://www.docbook.org/xml"/>
     <get src="${docbook.url}/4.3/docbook-xml-4.3.zip" dest="${down.dir}/docbook/docbook-xml-4.3.zip" skipexisting="true"/>
@@ -251,8 +252,8 @@
                includes="*.jar"/>
     </copy>
 
-    <copy todir="${release.dir}/lib/common">
-      <fileset dir="${lib.dir}/common"
+    <copy todir="${release.dir}/lib/core">
+      <fileset dir="${lib.dir}/core"
                includes="*.jar"/>
     </copy>
 
