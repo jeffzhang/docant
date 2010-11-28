@@ -6,7 +6,6 @@
     <fileset dir="${docant.dir}/lib">
       <include name="**/*.jar"/>
       <include name="**/*.zip"/>
-      <include name="**/*.jdocbook-style"/>
     </fileset>
   </path>
   
