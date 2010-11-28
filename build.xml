@@ -257,6 +257,11 @@
                includes="*.jar"/>
     </copy>
 
+    <copy todir="${release.dir}/lib/style">
+      <fileset dir="${lib.dir}/style"
+               includes="*.*"/>
+    </copy>
+
     <copy todir="${release.dir}/lib/docbook">
       <fileset dir="${down.dir}/docbook"
                includes="*.zip"/>
@@ -275,9 +280,10 @@
     </unzip>
 
     <unzip src="${down.dir}/docbook/docbook-xsl-${version.docbook-xsl}.zip" dest="${staging.dir}"/>
+<!--
     <unzip src="${lib.dir}/style/jbossorg-docbook-xslt-${version.jbossorg-docbook-xslt}.jar" dest="${staging.dir}"/>
     <unzip src="${lib.dir}/style/jbossorg-jdocbook-style-${version.jbossorg-jdocbook-style}.jdocbook-style" dest="${staging.dir}"/>
-
+-->
   </target>
 
   <!-- ================================= 

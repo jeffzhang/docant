@@ -270,6 +270,25 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
 
       try
       {
+         /*
+         //ClassLoader cl = Thread.currentThread().getContextClassLoader();
+         ClassLoader cl = this.getClass().getClassLoader();
+         while (cl != null)
+         {
+            System.out.println(cl);
+            if (cl instanceof URLClassLoader)
+            {
+               URL[] urls = ((URLClassLoader) cl).getURLs();
+               for (int i = 0; i < urls.length; i++)
+               {
+                  System.out.println(urls[i].toExternalForm());
+               }
+            }
+            cl = cl.getParent();
+         }
+         */
+         
+         Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
          addResourceIntoClassloader();
          doExecute();
 
@@ -291,6 +310,7 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
    private void addResourceIntoClassloader()
    {
       List<URL> urls = new ArrayList<URL>();
+      /*
       log.info("$$ docbook zip {}", "lib/docbook".toString());
       File docbookDir = new File("lib/docbook");
       if (docbookDir.exists())
@@ -311,7 +331,7 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
       }
       else
          log.info("$$ docbook zip can't find");
-      
+      */
       log.info("$$ stage {}", directoryLayout.getStagingDirectory().toString());
       if (directoryLayout.getStagingDirectory().exists())
       {
