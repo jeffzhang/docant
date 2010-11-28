@@ -34,7 +34,7 @@
   <property name="major" value="1"/>
   <property name="minor" value="0"/>
   <property name="patch" value="0"/>
-  <property name="type" value="Alpha1"/>
+  <property name="type" value="Alpha2"/>
 
   <!-- ================================= 
        Ivy              
@@ -159,7 +159,7 @@
     <fail message="The performance test suite requires JDK5+" unless="HAVE_JDK_1.5"/>
 
     <ivy:settings file="${basedir}/ivy.settings.xml"/>
-
+    <mkdir dir="${down.dir}"/>
     <mkdir dir="${build.dir}" />
     <mkdir dir="${target.dir}" />
 
@@ -284,6 +284,36 @@
     <unzip src="${lib.dir}/style/jbossorg-docbook-xslt-${version.jbossorg-docbook-xslt}.jar" dest="${staging.dir}"/>
 -->
     <unzip src="${lib.dir}/style/jbossorg-jdocbook-style-${version.jbossorg-jdocbook-style}.jdocbook-style" dest="${staging.dir}"/>
+  </target>
+
+  <!-- ================================= 
+       Target: artifact 
+       ================================= -->
+  <target name="artifact" depends="release">
+    <property name="artifact.dir" value="${build.dir}/artifact"/>
+    <mkdir dir="${artifact.dir}/"/>
+
+    <copy todir="${artifact.dir}">
+      <fileset dir="${basedir}"
+               includes="ivy*.xml"/>
+    </copy>
+    <copy todir="${artifact.dir}">
+      <fileset dir="src/main/resources"
+               includes="support.xml"/>
+    </copy>
+
+    <copy todir="${artifact.dir}">
+      <fileset dir="${staging.dir}"
+               includes="catalog.xml"/>
+    </copy>
+    <copy todir="${artifact.dir}">
+      <fileset dir="${target.dir}"
+               includes="docant.jar"/>
+    </copy>
+
+    <zip destfile="${target.dir}/docant-${major}.${minor}.${patch}.${type}.zip"
+         basedir="${artifact.dir}"
+    />
   </target>
 
   <!-- ================================= 
