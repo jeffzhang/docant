@@ -47,28 +47,11 @@ public class GenerationTask extends AbstractDocbookTask
    @Override
    public void process() throws BuildException
    {
-      /*
-      ClassLoader cl = Thread.currentThread().getContextClassLoader();
-      while (cl != null)
-      {
-         if (!(cl instanceof URLClassLoader))
-         {
-            log.info("$$ cl isn't URLClassloader: {}", cl.toString());
-            break;
-         }
-         log.info("$$  URLClassloader: {}", cl.toString());
-      for (URL url : ((URLClassLoader) cl).getURLs())
-      {
-         log.info("$$ cl url: {}", url.toString());
-      }
-      cl = cl.getParent();
-      }
-      */
       
       if (!sourceDirectory.exists())
       {
-         System.out.println("sourceDirectory [" + sourceDirectory.getAbsolutePath() + "] did not exist");
-         //getLog().info( "sourceDirectory [" + sourceDirectory.getAbsolutePath() + "] did not exist" );
+         //System.out.println("sourceDirectory [" + sourceDirectory.getAbsolutePath() + "] did not exist");
+         log.info( "sourceDirectory [" + sourceDirectory.getAbsolutePath() + "] did not exist" );
          return;
       }
 
