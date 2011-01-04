@@ -376,11 +376,6 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
             loader = buildResourceDelegateClassLoader();
          }
 
-         for (URL url : ((URLClassLoader) loader).getURLs())
-         {
-            log.info("cl url: {}", url.toString());
-            System.err.println("cl url: " + url.toString());
-         }
          return loader;
       }
    }
