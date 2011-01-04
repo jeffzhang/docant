@@ -211,6 +211,13 @@
                includes="**"/>
     </copy>
 
+    <copy file="src/main/resources/catalog.xml.template" tofile="${build.dir}/jars/catalog.xml.in">
+      <filterset>
+        <filter token="OLD" value="${version.docbook-xsl-old}"/>
+        <filter token="NEW" value="${version.docbook-xsl}"/>
+      </filterset>
+    </copy>
+
     <jar destfile="${target.dir}/docant.jar"
          basedir="${build.dir}/jars">
       <manifest>
