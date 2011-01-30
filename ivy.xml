@@ -36,9 +36,9 @@
   </configurations>
 
   <dependencies>
-<!--
+
     <dependency org="org.jboss.jdocbook" name="jdocbook-core" rev="${version.jdocbook-core}" conf="core"/>
--->
+
     <dependency org="com.uwyn" name="jhighlight" rev="${version.jhighlight}" conf="core"/>
     <dependency org="commons-io" name="commons-io" rev="${version.commons-io}" conf="core"/>
     <dependency org="commons-logging" name="commons-logging" rev="${version.commons-logging}" conf="core"/>

@@ -34,7 +34,7 @@
   <property name="major" value="1"/>
   <property name="minor" value="0"/>
   <property name="patch" value="0"/>
-  <property name="type" value="Alpha2"/>
+  <property name="type" value="Final"/>
 
   <!-- ================================= 
        Ivy              
@@ -91,12 +91,10 @@
   <!-- ================================= 
        Versions              
        ================================= -->
-<!--
-  <property name="version.jdocbook-core" value="1.0.3"/>
--->
   <property name="version.jdocbook-core" value="1.0.4"/>
+<!--
   <property name="version.jdocbook-core-ext" value="2010-11-18-SNAPSHOT"/>
-
+-->
   <property name="version.docbook-xsl" value="1.76.1"/>
   <property name="version.docbook-xsl-old" value="1.72.0"/>
 
@@ -163,9 +161,10 @@
     <mkdir dir="${build.dir}" />
     <mkdir dir="${target.dir}" />
 
-<!-- temp using hacked file -->
+<!-- temp using hacked file 
     <get src="http://jeffzhang.github.com/docant/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar"
          dest="${down.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar" skipexisting="true"/>
+-->
   </target>
   
   <!-- ================================= 
@@ -173,8 +172,10 @@
        ================================= -->
   <target name="resolve" depends="init">
     <ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision].[ext]" sync="true"/>
+<!--
     <copy file="${down.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar" 
           tofile="${lib.dir}/jdocbook-core-${version.jdocbook-core}-${version.jdocbook-core-ext}.jar"/>
+-->
   </target>
   
   <!-- ================================= 
