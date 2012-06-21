@@ -63,10 +63,10 @@
     <dependency org="xml-apis" name="xml-apis-ext" rev="${version.xml-apis}" conf="core"/>
     <dependency org="xml-resolver" name="xml-resolver" rev="${version.xml-resolver}" conf="core"/>
 
-    <dependency org="org.jboss" name="jbossorg-docbook-xslt" rev="${version.jbossorg-docbook-xslt}" conf="style"/>
+    <dependency org="org.jboss.pressgang" name="pressgang-xslt-ns" rev="${version.pressgang-xslt-ns}" conf="style"/>
 
-    <dependency org="org.jboss" name="jbossorg-jdocbook-style" rev="${version.jbossorg-jdocbook-style}" conf="style">
-      <artifact name="jbossorg-jdocbook-style" type="jar" ext="jdocbook-style"/>
+    <dependency org="org.jboss.pressgang" name="pressgang-jdocbook-style" rev="${version.pressgang-jdocbook-style}" conf="style">
+      <artifact name="pressgang-jdocbook-style" type="jar" ext="jdocbook-style"/>
     </dependency>
 
   </dependencies>

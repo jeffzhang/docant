@@ -41,6 +41,7 @@ import java.util.TreeSet;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.jboss.jdocbook.Configuration;
+import org.jboss.jdocbook.DocBookSchemaResolutionStrategy;
 import org.jboss.jdocbook.Environment;
 import org.jboss.jdocbook.JDocBookComponentRegistry;
 import org.jboss.jdocbook.JDocBookProcessException;
@@ -361,6 +362,12 @@ public abstract class AbstractDocbookTask extends Task implements DirectoryLayou
       public DocBookXsltResolutionStrategy getDocBookXsltResolutionStrategy()
       {
          return DocBookXsltResolutionStrategy.NAMED;
+      }
+
+      @Override
+      public DocBookSchemaResolutionStrategy getDocBookSchemaResolutionStrategy()
+      {
+         return DocBookSchemaResolutionStrategy.XSD;
       }
    }
 

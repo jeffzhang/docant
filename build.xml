@@ -32,7 +32,7 @@
        ================================= -->
   <property name="name" value="docant"/>
   <property name="major" value="1"/>
-  <property name="minor" value="0"/>
+  <property name="minor" value="1"/>
   <property name="patch" value="0"/>
   <property name="type" value="Final"/>
 
@@ -91,16 +91,16 @@
   <!-- ================================= 
        Versions              
        ================================= -->
-  <property name="version.jdocbook-core" value="1.0.4"/>
+  <property name="version.jdocbook-core" value="1.1.0"/>
 <!--
   <property name="version.jdocbook-core-ext" value="2010-11-18-SNAPSHOT"/>
 -->
   <property name="version.docbook-xsl" value="1.76.1"/>
-  <property name="version.docbook-xsl-old" value="1.72.0"/>
+  <property name="version.docbook-xsl-old" value="1.76.1"/>
 
   <property name="version.ant" value="1.8.1"/>
   <property name="version.saxon" value="6.5.3"/>
-  <property name="version.slf4j" value="1.5.8"/>
+  <property name="version.slf4j" value="1.6.1"/>
   <property name="version.doctype-changer" value="1.1"/>
   <property name="version.xercesImpl" value="2.9.1"/>
   <property name="version.xml-apis" value="1.3.04"/>
@@ -119,8 +119,8 @@
   <property name="version.richfaces.highlight" value="3.1.4.GA"/>
   <property name="version.batik" value="1.7"/>
 
-  <property name="version.jbossorg-docbook-xslt" value="1.1.1"/>
-  <property name="version.jbossorg-jdocbook-style" value="1.1.1"/>
+  <property name="version.pressgang-xslt-ns" value="3.0.0"/>
+  <property name="version.pressgang-jdocbook-style" value="3.0.0"/>
 
   <!-- ================================= 
        Target: download-docbook-files
@@ -219,7 +219,7 @@
       </filterset>
     </copy>
 
-    <jar destfile="${target.dir}/docant.jar"
+    <jar destfile="${target.dir}/docant-${major}.${minor}.${patch}.${type}.jar"
          basedir="${build.dir}/jars">
       <manifest>
         <attribute name="Implementation-Title" value="JBoss Docant"/>
