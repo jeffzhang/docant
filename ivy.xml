@@ -52,19 +52,22 @@
     <dependency org="org.apache.xmlgraphics" name="fop" rev="${version.fop}" conf="core"/>
     <dependency org="org.apache.xmlgraphics" name="xmlgraphics-commons" rev="${version.xmlgraphics-commons}" conf="core"/>
     <dependency org="org.codehaus.plexus" name="plexus-utils" rev="${version.plexus-utils}" conf="core"/>
-
+<!--
     <dependency org="org.jboss.docs" name="highlight" rev="${version.jboss.highlight}" conf="core"/>
+-->
     <dependency org="org.slf4j" name="slf4j-api" rev="${version.slf4j}" conf="core"/>
     <dependency org="org.slf4j" name="slf4j-simple" rev="${version.slf4j}" conf="core"/>
+<!--
     <dependency org="org.richfaces.docs" name="highlight" rev="${version.richfaces.highlight}" conf="core"/>
+-->
     <dependency org="saxon" name="saxon" rev="${version.saxon}" conf="core"/>
     <dependency org="xerces" name="xercesImpl" rev="${version.xercesImpl}" conf="core"/>
     <dependency org="xml-apis" name="xml-apis" rev="${version.xml-apis}" conf="core"/>
     <dependency org="xml-apis" name="xml-apis-ext" rev="${version.xml-apis}" conf="core"/>
     <dependency org="xml-resolver" name="xml-resolver" rev="${version.xml-resolver}" conf="core"/>
 
-    <dependency org="org.jboss.pressgang" name="pressgang-xslt-ns" rev="${version.pressgang-xslt-ns}" conf="style"/>
-
+    <dependency org="org.jboss.pressgang" name="pressgang-highlight" rev="${version.pressgang-highlight}" conf="style"/>
+    <dependency org="org.jboss.pressgang" name="pressgang-xslt" rev="${version.pressgang-xslt}" conf="style"/>
     <dependency org="org.jboss.pressgang" name="pressgang-jdocbook-style" rev="${version.pressgang-jdocbook-style}" conf="style">
       <artifact name="pressgang-jdocbook-style" type="jar" ext="jdocbook-style"/>
     </dependency>

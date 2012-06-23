@@ -119,8 +119,9 @@
   <property name="version.richfaces.highlight" value="3.1.4.GA"/>
   <property name="version.batik" value="1.7"/>
 
-  <property name="version.pressgang-xslt-ns" value="2.0.2"/>
+  <property name="version.pressgang-highlight" value="2.0.2"/>
   <property name="version.pressgang-jdocbook-style" value="2.0.2"/>
+  <property name="version.pressgang-xslt" value="2.0.2"/>
 
   <!-- ================================= 
        Target: download-docbook-files
