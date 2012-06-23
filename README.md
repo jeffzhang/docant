@@ -3,7 +3,12 @@ DocAnt
 
 Description
 ------
-This project conetains Ant tasks for [jdocbook](https://github.com/jeffzhang/jdocbook-core).
+This project conetains Ant tasks for [jdocbook](https://github.com/pressgang/jdocbook-core).
+
+Release
+------
+1. 2011-01-30 1.0.0.Final
+2. 2012-06-23 1.1.0.Final update to using jdocbook 1.1.0 and pressgang style
 
 Setup
 -----
