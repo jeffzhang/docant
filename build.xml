@@ -33,7 +33,7 @@
   <property name="name" value="docant"/>
   <property name="major" value="1"/>
   <property name="minor" value="1"/>
-  <property name="patch" value="0"/>
+  <property name="patch" value="1"/>
   <property name="type" value="Final"/>
 
   <!-- ================================= 
@@ -96,7 +96,7 @@
   <property name="version.jdocbook-core-ext" value="2010-11-18-SNAPSHOT"/>
 -->
   <property name="version.docbook-xsl" value="1.76.1"/>
-  <property name="version.docbook-xsl-old" value="1.72.0"/>
+  <property name="version.docbook-xsl-old" value="1.76.1"/>
 
   <property name="version.ant" value="1.8.1"/>
   <property name="version.saxon" value="6.5.3"/>
@@ -119,9 +119,10 @@
   <property name="version.richfaces.highlight" value="3.1.4.GA"/>
   <property name="version.batik" value="1.7"/>
 
-  <property name="version.pressgang-highlight" value="2.0.2"/>
-  <property name="version.pressgang-jdocbook-style" value="2.0.2"/>
-  <property name="version.pressgang-xslt" value="2.0.2"/>
+  <property name="version.pressgang-highlight" value="3.0.0"/>
+  <property name="version.pressgang-jdocbook-style" value="3.0.0"/>
+  <property name="version.pressgang-fonts" value="3.0.0"/>
+  <property name="version.pressgang-xslt-ns" value="3.0.0"/>
 
   <!-- ================================= 
        Target: download-docbook-files

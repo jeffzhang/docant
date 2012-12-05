@@ -67,11 +67,13 @@
     <dependency org="xml-resolver" name="xml-resolver" rev="${version.xml-resolver}" conf="core"/>
 
     <dependency org="org.jboss.pressgang" name="pressgang-highlight" rev="${version.pressgang-highlight}" conf="style"/>
-    <dependency org="org.jboss.pressgang" name="pressgang-xslt" rev="${version.pressgang-xslt}" conf="style"/>
+    <dependency org="org.jboss.pressgang" name="pressgang-xslt-ns" rev="${version.pressgang-xslt-ns}" conf="style"/>
     <dependency org="org.jboss.pressgang" name="pressgang-jdocbook-style" rev="${version.pressgang-jdocbook-style}" conf="style">
       <artifact name="pressgang-jdocbook-style" type="jar" ext="jdocbook-style"/>
     </dependency>
-
+    <dependency org="org.jboss.pressgang" name="pressgang-fonts" rev="${version.pressgang-fonts}" conf="style">
+      <artifact name="pressgang-fonts" type="jar" ext="jdocbook-style"/>
+    </dependency>
   </dependencies>
 
 </ivy-module>
