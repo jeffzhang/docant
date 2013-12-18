@@ -10,6 +10,7 @@ Release
 1. 2011-01-30 1.0.0.Final
 2. 2012-06-23 1.1.0.Final update to using jdocbook 1.1.0 and pressgang style
 3. 2012-12-05 1.1.1.Final update to pressgang 3.0.0
+4. 2013-12-18 1.1.2.Final update to xerces 2.11.0
 
 Setup
 -----

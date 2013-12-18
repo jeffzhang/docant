@@ -63,7 +63,9 @@
     <dependency org="saxon" name="saxon" rev="${version.saxon}" conf="core"/>
     <dependency org="xerces" name="xercesImpl" rev="${version.xercesImpl}" conf="core"/>
     <dependency org="xml-apis" name="xml-apis" rev="${version.xml-apis}" conf="core"/>
+<!--
     <dependency org="xml-apis" name="xml-apis-ext" rev="${version.xml-apis}" conf="core"/>
+-->
     <dependency org="xml-resolver" name="xml-resolver" rev="${version.xml-resolver}" conf="core"/>
 
     <dependency org="org.jboss.pressgang" name="pressgang-highlight" rev="${version.pressgang-highlight}" conf="style"/>
